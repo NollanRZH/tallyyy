@@ -18,8 +18,6 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    /* CUSTOM CURSOR */
     *, *::before, *::after { cursor: none !important; }
 
     #cursor {
@@ -41,7 +39,6 @@
       min-height: 100vh;
     }
 
-    /* PIXEL GRID BG */
     body::before {
       content: '';
       position: fixed;
@@ -54,7 +51,6 @@
       z-index: 0;
     }
 
-    /*STARS */
     .stars {
       position: fixed;
       inset: 0;
@@ -69,11 +65,31 @@
       animation: twinkle 2s infinite;
     }
     @keyframes twinkle {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 1; }
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.6); }
     }
 
-    /*  LAYOUT */
+    /* FLOATING PARTICLES */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      font-size: 10px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); }
+    }
+
     main {
       position: relative;
       z-index: 1;
@@ -82,7 +98,7 @@
       padding: 80px 32px 120px;
     }
 
-    /*  HERO  */
+    /* HERO */
     .hero {
       text-align: center;
       margin-bottom: 100px;
@@ -108,6 +124,39 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 24px;
+      position: relative;
+    }
+
+    /* Glitch effect on hero */
+    .hero h1::before,
+    .hero h1::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--soft) 30%, var(--rose) 70%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero h1::before {
+      animation: glitch1 4s infinite;
+      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+    }
+    .hero h1::after {
+      animation: glitch2 4s infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+    }
+    @keyframes glitch1 {
+      0%, 90%, 100% { transform: translate(0); opacity: 0; }
+      92% { transform: translate(-3px, 1px); opacity: 0.7; }
+      94% { transform: translate(3px, -1px); opacity: 0.5; }
+      96% { transform: translate(-2px, 2px); opacity: 0.7; }
+    }
+    @keyframes glitch2 {
+      0%, 90%, 100% { transform: translate(0); opacity: 0; }
+      93% { transform: translate(3px, 1px); opacity: 0.5; }
+      95% { transform: translate(-3px, -1px); opacity: 0.7; }
+      97% { transform: translate(2px, -2px); opacity: 0.5; }
     }
 
     .hero-sub {
@@ -118,7 +167,25 @@
       opacity: 0.7;
     }
 
-    /*  DIVIDER  */
+    /* TYPEWRITER for hero-sub */
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--rose);
+      width: 0;
+      animation: typing 1.5s steps(30) 0.8s forwards, blink-caret 0.8s step-end infinite;
+      display: inline-block;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--rose); }
+    }
+
+    /* DIVIDER */
     .px-divider {
       display: flex;
       align-items: center;
@@ -138,9 +205,14 @@
       font-size: 8px;
       font-style: normal;
       color: var(--rose);
+      animation: pulse-spin 2s ease-in-out infinite;
+    }
+    @keyframes pulse-spin {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.4); }
     }
 
-    /*  CARDS  */
+    /* CARDS */
     .cards {
       display: flex;
       flex-direction: column;
@@ -157,6 +229,8 @@
       animation: fadeUp 0.8s ease both;
       background: rgba(45, 19, 85, 0.3);
       backdrop-filter: blur(4px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
     }
 
     .card::before {
@@ -167,6 +241,28 @@
       pointer-events: none;
     }
 
+    /* Card shine sweep on hover */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.5s ease;
+      pointer-events: none;
+    }
+    .card:hover::after {
+      left: 150%;
+    }
+
+    .card:hover {
+      transform: translateX(6px) translateY(-2px);
+      box-shadow: -6px 6px 0 rgba(180,127,232,0.25);
+    }
+
+    /* Pixel number pop on hover */
     .card-tag {
       font-family: 'Press Start 2P', monospace;
       font-size: 7px;
@@ -174,6 +270,16 @@
       letter-spacing: 2px;
       margin-bottom: 14px;
       display: block;
+      transition: color 0.2s;
+    }
+    .card:hover .card-tag {
+      color: var(--rose);
+      animation: shake 0.3s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
     }
 
     .card p {
@@ -186,9 +292,25 @@
     .card em {
       font-style: normal;
       color: var(--rose);
+      position: relative;
+      display: inline-block;
+    }
+    .card em::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0; right: 0;
+      height: 2px;
+      background: var(--rose);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .card:hover em::after {
+      transform: scaleX(1);
     }
 
-    /*  PHOTO FRAME */
+    /* PHOTO FRAME */
     .photo-section {
       text-align: center;
       margin: 80px 0;
@@ -204,6 +326,11 @@
         repeating-linear-gradient(90deg, var(--rose) 0, var(--rose) 8px, transparent 8px, transparent 16px);
       background-size: 8px 8px;
       image-rendering: pixelated;
+      animation: frame-glow 3s ease-in-out infinite;
+    }
+    @keyframes frame-glow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(180,127,232,0.4)); }
+      50% { filter: drop-shadow(0 0 20px rgba(240,160,200,0.7)) drop-shadow(0 0 40px rgba(180,127,232,0.3)); }
     }
 
     .pixel-frame img {
@@ -215,6 +342,10 @@
       filter: saturate(1.1) contrast(1.05);
       position: relative;
       z-index: 1;
+      transition: filter 0.4s;
+    }
+    .pixel-frame:hover img {
+      filter: saturate(1.4) contrast(1.1) hue-rotate(10deg);
     }
 
     .pixel-frame::after {
@@ -226,7 +357,7 @@
       pointer-events: none;
     }
 
-    /*  FINAL NOTE  */
+    /* FINALE */
     .finale {
       text-align: center;
       margin-top: 100px;
@@ -255,6 +386,7 @@
       50% { opacity: 0; }
     }
 
+    /* MUSIC BAR */
     .music-bar {
       position: fixed;
       bottom: 24px;
@@ -275,7 +407,6 @@
       color: var(--rose);
       animation: spin 2s linear infinite;
     }
-
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -304,7 +435,6 @@
     .music-bars span:nth-child(2) { animation-delay: 0.15s; }
     .music-bars span:nth-child(3) { animation-delay: 0.3s; }
     .music-bars span:nth-child(4) { animation-delay: 0.45s; }
-
     @keyframes bar {
       from { height: 4px; }
       to { height: 16px; }
@@ -337,20 +467,186 @@
       pointer-events: none;
       z-index: 50;
     }
+
+    /* ============================================
+       MINI GAME: CATCH THE HEARTS
+       ============================================ */
+    .game-section {
+      margin-top: 120px;
+      text-align: center;
+      animation: fadeUp 1s ease both;
+      animation-delay: 0.8s;
+    }
+
+    .game-section .pixel-label {
+      margin-bottom: 16px;
+    }
+
+    .game-title {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      color: var(--soft);
+      margin-bottom: 8px;
+    }
+    .game-title span { color: var(--rose); }
+
+    .game-desc {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      color: var(--violet);
+      line-height: 2;
+      margin-bottom: 28px;
+      opacity: 0.8;
+    }
+
+    .game-container {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      border: 2px solid var(--violet);
+      background: rgba(26,10,46,0.8);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      image-rendering: pixelated;
+    }
+
+    .game-hud {
+      position: absolute;
+      top: 10px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 14px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .hud-item {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--soft);
+      background: rgba(26,10,46,0.7);
+      padding: 5px 8px;
+      border: 1px solid rgba(180,127,232,0.3);
+    }
+    .hud-item span { color: var(--rose); }
+
+    .game-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: var(--deep);
+      background: var(--rose);
+      border: none;
+      padding: 12px 24px;
+      margin-top: 20px;
+      letter-spacing: 1px;
+      cursor: pointer !important;
+      transition: transform 0.1s, box-shadow 0.1s;
+      box-shadow: 4px 4px 0 var(--violet);
+      position: relative;
+      z-index: 200;
+    }
+    .game-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--violet);
+      cursor: pointer !important;
+    }
+    .game-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--violet);
+    }
+
+    .game-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26,10,46,0.88);
+      z-index: 20;
+      gap: 12px;
+    }
+
+    .overlay-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: var(--rose);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .overlay-sub {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--violet);
+      text-align: center;
+      line-height: 2;
+    }
+
+    .overlay-score {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: var(--soft);
+      text-align: center;
+      line-height: 2;
+    }
+
+    /* SCORE POP */
+    .score-pop {
+      position: absolute;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: var(--rose);
+      pointer-events: none;
+      z-index: 15;
+      animation: scorePop 0.8s ease forwards;
+    }
+    @keyframes scorePop {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-40px) scale(1.4); }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* HEART BURST on card click */
+    .burst {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      font-size: 14px;
+      animation: burst-out 0.7s ease forwards;
+    }
+    @keyframes burst-out {
+      0% { opacity: 1; transform: translate(0,0) scale(0.5); }
+      100% { opacity: 0; transform: var(--end) scale(1.5); }
+    }
   </style>
 </head>
 <body>
 
-  <!-- CUSTOM CURSOR (pixel heart SVG drawn via canvas) -->
   <canvas id="cursor" width="24" height="24"></canvas>
-
-  <!-- STARS -->
   <div class="stars" id="stars"></div>
+  <div class="particles" id="particles"></div>
 
-  <!-- AUDIO -->
   <audio id="bgm" src="images/music.mp3" loop></audio>
 
-  <!-- MUSIC BAR -->
   <div class="music-bar">
     <div class="music-icon">♪</div>
     <div>
@@ -364,15 +660,13 @@
 
   <main>
 
-    <!-- HERO -->
     <section class="hero">
       <span class="pixel-label">✦ a little something ✦</span>
-      <h1>hey,<br/>Tallyyy.</h1>
-      <p class="hero-sub">this one's for you!! &nbsp;♡</p>
+      <h1 data-text="hey,&#10;Tallyyy.">hey,<br/>Tallyyy.</h1>
+      <p class="hero-sub"><span class="typewriter">this one's for you!! &nbsp;♡</span></p>
     </section>
 
-    <!-- PHOTO -->
-    <section class="photo-section">
+    <section class="photo-section reveal">
       <div class="pixel-frame">
         <img src="images/tally.png" alt="Tally" />
       </div>
@@ -380,40 +674,39 @@
 
     <div class="px-divider"><span></span><i>✦</i><span></span></div>
 
-    <!-- CARDS -->
     <div class="cards">
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">001 / first thing</span>
         <p>Your hair. I don't even know how to explain it <br/>it's just <em>greuigh as I say... stunning!!</em>, And it's... everything.</p>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">002 / your energyyy</span>
         <p>I'm sure you walk into a room and something shifts.<br/>You don't try. You just <em>are because... stunning!</em>.</p>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">003 / the way you tease mee</span>
         <p>You know exactly what you'ree doing.<br/>And I <em>love</em> hum... that you-... you- do it anyway.</p>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">004 / your confidence</span>
         <p>Sublime, Parfait. That are the words.<br/>You carry yourself like you already know you're <em>it</em> <br/>because you are.</p>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">005 / what you do to me</span>
         <p>You make me smile without trying!<br/>You hypee meeee.<br/>You make me blush <em>every single time</em>.</p>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">006 / your good boy</span>
         <p>When you call me your <em>shorty good boy</em> <br/>welll... yeah. I'm not complaining. And not ashamed!</p>
       </div>
 
-      <div class="card">
+      <div class="card reveal">
         <span class="card-tag">007 / last thing</span>
         <p>There would be nothing about you I would change.<br/><em>Nothing.</em><br/>I love you for exactly what you are!!!</p>
       </div>
@@ -422,15 +715,38 @@
 
     <div class="px-divider"><span></span><i>✦</i><span></span></div>
 
-    <!-- FINALE -->
-    <section class="finale">
+    <section class="finale reveal">
       <h2>you make everything feel<br/><span>a little more special.</span></h2>
       <span class="pixel-label">always ♡</span>
+    </section>
+
+    <!-- MINI GAME -->
+    <section class="game-section reveal">
+      <span class="pixel-label">✦ mini game ✦</span>
+      <h2 class="game-title">catch the <span>hearts</span></h2>
+      <p class="game-desc">move your mouse / tap to catch the falling hearts!<br/>don't let them slip away... just like you</p>
+
+      <div class="game-container">
+        <div class="game-hud">
+          <div class="hud-item">score <span id="score">0</span></div>
+          <div class="hud-item">lives <span id="lives">♡♡♡</span></div>
+          <div class="hud-item">best <span id="best">0</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="560" height="340"></canvas>
+
+        <div class="game-overlay" id="gameOverlay">
+          <div class="overlay-title">catch the hearts</div>
+          <div class="overlay-sub">use mouse or tap to move the basket<br/>don't let the hearts fall!!</div>
+          <button class="game-btn" id="startBtn" style="cursor:pointer!important">PLAY ♡</button>
+        </div>
+      </div>
     </section>
 
   </main>
 
   <script>
+    /* ---- STARS ---- */
     const starsEl = document.getElementById('stars');
     for (let i = 0; i < 60; i++) {
       const s = document.createElement('div');
@@ -439,14 +755,28 @@
       s.style.top = Math.random() * 100 + 'vh';
       s.style.animationDelay = Math.random() * 3 + 's';
       s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
-      // Some stars are violet, some rose
       if (Math.random() > 0.5) s.style.background = '#b47fe8';
       starsEl.appendChild(s);
     }
 
+    /* ---- FLOATING PARTICLES ---- */
+    const particlesEl = document.getElementById('particles');
+    const emojis = ['♡', '✦', '✿', '♪', '✨', '☆'];
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.bottom = '0';
+      p.style.animationDelay = Math.random() * 12 + 's';
+      p.style.animationDuration = (8 + Math.random() * 10) + 's';
+      p.style.color = Math.random() > 0.5 ? '#f0a0c8' : '#b47fe8';
+      particlesEl.appendChild(p);
+    }
+
+    /* ---- CURSOR ---- */
     const cursorEl = document.getElementById('cursor');
     const ctx = cursorEl.getContext('2d');
-    // Draw a pixel heart (12x11 pixel grid, scaled up)
     const heart = [
       [0,0,1,1,0,0,0,1,1,0,0,0],
       [0,1,1,1,1,0,1,1,1,1,0,0],
@@ -468,25 +798,359 @@
         }
       });
     });
-
     document.addEventListener('mousemove', e => {
       cursorEl.style.left = e.clientX + 'px';
       cursorEl.style.top = e.clientY + 'px';
     });
 
-    // AUTOPLAY MUSIC (with user-gesture fallback)
+    /* ---- SCROLL REVEAL ---- */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    /* ---- CARD HEART BURST ---- */
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', e => {
+        const rect = card.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        for (let i = 0; i < 8; i++) {
+          const b = document.createElement('div');
+          b.className = 'burst';
+          b.textContent = '♡';
+          b.style.left = cx + 'px';
+          b.style.top = cy + 'px';
+          const angle = (i / 8) * Math.PI * 2;
+          const dist = 40 + Math.random() * 40;
+          const dx = Math.cos(angle) * dist;
+          const dy = Math.sin(angle) * dist;
+          b.style.setProperty('--end', `translate(${dx}px, ${dy}px)`);
+          b.style.color = Math.random() > 0.5 ? '#f0a0c8' : '#b47fe8';
+          document.body.appendChild(b);
+          setTimeout(() => b.remove(), 800);
+        }
+      });
+    });
+
+    /* ---- AUDIO ---- */
     const bgm = document.getElementById('bgm');
     bgm.volume = 0.55;
-
     function tryPlay() {
       bgm.play().catch(() => {
-        // Fallback: play on first click/touch
         const unlock = () => { bgm.play(); document.removeEventListener('click', unlock); document.removeEventListener('touchstart', unlock); };
         document.addEventListener('click', unlock);
         document.addEventListener('touchstart', unlock);
       });
     }
     tryPlay();
+
+    /* ====================================================
+       MINI GAME: CATCH THE HEARTS
+       ==================================================== */
+    const gc = document.getElementById('gameCanvas');
+    const gctx = gc.getContext('2d');
+    const overlay = document.getElementById('gameOverlay');
+    const startBtn = document.getElementById('startBtn');
+    const scoreEl = document.getElementById('score');
+    const livesEl = document.getElementById('lives');
+    const bestEl = document.getElementById('best');
+
+    const GW = 560;
+    const GH = 340;
+    const COLORS = { violet: '#b47fe8', rose: '#f0a0c8', deep: '#1a0a2e', mid: '#2d1355', soft: '#f5e6ff', accent: '#ff80bf' };
+
+    let gameState = 'idle'; // idle, playing, over
+    let score = 0;
+    let lives = 3;
+    let best = 0;
+    let items = [];
+    let particles_game = [];
+    let basket = { x: GW / 2, width: 72, height: 14 };
+    let spawnTimer = 0;
+    let spawnInterval = 80;
+    let speed = 1.8;
+    let frameCount = 0;
+    let combo = 0;
+    let targetBasketX = GW / 2;
+
+    const ITEM_TYPES = [
+      { emoji: '♡', points: 1,  color: '#f0a0c8', size: 16, freq: 60 },
+      { emoji: '✦', points: 2,  color: '#b47fe8', size: 13, freq: 20 },
+      { emoji: '✿', points: 3,  color: '#ff80bf', size: 15, freq: 15 },
+      { emoji: '💔', points: -1, color: '#884466', size: 14, freq: 5 },
+    ];
+
+    function pickType() {
+      const total = ITEM_TYPES.reduce((s, t) => s + t.freq, 0);
+      let r = Math.random() * total;
+      for (const t of ITEM_TYPES) { r -= t.freq; if (r <= 0) return t; }
+      return ITEM_TYPES[0];
+    }
+
+    function spawnItem() {
+      const t = pickType();
+      items.push({
+        x: 20 + Math.random() * (GW - 40),
+        y: -20,
+        vy: speed + Math.random() * 0.8,
+        type: t,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.04 + Math.random() * 0.03,
+        opacity: 1,
+        caught: false,
+        missed: false,
+      });
+    }
+
+    function addParticle(x, y, color, emoji) {
+      for (let i = 0; i < 5; i++) {
+        particles_game.push({
+          x, y,
+          vx: (Math.random() - 0.5) * 4,
+          vy: -2 - Math.random() * 3,
+          alpha: 1,
+          color,
+          emoji,
+          size: 10 + Math.random() * 6,
+          life: 1,
+        });
+      }
+    }
+
+    function drawPixelHeart(ctx, x, y, size, color) {
+      const s = size / 12;
+      ctx.fillStyle = color;
+      const h = [
+        [0,0,1,1,0,0,0,1,1,0,0,0],
+        [0,1,1,1,1,0,1,1,1,1,0,0],
+        [1,1,1,1,1,1,1,1,1,1,1,0],
+        [1,1,1,1,1,1,1,1,1,1,1,0],
+        [0,1,1,1,1,1,1,1,1,1,0,0],
+        [0,0,1,1,1,1,1,1,1,0,0,0],
+        [0,0,0,1,1,1,1,1,0,0,0,0],
+        [0,0,0,0,1,1,1,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0,0,0],
+      ];
+      h.forEach((row, ry) => {
+        row.forEach((cell, rx) => {
+          if (cell) ctx.fillRect(x + rx * s, y + ry * s, s, s);
+        });
+      });
+    }
+
+    function drawBasket(x, y, w, h) {
+      gctx.strokeStyle = COLORS.violet;
+      gctx.lineWidth = 2;
+      // Pixel basket
+      gctx.fillStyle = 'rgba(180,127,232,0.15)';
+      gctx.fillRect(x - w/2, y, w, h);
+      gctx.strokeRect(x - w/2, y, w, h);
+      // Heart label in basket
+      gctx.fillStyle = COLORS.rose;
+      gctx.font = '10px "Press Start 2P"';
+      gctx.textAlign = 'center';
+      gctx.fillText('♡', x, y + 11);
+    }
+
+    function drawBackground() {
+      gctx.clearRect(0, 0, GW, GH);
+      gctx.fillStyle = 'rgba(26,10,46,0)';
+      gctx.fillRect(0, 0, GW, GH);
+      // Grid
+      gctx.strokeStyle = 'rgba(180,127,232,0.04)';
+      gctx.lineWidth = 1;
+      for (let x = 0; x < GW; x += 24) { gctx.beginPath(); gctx.moveTo(x,0); gctx.lineTo(x,GH); gctx.stroke(); }
+      for (let y = 0; y < GH; y += 24) { gctx.beginPath(); gctx.moveTo(0,y); gctx.lineTo(GW,y); gctx.stroke(); }
+    }
+
+    function showScorePop(x, y, text) {
+      const pop = document.createElement('div');
+      pop.className = 'score-pop';
+      pop.textContent = text;
+      const rect = gc.getBoundingClientRect();
+      const scaleX = rect.width / GW;
+      const scaleY = rect.height / GH;
+      pop.style.left = (rect.left + x * scaleX) + 'px';
+      pop.style.top = (rect.top + y * scaleY) + 'px';
+      pop.style.color = text.includes('+') ? COLORS.rose : '#884466';
+      document.body.appendChild(pop);
+      setTimeout(() => pop.remove(), 800);
+    }
+
+    function gameLoop() {
+      if (gameState !== 'playing') return;
+      frameCount++;
+
+      // Speed ramp
+      if (frameCount % 300 === 0) {
+        speed = Math.min(speed + 0.2, 4.5);
+        spawnInterval = Math.max(spawnInterval - 5, 35);
+      }
+
+      // Smooth basket
+      basket.x += (targetBasketX - basket.x) * 0.18;
+
+      drawBackground();
+
+      // Spawn
+      spawnTimer++;
+      if (spawnTimer >= spawnInterval) {
+        spawnTimer = 0;
+        spawnItem();
+      }
+
+      // Update & draw items
+      items = items.filter(item => {
+        if (!item.caught && !item.missed) {
+          item.y += item.vy;
+          item.wobble += item.wobbleSpeed;
+          const wx = item.x + Math.sin(item.wobble) * 3;
+
+          // Check catch
+          const bx = basket.x - basket.width / 2;
+          const bTop = GH - 40;
+          if (wx > bx && wx < bx + basket.width && item.y > bTop && item.y < bTop + basket.height + 10) {
+            item.caught = true;
+            const pts = item.type.points;
+            score += pts;
+            if (pts < 0) { combo = 0; }
+            else { combo++; }
+            scoreEl.textContent = score;
+            addParticle(wx, item.y, item.type.color, item.type.emoji);
+            showScorePop(wx, item.y, pts > 0 ? (combo > 2 ? `+${pts} x${combo}!!` : `+${pts}`) : `${pts} oops!`);
+            return false;
+          }
+
+          // Missed
+          if (item.y > GH + 10) {
+            if (item.type.points > 0) {
+              lives--;
+              combo = 0;
+              livesEl.textContent = '♡'.repeat(Math.max(lives, 0));
+              // Shake canvas
+              gc.style.transform = 'translateX(4px)';
+              setTimeout(() => { gc.style.transform = 'translateX(-4px)'; }, 60);
+              setTimeout(() => { gc.style.transform = ''; }, 120);
+              if (lives <= 0) { gameOver(); return false; }
+            }
+            return false;
+          }
+        }
+
+        // Draw item
+        gctx.save();
+        gctx.globalAlpha = item.opacity;
+        const drawX = item.x + Math.sin(item.wobble) * 3;
+        if (item.type.emoji === '♡' || item.type.emoji === '💔') {
+          const sz = item.type.size;
+          drawPixelHeart(gctx, drawX - sz/2, item.y - sz/2, sz, item.type.color);
+        } else {
+          gctx.fillStyle = item.type.color;
+          gctx.font = `${item.type.size}px serif`;
+          gctx.textAlign = 'center';
+          gctx.fillText(item.type.emoji, drawX, item.y + 5);
+        }
+        gctx.restore();
+        return true;
+      });
+
+      // Update & draw particles
+      particles_game = particles_game.filter(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.15;
+        p.alpha -= 0.04;
+        if (p.alpha <= 0) return false;
+        gctx.save();
+        gctx.globalAlpha = p.alpha;
+        gctx.fillStyle = p.color;
+        gctx.font = `${p.size}px serif`;
+        gctx.textAlign = 'center';
+        gctx.fillText(p.emoji, p.x, p.y);
+        gctx.restore();
+        return true;
+      });
+
+      // Draw basket
+      const bY = GH - 40;
+      drawBasket(basket.x, bY, basket.width, basket.height);
+
+      // Draw bottom line
+      gctx.strokeStyle = 'rgba(180,127,232,0.2)';
+      gctx.lineWidth = 1;
+      gctx.setLineDash([4, 4]);
+      gctx.beginPath();
+      gctx.moveTo(0, GH - 10);
+      gctx.lineTo(GW, GH - 10);
+      gctx.stroke();
+      gctx.setLineDash([]);
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function startGame() {
+      score = 0; lives = 3; items = []; particles_game = []; combo = 0;
+      speed = 1.8; spawnInterval = 80; spawnTimer = 0; frameCount = 0;
+      basket.x = GW / 2; targetBasketX = GW / 2;
+      scoreEl.textContent = '0';
+      livesEl.textContent = '♡♡♡';
+      overlay.style.display = 'none';
+      gameState = 'playing';
+      requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver() {
+      gameState = 'over';
+      if (score > best) { best = score; bestEl.textContent = best; }
+      overlay.innerHTML = '';
+      overlay.style.display = 'flex';
+      const t = document.createElement('div');
+      t.className = 'overlay-title';
+      t.textContent = score >= 20 ? 'amazing!! ♡' : score >= 10 ? 'so cute!!' : 'aww...';
+      const s = document.createElement('div');
+      s.className = 'overlay-score';
+      s.innerHTML = `score: ${score}<br/>best: ${best}`;
+      const b = document.createElement('button');
+      b.className = 'game-btn';
+      b.textContent = 'RETRY ♡';
+      b.style.cursor = 'pointer';
+      b.addEventListener('click', startGame);
+      overlay.appendChild(t);
+      overlay.appendChild(s);
+      overlay.appendChild(b);
+    }
+
+    startBtn.addEventListener('click', startGame);
+
+    // Mouse / touch control
+    function updateBasket(clientX) {
+      const rect = gc.getBoundingClientRect();
+      const scaleX = GW / rect.width;
+      targetBasketX = (clientX - rect.left) * scaleX;
+      targetBasketX = Math.max(basket.width/2, Math.min(GW - basket.width/2, targetBasketX));
+    }
+
+    gc.addEventListener('mousemove', e => { if (gameState === 'playing') updateBasket(e.clientX); });
+    gc.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (gameState === 'playing') updateBasket(e.touches[0].clientX);
+    }, { passive: false });
+
+    // Also track mouse globally for smoother control
+    document.addEventListener('mousemove', e => {
+      if (gameState === 'playing') {
+        const rect = gc.getBoundingClientRect();
+        if (e.clientY > rect.top - 20 && e.clientY < rect.bottom + 20) {
+          updateBasket(e.clientX);
+        }
+      }
+    });
   </script>
 </body>
 </html>
