@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -49,6 +50,112 @@
       overflow-x:hidden;
       min-height:100vh;
       position:relative;
+    }
+
+    /* =========================================
+       SPLASH SCREEN
+    ========================================= */
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background:
+        radial-gradient(circle at 40% 40%, rgba(180,127,232,.25), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(240,160,200,.15), transparent 50%),
+        var(--deep);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      text-align: center;
+      padding: 30px;
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    #splash.hidden {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    .splash-stars {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .splash-star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--rose);
+      animation: twinkle infinite ease-in-out;
+    }
+
+    .splash-heart {
+      font-size: 48px;
+      animation: splashPulse 1.4s ease-in-out infinite;
+      filter: drop-shadow(0 0 18px rgba(240,160,200,.7)) drop-shadow(0 0 40px rgba(180,127,232,.5));
+      line-height: 1;
+    }
+
+    @keyframes splashPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .splash-title {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      background: linear-gradient(135deg, var(--soft) 0%, var(--rose) 50%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .splash-sub {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--violet);
+      line-height: 2.2;
+      opacity: .85;
+    }
+
+    #splashBtn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--deep);
+      background: var(--rose);
+      border: none;
+      padding: 18px 32px;
+      box-shadow: 6px 6px 0 var(--violet);
+      cursor: pointer !important;
+      transition: transform .12s ease, box-shadow .12s ease;
+      animation: btnPulse 1.6s ease-in-out infinite;
+      margin-top: 8px;
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 6px 6px 0 var(--violet); }
+      50% { box-shadow: 6px 6px 0 var(--violet), 0 0 28px rgba(240,160,200,.5); }
+    }
+
+    #splashBtn:hover, #splashBtn:active {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 var(--violet);
+    }
+
+    .splash-note {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      color: rgba(240,160,200,.4);
+      line-height: 2;
     }
 
     /* =========================================
@@ -822,6 +929,12 @@
       to{ height:16px; }
     }
 
+    /* music paused state */
+    .music-bars.paused span {
+      animation-play-state: paused;
+      height: 4px;
+    }
+
     /* =========================================
        MINI GAME
     ========================================= */
@@ -1178,9 +1291,40 @@
     }
 
   </style>
+
 </head>
 
 <body>
+
+  <!-- =========================================
+       SPLASH SCREEN — forces user tap → unlocks audio on mobile
+  ========================================= -->
+
+  <div id="splash">
+    <div class="splash-stars" id="splashStars"></div>
+
+```
+<div class="splash-heart">♡</div>
+
+<div class="splash-title">
+  hey,<br/>Tallyyy.
+</div>
+
+<div class="splash-sub">
+  quelque chose de spécial t'attend<br/>
+  appuie pour entrer ♡
+</div>
+
+<button id="splashBtn">
+  ENTRER ♡
+</button>
+
+<div class="splash-note">
+  ✦ avec musique ✦
+</div>
+```
+
+  </div>
 
   <div class="noise"></div>
 
@@ -1188,227 +1332,298 @@
   <div class="corner top-right">♡</div>
   <div class="corner bottom-left">♪</div>
 
-  <canvas id="cursor" width="24" height="24"></canvas>
+<canvas id="cursor" width="24" height="24"></canvas>
 
   <div class="stars" id="stars"></div>
   <div class="particles" id="particles"></div>
 
-  <audio id="bgm" src="images/music.mp3" loop></audio>
+<audio id="bgm" src="images/music.mp3" loop preload="auto"></audio>
 
   <!-- MUSIC BAR -->
-  <div class="music-bar">
+
+  <div class="music-bar" id="musicBar" style="cursor:pointer !important" title="tap to play/pause">
     <div class="music-icon">♪</div>
 
-    <div>
-      <div class="music-text">now playing</div>
-      <div class="music-text" style="color:var(--soft)">for tally ♡</div>
-    </div>
+```
+<div>
+  <div class="music-text">now playing</div>
+  <div class="music-text" style="color:var(--soft)">for tally ♡</div>
+</div>
 
-    <div class="music-bars">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+<div class="music-bars" id="musicBars">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+```
+
   </div>
 
   <main>
 
-    <!-- HERO -->
-    <section class="hero">
+```
+<!-- HERO -->
+<section class="hero">
 
-      <span class="pixel-label">
-        ✦ a little something ✦
-      </span>
+  <span class="pixel-label">
+    ✦ a little something ✦
+  </span>
 
-      <h1 data-text="hey,&#10;Tallyyy.">
-        hey,<br/>
-        Tallyyy.
-      </h1>
+  <h1 data-text="hey,&#10;Tallyyy.">
+    hey,<br/>
+    Tallyyy.
+  </h1>
 
-      <p class="hero-sub">
-        <span class="typewriter">
-          this one's for you!! &nbsp;♡
-        </span>
-      </p>
+  <p class="hero-sub">
+    <span class="typewriter">
+      this one's for you!! &nbsp;♡
+    </span>
+  </p>
 
-    </section>
+</section>
 
-    <!-- PHOTO -->
-    <section class="photo-section reveal">
+<!-- PHOTO -->
+<section class="photo-section reveal">
 
-      <div class="pixel-frame">
-        <img src="images/tally.png" alt="Tally"/>
+  <div class="pixel-frame">
+    <img src="images/tally.png" alt="Tally"/>
+  </div>
+
+</section>
+
+<div class="px-divider">
+  <span></span>
+  <i>✦</i>
+  <span></span>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+
+  <div class="card reveal">
+    <span class="card-tag">001 / first thing</span>
+
+    <p>
+      Your hair. I don't even know how to explain it
+      <br/>
+      it's just <em>greuigh as I say... stunning!!</em>,
+      And it's... everything.
+    </p>
+  </div>
+
+  <div class="card reveal">
+    <span class="card-tag">002 / your energyyy</span>
+
+    <p>
+      I'm sure you walk into a room and something shifts.
+      <br/>
+      You don't try. You just
+      <em>are because... stunning!</em>.
+    </p>
+  </div>
+
+  <div class="card reveal">
+    <span class="card-tag">003 / the way you tease mee</span>
+
+    <p>
+      You know exactly what you'ree doing.
+      <br/>
+      And I <em>love</em> hum... that you-... you- do it anyway.
+    </p>
+  </div>
+
+  <div class="card reveal">
+    <span class="card-tag">004 / your confidence</span>
+
+    <p>
+      Sublime, Parfait. That are the words.
+      <br/>
+      You carry yourself like you already know you're <em>it</em>
+      <br/>
+      because you are.
+    </p>
+  </div>
+
+  <div class="card reveal">
+    <span class="card-tag">005 / what you do to me</span>
+
+    <p>
+      You make me smile without trying!
+      <br/>
+      You hypee meeee.
+      <br/>
+      You make me blush <em>every single time</em>.
+    </p>
+  </div>
+
+  <div class="card reveal">
+    <span class="card-tag">006 / your good boy</span>
+
+    <p>
+      When you call me your <em>shorty good boy</em>
+      <br/>
+      welll... yeah. I'm not complaining. And not ashamed!
+    </p>
+  </div>
+
+  <div class="card reveal">
+    <span class="card-tag">007 / last thing</span>
+
+    <p>
+      There would be nothing about you I would change.
+      <br/>
+      <em>Nothing.</em>
+      <br/>
+      I love you for exactly what you are!!!
+    </p>
+  </div>
+
+</div>
+
+<div class="px-divider">
+  <span></span>
+  <i>✦</i>
+  <span></span>
+</div>
+
+<!-- FINALE -->
+<section class="finale reveal">
+
+  <h2>
+    you make everything feel
+    <br/>
+    <span>a little more special.</span>
+  </h2>
+
+  <span class="pixel-label">always ♡</span>
+
+</section>
+
+<!-- MINI GAME -->
+<section class="game-section reveal">
+
+  <span class="pixel-label">✦ mini game ✦</span>
+
+  <h2 class="game-title">
+    catch the <span>hearts</span>
+  </h2>
+
+  <p class="game-desc">
+    move your mouse / tap to catch the falling hearts!
+    <br/>
+    don't let them slip away... just like you
+  </p>
+
+  <div class="game-container">
+
+    <div class="game-hud">
+      <div class="hud-item">
+        score <span id="score">0</span>
       </div>
 
-    </section>
+      <div class="hud-item">
+        lives <span id="lives">♡♡♡</span>
+      </div>
 
-    <div class="px-divider">
-      <span></span>
-      <i>✦</i>
-      <span></span>
+      <div class="hud-item">
+        best <span id="best">0</span>
+      </div>
     </div>
 
-    <!-- CARDS -->
-    <div class="cards">
+    <canvas id="gameCanvas" width="560" height="340"></canvas>
 
-      <div class="card reveal">
-        <span class="card-tag">001 / first thing</span>
+    <div class="game-overlay" id="gameOverlay">
 
-        <p>
-          Your hair. I don't even know how to explain it
-          <br/>
-          it's just <em>greuigh as I say... stunning!!</em>,
-          And it's... everything.
-        </p>
+      <div class="overlay-title">
+        catch the hearts
       </div>
 
-      <div class="card reveal">
-        <span class="card-tag">002 / your energyyy</span>
-
-        <p>
-          I'm sure you walk into a room and something shifts.
-          <br/>
-          You don't try. You just
-          <em>are because... stunning!</em>.
-        </p>
-      </div>
-
-      <div class="card reveal">
-        <span class="card-tag">003 / the way you tease mee</span>
-
-        <p>
-          You know exactly what you'ree doing.
-          <br/>
-          And I <em>love</em> hum... that you-... you- do it anyway.
-        </p>
-      </div>
-
-      <div class="card reveal">
-        <span class="card-tag">004 / your confidence</span>
-
-        <p>
-          Sublime, Parfait. That are the words.
-          <br/>
-          You carry yourself like you already know you're <em>it</em>
-          <br/>
-          because you are.
-        </p>
-      </div>
-
-      <div class="card reveal">
-        <span class="card-tag">005 / what you do to me</span>
-
-        <p>
-          You make me smile without trying!
-          <br/>
-          You hypee meeee.
-          <br/>
-          You make me blush <em>every single time</em>.
-        </p>
-      </div>
-
-      <div class="card reveal">
-        <span class="card-tag">006 / your good boy</span>
-
-        <p>
-          When you call me your <em>shorty good boy</em>
-          <br/>
-          welll... yeah. I'm not complaining. And not ashamed!
-        </p>
-      </div>
-
-      <div class="card reveal">
-        <span class="card-tag">007 / last thing</span>
-
-        <p>
-          There would be nothing about you I would change.
-          <br/>
-          <em>Nothing.</em>
-          <br/>
-          I love you for exactly what you are!!!
-        </p>
-      </div>
-
-    </div>
-
-    <div class="px-divider">
-      <span></span>
-      <i>✦</i>
-      <span></span>
-    </div>
-
-    <!-- FINALE -->
-    <section class="finale reveal">
-
-      <h2>
-        you make everything feel
+      <div class="overlay-sub">
+        use mouse or tap to move the basket
         <br/>
-        <span>a little more special.</span>
-      </h2>
-
-      <span class="pixel-label">always ♡</span>
-
-    </section>
-
-    <!-- MINI GAME -->
-    <section class="game-section reveal">
-
-      <span class="pixel-label">✦ mini game ✦</span>
-
-      <h2 class="game-title">
-        catch the <span>hearts</span>
-      </h2>
-
-      <p class="game-desc">
-        move your mouse / tap to catch the falling hearts!
-        <br/>
-        don't let them slip away... just like you
-      </p>
-
-      <div class="game-container">
-
-        <div class="game-hud">
-          <div class="hud-item">
-            score <span id="score">0</span>
-          </div>
-
-          <div class="hud-item">
-            lives <span id="lives">♡♡♡</span>
-          </div>
-
-          <div class="hud-item">
-            best <span id="best">0</span>
-          </div>
-        </div>
-
-        <canvas id="gameCanvas" width="560" height="340"></canvas>
-
-        <div class="game-overlay" id="gameOverlay">
-
-          <div class="overlay-title">
-            catch the hearts
-          </div>
-
-          <div class="overlay-sub">
-            use mouse or tap to move the basket
-            <br/>
-            don't let the hearts fall!!
-          </div>
-
-          <button class="game-btn" id="startBtn">
-            PLAY ♡
-          </button>
-
-        </div>
-
+        don't let the hearts fall!!
       </div>
 
-    </section>
+      <button class="game-btn" id="startBtn">
+        PLAY ♡
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+```
 
   </main>
 
   <script>
+
+    /* =========================================
+       SPLASH — tap to unlock audio (Android fix)
+    ========================================= */
+
+    const splash = document.getElementById('splash');
+    const splashBtn = document.getElementById('splashBtn');
+    const bgm = document.getElementById('bgm');
+    const musicBarsEl = document.getElementById('musicBars');
+    const musicBar = document.getElementById('musicBar');
+
+    bgm.volume = 0.55;
+
+    let audioUnlocked = false;
+    let isPlaying = false;
+
+    // Add stars to splash
+    const splashStars = document.getElementById('splashStars');
+    for(let i = 0; i < 40; i++){
+      const s = document.createElement('div');
+      s.className = 'splash-star';
+      s.style.cssText = `
+        left:${Math.random()*100}vw;
+        top:${Math.random()*100}vh;
+        animation-delay:${Math.random()*4}s;
+        animation-duration:${1.5+Math.random()*3}s;
+        background:${Math.random()>.5?'#b47fe8':'#f0a0c8'};
+      `;
+      splashStars.appendChild(s);
+    }
+
+    function startAudio(){
+      bgm.play().then(() => {
+        isPlaying = true;
+        musicBarsEl.classList.remove('paused');
+      }).catch(err => {
+        console.warn('Audio play failed:', err);
+        isPlaying = false;
+        musicBarsEl.classList.add('paused');
+      });
+    }
+
+    splashBtn.addEventListener('click', () => {
+      // This click event is the "user gesture" Android needs
+      audioUnlocked = true;
+      startAudio();
+
+      // Fade out splash
+      splash.classList.add('hidden');
+      setTimeout(() => {
+        splash.style.display = 'none';
+      }, 650);
+    });
+
+    // Music bar tap = toggle play/pause
+    musicBar.addEventListener('click', () => {
+      if(!audioUnlocked) return;
+      if(isPlaying){
+        bgm.pause();
+        isPlaying = false;
+        musicBarsEl.classList.add('paused');
+      } else {
+        startAudio();
+      }
+    });
 
     /* =========================================
        STARS
@@ -1580,33 +1795,6 @@
       });
 
     });
-
-    /* =========================================
-       AUDIO
-    ========================================= */
-
-    const bgm = document.getElementById('bgm');
-
-    bgm.volume = .55;
-
-    function tryPlay(){
-
-      bgm.play().catch(()=>{
-
-        const unlock = ()=>{
-
-          bgm.play();
-
-          document.removeEventListener('click', unlock);
-          document.removeEventListener('touchstart', unlock);
-        };
-
-        document.addEventListener('click', unlock);
-        document.addEventListener('touchstart', unlock);
-      });
-    }
-
-    tryPlay();
 
     /* =========================================
        MINI GAME
