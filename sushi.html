@@ -1,1026 +1,1294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>sushi clicker ♡</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Serif+Display:ital@0;1&display=swap');
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>sushi clicker ♡</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
-    :root {
-      --violet: #b47fe8;
-      --rose:   #f0a0c8;
-      --deep:   #1a0a2e;
-      --mid:    #2d1355;
-      --soft:   #f5e6ff;
-      --accent: #ff80bf;
-      --gold:   #ffd580;
-      --teal:   #80ffe8;
-      --glass:  rgba(45,19,85,.45);
-    }
+:root {
+  --violet: #b47fe8;
+  --rose:   #f0a0c8;
+  --deep:   #0f0720;
+  --mid:    #1e0d3a;
+  --soft:   #f5e6ff;
+  --accent: #ff80bf;
+  --gold:   #ffd580;
+  --teal:   #80ffe8;
+  --red:    #ff6060;
+  --green:  #80ffb0;
+  --glass:  rgba(30,13,58,.55);
+  --glass2: rgba(20,8,40,.7);
+  --border: rgba(180,127,232,.35);
+}
 
-    * { margin:0; padding:0; box-sizing:border-box; }
-    *, *::before, *::after { cursor: none !important; }
-    html { scroll-behavior: smooth; }
+*{margin:0;padding:0;box-sizing:border-box;}
+*,*::before,*::after{cursor:none!important;}
 
-    body {
-      background:
-        radial-gradient(circle at top,    rgba(180,127,232,.18), transparent 38%),
-        radial-gradient(circle at bottom, rgba(240,160,200,.09), transparent 38%),
-        var(--deep);
-      color: var(--soft);
-      font-family: 'Press Start 2P', monospace;
-      overflow-x: hidden;
-      min-height: 100vh;
-      position: relative;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+body{
+  background: var(--deep);
+  color:var(--soft);
+  font-family:'Press Start 2P',monospace;
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+  user-select:none;
+  -webkit-user-select:none;
+}
 
-    /* ── GRID OVERLAY ───────────────────────────── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(180,127,232,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(180,127,232,.04) 1px, transparent 1px);
-      background-size: 24px 24px;
-      pointer-events: none; z-index: 0;
-    }
+/* BG layers */
+.bg-gradient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 40% at 20% 0%, rgba(180,127,232,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(240,160,200,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 60% at 50% 50%, rgba(15,7,32,.9) 0%, transparent 100%);
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(180,127,232,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,127,232,.03) 1px,transparent 1px);
+  background-size:20px 20px;
+  pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 3px);
+  mix-blend-mode:soft-light;pointer-events:none;z-index:50;opacity:.5;
+}
 
-    /* ── SCANLINES ──────────────────────────────── */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 3px);
-      mix-blend-mode: soft-light;
-      pointer-events: none; z-index: 50; opacity: .7;
-    }
+/* STARS */
+.stars{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.star{position:absolute;background:var(--rose);image-rendering:pixelated;animation:twinkle infinite ease-in-out;box-shadow:0 0 4px rgba(240,160,200,.5);}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1);}50%{opacity:.9;transform:scale(1.9);}}
 
-    /* ── NOISE ──────────────────────────────────── */
-    .noise {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 2; opacity: .05;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cg fill='%23fff'%3E%3Crect x='0'   y='0'   width='1' height='1'/%3E%3Crect x='40'  y='20'  width='1' height='1'/%3E%3Crect x='80'  y='60'  width='1' height='1'/%3E%3Crect x='120' y='10'  width='1' height='1'/%3E%3Crect x='20'  y='100' width='1' height='1'/%3E%3Crect x='100' y='140' width='1' height='1'/%3E%3C/g%3E%3C/svg%3E");
-      animation: noiseMove .3s steps(2) infinite;
-    }
-    @keyframes noiseMove {
-      0%   { transform: translate(0,0); }
-      25%  { transform: translate(-1px, 1px); }
-      50%  { transform: translate(1px,-1px); }
-      75%  { transform: translate(1px, 1px); }
-      100% { transform: translate(0,0); }
-    }
+/* MOUNTAINS */
+.mountains-bg{position:fixed;bottom:0;left:0;right:0;height:45vh;pointer-events:none;z-index:1;}
+.mountains-bg svg{width:100%;height:100%;}
 
-    /* ── MOUNTAINS ──────────────────────────────── */
-    .mountains-bg {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: 48vh; min-height: 240px;
-      pointer-events: none; z-index: 1;
-    }
-    .mountains-bg svg { width: 100%; height: 100%; }
+/* FLOATING PARTICLES */
+.particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.particle{position:absolute;opacity:0;font-size:11px;animation:floatUp linear infinite;filter:drop-shadow(0 0 5px rgba(240,160,200,.3));}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) rotate(0deg);}10%{opacity:.6;}100%{opacity:0;transform:translateY(-110vh) rotate(360deg);}}
 
-    .mountains-aurora {
-      position: fixed; bottom: 26vh; left: 0; right: 0; height: 160px;
-      pointer-events: none; z-index: 1;
-      background: linear-gradient(to top, rgba(180,127,232,.07), rgba(240,160,200,.04) 40%, transparent);
-      animation: auroraShift 8s ease-in-out infinite alternate;
-      filter: blur(12px);
-    }
-    @keyframes auroraShift {
-      0%   { opacity: .4; transform: translateX(-1%); }
-      100% { opacity: .8; transform: translateX(1%); }
-    }
+/* CURSOR */
+#cursor{position:fixed;width:24px;height:24px;pointer-events:none;z-index:100000;image-rendering:pixelated;transform:translate(-4px,-4px);filter:drop-shadow(0 0 4px rgba(240,160,200,.7));}
 
-    /* ── STARS ──────────────────────────────────── */
-    .stars { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-    .star {
-      position: absolute; width: 3px; height: 3px; background: var(--rose);
-      image-rendering: pixelated;
-      animation: twinkle infinite ease-in-out;
-      box-shadow: 0 0 6px rgba(240,160,200,.6), 0 0 12px rgba(180,127,232,.3);
-    }
-    @keyframes twinkle {
-      0%,100% { opacity: .2; transform: scale(1); }
-      50%      { opacity:  1; transform: scale(1.8); }
-    }
+/* CORNER DECO */
+.corner{position:fixed;font-family:'Press Start 2P',monospace;font-size:8px;color:rgba(240,160,200,.2);z-index:10;pointer-events:none;animation:cornerFloat 4s ease-in-out infinite;}
+.corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;animation-delay:1s;}.corner.bl{bottom:16px;left:16px;animation-delay:2s;}
+@keyframes cornerFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
 
-    /* ── FLOATING PARTICLES ─────────────────────── */
-    .particles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-    .particle {
-      position: absolute; opacity: 0; font-size: 12px;
-      animation: floatUp linear infinite;
-      filter: drop-shadow(0 0 6px rgba(240,160,200,.4));
-    }
-    @keyframes floatUp {
-      0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
-      10%  { opacity: .7; }
-      100% { opacity: 0; transform: translateY(-110vh) rotate(360deg); }
-    }
+/* ══════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════ */
+.game-wrap{
+  position:relative;z-index:5;
+  max-width:1020px;margin:0 auto;
+  padding:28px 16px 100px;
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:18px;
+  min-height:100vh;
+}
 
-    /* ── CURSOR ─────────────────────────────────── */
-    #cursor {
-      position: fixed; width: 24px; height: 24px;
-      pointer-events: none; z-index: 100000;
-      image-rendering: pixelated;
-      transform: translate(-4px,-4px);
-      filter: drop-shadow(0 0 4px rgba(240,160,200,.7)) drop-shadow(0 0 10px rgba(180,127,232,.4));
-    }
+/* HEADER */
+.header{
+  grid-column:1/-1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0 6px;
+  border-bottom:1px solid rgba(180,127,232,.15);
+  margin-bottom:4px;
+}
+.header-logo{
+  display:flex;align-items:center;gap:12px;
+}
+.header-logo h1{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:clamp(1.4rem,3vw,2rem);
+  background:linear-gradient(135deg,var(--soft) 0%,var(--rose) 50%,var(--violet) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(240,160,200,.2));
+}
+.header-logo span{font-size:22px;}
+.prestige-badge{
+  font-size:6px;color:var(--gold);
+  background:rgba(255,213,128,.08);
+  border:1px solid rgba(255,213,128,.3);
+  padding:4px 10px;
+  display:none;
+  animation:badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 rgba(255,213,128,0);}50%{box-shadow:0 0 12px rgba(255,213,128,.3);}}
+.header-stats{
+  display:flex;gap:16px;align-items:center;
+}
+.hstat{text-align:right;}
+.hstat-label{font-size:5px;color:var(--violet);opacity:.7;margin-bottom:3px;}
+.hstat-value{font-size:9px;color:var(--soft);}
 
-    /* ── CORNERS ────────────────────────────────── */
-    .corner {
-      position: fixed; font-family: 'Press Start 2P', monospace; font-size: 9px;
-      color: rgba(240,160,200,.28); z-index: 1; pointer-events: none;
-      animation: cornerFloat 4s ease-in-out infinite;
-    }
-    .corner.tl { top: 16px; left: 16px; }
-    .corner.tr { top: 16px; right: 16px; animation-delay: 1s; }
-    .corner.bl { bottom: 16px; left: 16px; animation-delay: 2s; }
-    @keyframes cornerFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+/* ── LEFT PANEL ── */
+.left-panel{display:flex;flex-direction:column;align-items:center;gap:16px;}
 
-    /* ── BACK BUTTON ────────────────────────────── */
-    .back-btn {
-      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
-      z-index: 200;
-      font-family: 'Press Start 2P', monospace; font-size: 6px;
-      color: rgba(240,160,200,.55);
-      background: rgba(26,10,46,.7);
-      border: 1px solid rgba(180,127,232,.3);
-      padding: 8px 14px;
-      text-decoration: none;
-      backdrop-filter: blur(8px);
-      transition: color .2s, border-color .2s;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      cursor: pointer !important;
-    }
-    .back-btn:hover { color: var(--rose); border-color: rgba(240,160,200,.5); }
+/* SUSHI BUTTON */
+.sushi-arena{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:100%;
+}
 
-    /* ════════════════════════════════════════════
-       MAIN LAYOUT
-    ════════════════════════════════════════════ */
-    .game-wrap {
-      position: relative; z-index: 5;
-      max-width: 900px; margin: 0 auto;
-      padding: 70px 16px 120px;
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      grid-template-rows: auto 1fr;
-      gap: 20px;
-      min-height: 100vh;
-    }
+.sushi-orbit{
+  position:absolute;width:260px;height:260px;border-radius:50%;
+  border:1px dashed rgba(180,127,232,.15);
+  animation:orbitSpin 20s linear infinite;
+  pointer-events:none;
+}
+.sushi-orbit::before,.sushi-orbit::after{
+  content:'✦';position:absolute;font-size:10px;color:rgba(240,160,200,.4);
+}
+.sushi-orbit::before{top:-6px;left:50%;transform:translateX(-50%);}
+.sushi-orbit::after{bottom:-6px;left:50%;transform:translateX(-50%);}
+@keyframes orbitSpin{to{transform:rotate(360deg);}}
 
-    /* ── HEADER ─────────────────────────────────── */
-    .header {
-      grid-column: 1 / -1;
-      text-align: center;
-      animation: fadeUp .8s ease both;
-    }
+#sushiBtn{
+  position:relative;
+  width:190px;height:190px;
+  border-radius:0;
+  background:var(--glass);
+  border:2px solid var(--border);
+  backdrop-filter:blur(14px);
+  box-shadow:0 0 0 1px rgba(255,255,255,.03),0 0 50px rgba(240,160,200,.1),0 20px 60px rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:78px;line-height:1;
+  transition:transform .07s ease,box-shadow .07s ease,filter .07s ease;
+  cursor:pointer!important;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  overflow:visible;z-index:2;
+}
+#sushiBtn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+#sushiBtn:active,#sushiBtn.clicked{
+  transform:scale(.88);
+  filter:brightness(1.2) saturate(1.3);
+  box-shadow:0 0 0 1px rgba(255,255,255,.04),0 0 30px rgba(240,160,200,.35),0 6px 20px rgba(0,0,0,.3);
+}
+#sushiBtn.golden{
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px rgba(255,213,128,.2),0 0 60px rgba(255,213,128,.4),0 20px 60px rgba(0,0,0,.35)!important;
+  animation:goldenPulse .8s ease-in-out infinite!important;
+}
+@keyframes goldenPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,213,128,.2),0 0 40px rgba(255,213,128,.3);}50%{box-shadow:0 0 0 1px rgba(255,213,128,.3),0 0 80px rgba(255,213,128,.6);}}
+.sushi-inner{display:block;animation:sushiBob 2.5s ease-in-out infinite;pointer-events:none;transition:filter .15s;}
+@keyframes sushiBob{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-7px) rotate(3deg);}}
 
-    .pixel-label {
-      font-size: 7px; letter-spacing: 3px;
-      color: var(--rose);
-      display: inline-flex; align-items: center; gap: 10px;
-      margin-bottom: 14px; opacity: .9;
-    }
-    .pixel-label::before, .pixel-label::after {
-      content: ''; width: 18px; height: 2px;
-      background: var(--violet); box-shadow: 0 0 6px rgba(180,127,232,.5);
-    }
+/* COMBO */
+.combo-display{
+  position:absolute;top:-44px;right:-20px;z-index:10;
+  font-size:8px;color:var(--rose);
+  text-shadow:0 0 10px rgba(240,160,200,.6);
+  opacity:0;transition:opacity .2s;
+  pointer-events:none;
+}
+.combo-display.active{opacity:1;}
+.combo-display .combo-num{font-size:14px;color:var(--gold);display:block;text-shadow:0 0 12px rgba(255,213,128,.7);}
 
-    .header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      line-height: 1.1;
-      background: linear-gradient(135deg, var(--soft) 0%, var(--rose) 45%, var(--violet) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      filter: drop-shadow(0 0 16px rgba(240,160,200,.2));
-      margin-bottom: 6px;
-    }
+/* GOLDEN TIMER */
+.golden-timer{
+  position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);
+  font-size:7px;color:var(--gold);
+  text-shadow:0 0 8px rgba(255,213,128,.5);
+  opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;
+}
+.golden-timer.active{opacity:1;}
 
-    .header-sub {
-      font-size: 6px; color: var(--violet); opacity: .75; letter-spacing: 2px;
-    }
+/* CPS BAR */
+.cps-bar-wrap{
+  width:100%;max-width:280px;
+}
+.cps-bar-label{font-size:5px;color:var(--violet);opacity:.7;margin-bottom:5px;display:flex;justify-content:space-between;}
+.cps-bar{height:4px;background:rgba(255,255,255,.05);position:relative;overflow:hidden;}
+.cps-bar-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .4s ease;width:0%;}
 
-    /* ── LEFT PANEL — clicker ───────────────────── */
-    .clicker-panel {
-      display: flex; flex-direction: column; align-items: center; gap: 20px;
-    }
+/* STATS ROW */
+.stats-row{display:flex;gap:10px;width:100%;flex-wrap:wrap;justify-content:center;}
+.stat-box{
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(8px);
+  padding:10px 14px;text-align:center;flex:1;min-width:90px;
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
+  transition:border-color .3s;
+}
+.stat-box.highlight{border-color:rgba(240,160,200,.5);box-shadow:0 4px 16px rgba(240,160,200,.1);}
+.stat-label{font-size:5px;color:var(--violet);letter-spacing:1px;margin-bottom:6px;opacity:.8;}
+.stat-value{font-size:10px;color:var(--soft);text-shadow:0 0 8px rgba(240,160,200,.2);}
+.stat-value.gold{color:var(--gold);text-shadow:0 0 10px rgba(255,213,128,.4);}
 
-    /* Stats row */
-    .stats-row {
-      display: flex; gap: 12px; width: 100%; justify-content: center;
-      flex-wrap: wrap;
-    }
+/* PASSIVE TICKER */
+.passive-ticker{
+  font-size:5px;color:var(--violet);letter-spacing:2px;opacity:.75;text-align:center;
+}
 
-    .stat-box {
-      background: var(--glass); border: 2px solid transparent;
-      border-image: repeating-linear-gradient(90deg, var(--violet) 0px, var(--violet) 4px, transparent 4px, transparent 8px) 2;
-      backdrop-filter: blur(10px);
-      padding: 12px 16px; text-align: center; flex: 1; min-width: 110px;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.2);
-      animation: fadeUp .6s ease both;
-    }
+/* ── RIGHT PANEL ── */
+.right-panel{display:flex;flex-direction:column;gap:12px;}
 
-    .stat-label { font-size: 5px; color: var(--violet); letter-spacing: 2px; margin-bottom: 8px; opacity: .8; }
-    .stat-value { font-size: 11px; color: var(--soft); text-shadow: 0 0 10px rgba(240,160,200,.3); }
-    .stat-value.gold { color: var(--gold); text-shadow: 0 0 10px rgba(255,213,128,.4); }
+/* TAB NAV */
+.tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);}
+.tab-btn{
+  font-family:'Press Start 2P',monospace;font-size:6px;
+  background:none;border:none;color:rgba(245,230,255,.45);
+  padding:8px 14px;cursor:pointer!important;
+  transition:color .2s,background .2s;
+  position:relative;
+}
+.tab-btn.active{color:var(--rose);}
+.tab-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--rose);}
+.tab-btn:hover:not(.active){color:rgba(245,230,255,.7);}
 
-    /* Big sushi button */
-    .sushi-btn-wrap {
-      position: relative;
-      animation: fadeUp .7s ease .1s both;
-    }
+/* PANEL SECTIONS */
+.panel-section{display:none;}
+.panel-section.active{display:flex;flex-direction:column;gap:8px;}
 
-    .sushi-btn-wrap::before {
-      content: '';
-      position: absolute; inset: -16px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(240,160,200,.15) 0%, transparent 70%);
-      animation: btnAura 2s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes btnAura {
-      0%,100% { transform: scale(1);   opacity: .6; }
-      50%      { transform: scale(1.2); opacity: 1; }
-    }
+/* SHOP */
+.section-label{font-size:6px;color:var(--rose);letter-spacing:2px;padding-bottom:6px;border-bottom:1px solid rgba(180,127,232,.15);margin-bottom:2px;}
 
-    #sushiBtn {
-      position: relative;
-      width: 180px; height: 180px;
-      border-radius: 0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
-        var(--glass);
-      border: 3px solid transparent;
-      border-image: repeating-linear-gradient(90deg, var(--rose) 0px, var(--rose) 4px, transparent 4px, transparent 8px) 3;
-      backdrop-filter: blur(12px);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,.04),
-        0 0 40px rgba(240,160,200,.15),
-        0 20px 60px rgba(0,0,0,.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 72px;
-      line-height: 1;
-      transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
-      cursor: pointer !important;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      overflow: visible;
-    }
+.upgrade-card{
+  position:relative;overflow:hidden;
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(8px);
+  padding:10px 12px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer!important;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s;
+  box-shadow:0 3px 12px rgba(0,0,0,.2);
+}
+.upgrade-card:hover:not(.locked){
+  transform:translateX(-3px);
+  border-color:rgba(240,160,200,.4);
+  box-shadow:4px 0 0 var(--violet),0 3px 14px rgba(0,0,0,.25);
+}
+.upgrade-card:active:not(.locked){transform:translateX(0) scale(.97);}
+.upgrade-card.locked{opacity:.35;cursor:default!important;}
+.upgrade-card.locked .upgrade-emoji{filter:grayscale(1);}
+.upgrade-card.affordable{border-color:rgba(240,160,200,.45);}
+.upgrade-card.affordable::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.04) 50%,transparent 70%);
+  transform:translateX(-120%);
+  animation:shimmer 2s ease-in-out infinite;pointer-events:none;
+}
+@keyframes shimmer{0%,40%{transform:translateX(-120%);}100%{transform:translateX(140%);}}
+.upgrade-card.maxed{border-color:rgba(128,255,232,.3);opacity:.6;cursor:default!important;}
 
-    #sushiBtn:active, #sushiBtn.clicked {
-      transform: scale(.89);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,.04),
-        0 0 20px rgba(240,160,200,.3),
-        0 6px 20px rgba(0,0,0,.3);
-      filter: brightness(1.15);
-    }
+.upgrade-emoji{font-size:22px;flex-shrink:0;}
+.upgrade-info{flex:1;min-width:0;}
+.upgrade-name{font-size:5.5px;color:var(--soft);margin-bottom:4px;letter-spacing:.5px;}
+.upgrade-desc{font-size:4.5px;color:rgba(245,230,255,.45);line-height:1.8;margin-bottom:4px;}
+.upgrade-meta{display:flex;gap:8px;align-items:center;}
+.upgrade-count{font-size:4.5px;color:var(--teal);}
+.upgrade-level-bar{flex:1;height:2px;background:rgba(255,255,255,.06);overflow:hidden;}
+.upgrade-level-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--violet));transition:width .3s;}
+.upgrade-cost{font-size:7px;color:var(--gold);white-space:nowrap;flex-shrink:0;text-shadow:0 0 6px rgba(255,213,128,.35);}
+.upgrade-cost.can-afford{color:var(--rose);text-shadow:0 0 8px rgba(240,160,200,.4);animation:costPulse 1.2s ease-in-out infinite;}
+@keyframes costPulse{0%,100%{opacity:1;}50%{opacity:.6;}}
 
-    #sushiBtn .sushi-inner {
-      display: block;
-      animation: sushiBob 2.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes sushiBob {
-      0%,100% { transform: translateY(0) rotate(-3deg); }
-      50%      { transform: translateY(-6px) rotate(3deg); }
-    }
+/* ACHIEVEMENTS */
+.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ach-card{
+  background:var(--glass);border:1px solid var(--border);
+  padding:10px;text-align:center;
+  transition:border-color .3s,box-shadow .3s;
+}
+.ach-card.unlocked{border-color:rgba(255,213,128,.4);box-shadow:0 0 12px rgba(255,213,128,.1);}
+.ach-card.locked{opacity:.3;filter:grayscale(.8);}
+.ach-emoji{font-size:20px;display:block;margin-bottom:6px;}
+.ach-name{font-size:4px;color:var(--soft);line-height:1.8;margin-bottom:4px;}
+.ach-desc{font-size:3.5px;color:rgba(245,230,255,.4);line-height:1.9;}
+.ach-card.unlocked .ach-desc{color:var(--gold);}
 
-    /* Click ripple */
-    .ripple {
-      position: absolute;
-      border-radius: 0;
-      width: 10px; height: 10px;
-      background: rgba(240,160,200,.55);
-      pointer-events: none;
-      transform: translate(-50%,-50%) scale(0);
-      animation: rippleOut .5s ease forwards;
-      z-index: 100;
-    }
-    @keyframes rippleOut {
-      to { transform: translate(-50%,-50%) scale(22); opacity: 0; }
-    }
+/* STATS TAB */
+.stat-row-list{display:flex;flex-direction:column;gap:6px;}
+.stat-item{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:5px;padding:7px 10px;
+  background:var(--glass);border:1px solid rgba(180,127,232,.1);
+}
+.stat-item-label{color:rgba(245,230,255,.5);}
+.stat-item-value{color:var(--soft);}
 
-    /* Click sparkles */
-    .sparkle {
-      position: fixed;
-      font-size: 14px;
-      pointer-events: none;
-      z-index: 9999;
-      animation: sparklePop .65s ease forwards;
-    }
-    @keyframes sparklePop {
-      0%   { opacity: 1; transform: translate(0,0) scale(.5); }
-      100% { opacity: 0; transform: var(--sv) scale(1.6); }
-    }
+/* PRESTIGE SECTION */
+.prestige-panel{
+  background:var(--glass2);border:1px solid rgba(255,213,128,.2);
+  padding:16px;text-align:center;
+  box-shadow:0 0 30px rgba(255,213,128,.05);
+}
+.prestige-title{font-size:8px;color:var(--gold);margin-bottom:10px;text-shadow:0 0 10px rgba(255,213,128,.4);}
+.prestige-info{font-size:5px;color:rgba(245,230,255,.5);line-height:2.2;margin-bottom:14px;}
+.prestige-mult{font-size:16px;color:var(--gold);text-shadow:0 0 20px rgba(255,213,128,.5);margin:10px 0;display:block;}
+#prestigeBtn{
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  color:var(--deep);
+  background:linear-gradient(135deg,var(--gold) 0%,#ffaa44 100%);
+  border:none;padding:12px 24px;
+  cursor:pointer!important;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:transform .12s,box-shadow .12s,filter .12s;
+  opacity:.4;pointer-events:none;
+  box-shadow:4px 4px 0 rgba(180,127,232,.5);
+  width:100%;
+}
+#prestigeBtn.ready{opacity:1;pointer-events:auto;animation:prestigePulse 1.5s ease-in-out infinite;}
+@keyframes prestigePulse{0%,100%{box-shadow:4px 4px 0 rgba(180,127,232,.5);}50%{box-shadow:4px 4px 0 rgba(180,127,232,.6),0 0 24px rgba(255,213,128,.4);}}
+#prestigeBtn:hover.ready{transform:translate(-2px,-2px);box-shadow:6px 6px 0 rgba(180,127,232,.5);}
+#prestigeBtn:active.ready{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(180,127,232,.5);}
 
-    /* Score float */
-    .score-float {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: var(--gold);
-      text-shadow: 0 0 10px rgba(255,213,128,.6);
-      animation: floatScore .8s ease forwards;
-    }
-    @keyframes floatScore {
-      0%   { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-55px) scale(1.4); }
-    }
+/* TOASTS & FLOATS */
+.score-float{
+  position:fixed;pointer-events:none;z-index:9999;
+  font-family:'Press Start 2P',monospace;font-size:9px;
+  color:var(--gold);text-shadow:0 0 10px rgba(255,213,128,.6);
+  animation:floatScore .75s ease forwards;
+}
+.score-float.crit{font-size:13px;color:var(--rose);text-shadow:0 0 14px rgba(240,160,200,.8);}
+.score-float.golden{color:#ffe066;font-size:15px;text-shadow:0 0 20px rgba(255,224,102,.9);}
+@keyframes floatScore{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-65px) scale(1.5);}}
 
-    /* Milestone flash */
-    .milestone-toast {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%,-50%) scale(0);
-      z-index: 9998;
-      background: linear-gradient(180deg, rgba(26,10,46,.96), rgba(45,19,85,.96));
-      border: 3px solid var(--rose);
-      padding: 24px 36px; text-align: center;
-      box-shadow: 0 0 60px rgba(240,160,200,.3), 0 0 120px rgba(180,127,232,.2);
-      pointer-events: none;
-      animation: toastIn .4s cubic-bezier(.34,1.56,.64,1) forwards;
-    }
-    .milestone-toast.out {
-      animation: toastOut .4s ease forwards;
-    }
-    @keyframes toastIn  { to   { transform: translate(-50%,-50%) scale(1); } }
-    @keyframes toastOut { from { transform: translate(-50%,-50%) scale(1); opacity: 1; } to { transform: translate(-50%,-50%) scale(.85); opacity: 0; } }
+.sparkle{
+  position:fixed;font-size:13px;pointer-events:none;z-index:9999;
+  animation:sparklePop .6s ease forwards;
+}
+@keyframes sparklePop{0%{opacity:1;transform:translate(0,0) scale(.4);}100%{opacity:0;transform:var(--sv) scale(1.5);}}
 
-    .toast-emoji { font-size: 32px; display: block; margin-bottom: 10px; }
-    .toast-title { font-size: 10px; color: var(--gold); margin-bottom: 8px; text-shadow: 0 0 12px rgba(255,213,128,.5); }
-    .toast-sub   { font-size: 6px;  color: var(--violet); line-height: 2.2; }
+.ripple{
+  position:absolute;width:8px;height:8px;
+  background:rgba(240,160,200,.5);pointer-events:none;
+  transform:translate(-50%,-50%) scale(0);
+  animation:rippleOut .45s ease forwards;z-index:100;
+}
+@keyframes rippleOut{to{transform:translate(-50%,-50%) scale(24);opacity:0;}}
 
-    /* ── RIGHT PANEL — upgrades ─────────────────── */
-    .upgrades-panel {
-      display: flex; flex-direction: column; gap: 10px;
-      animation: fadeUp .8s ease .2s both;
-      max-height: 720px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(180,127,232,.3) transparent;
-    }
+/* MILESTONE TOAST */
+.milestone-toast{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  z-index:9998;
+  background:linear-gradient(160deg,rgba(15,7,32,.97),rgba(30,13,58,.97));
+  border:2px solid var(--rose);
+  padding:20px 32px;text-align:center;
+  box-shadow:0 0 60px rgba(240,160,200,.25),0 0 120px rgba(180,127,232,.15);
+  pointer-events:none;
+  animation:toastIn .35s cubic-bezier(.34,1.56,.64,1) forwards;
+  max-width:340px;width:90%;
+}
+.milestone-toast.out{animation:toastOut .35s ease forwards;}
+@keyframes toastIn{to{transform:translate(-50%,-50%) scale(1);}}
+@keyframes toastOut{from{transform:translate(-50%,-50%) scale(1);opacity:1;}to{transform:translate(-50%,-50%) scale(.85);opacity:0;}}
+.toast-emoji{font-size:28px;display:block;margin-bottom:8px;}
+.toast-title{font-size:9px;color:var(--gold);margin-bottom:6px;text-shadow:0 0 10px rgba(255,213,128,.5);}
+.toast-sub{font-size:5px;color:var(--violet);line-height:2.2;}
+.toast-type-ach{border-color:var(--gold);}
+.toast-type-prestige{border-color:var(--gold);box-shadow:0 0 80px rgba(255,213,128,.3);}
+.toast-type-golden{border-color:var(--gold);box-shadow:0 0 60px rgba(255,213,128,.4);}
 
-    .upgrades-panel::-webkit-scrollbar { width: 4px; }
-    .upgrades-panel::-webkit-scrollbar-track { background: transparent; }
-    .upgrades-panel::-webkit-scrollbar-thumb { background: rgba(180,127,232,.3); }
+/* GOLDEN SUSHI EVENT */
+.golden-event-btn{
+  position:fixed;pointer-events:auto;z-index:8000;
+  font-size:38px;
+  background:none;border:none;
+  cursor:pointer!important;
+  animation:goldenFloat 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,213,128,.8));
+  display:none;
+}
+@keyframes goldenFloat{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-12px) rotate(5deg);}}
 
-    .upgrades-title {
-      font-size: 7px; letter-spacing: 2px; color: var(--rose);
-      text-align: center; padding-bottom: 8px;
-      border-bottom: 2px solid rgba(180,127,232,.2);
-      margin-bottom: 4px;
-    }
+/* CRIT FLASH */
+.crit-flash{
+  position:fixed;inset:0;pointer-events:none;z-index:7000;
+  background:rgba(240,160,200,.08);
+  animation:critFlash .2s ease forwards;
+}
+@keyframes critFlash{0%{opacity:1;}100%{opacity:0;}}
 
-    .upgrade-card {
-      position: relative; overflow: hidden;
-      background: var(--glass);
-      border: 2px solid transparent;
-      border-image: repeating-linear-gradient(90deg, rgba(180,127,232,.4) 0px, rgba(180,127,232,.4) 4px, transparent 4px, transparent 8px) 2;
-      backdrop-filter: blur(8px);
-      padding: 12px 14px;
-      display: flex; align-items: center; gap: 12px;
-      cursor: pointer !important;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
-      box-shadow: 0 4px 16px rgba(0,0,0,.2);
-    }
+/* SCREEN SHAKE */
+@keyframes shake{0%,100%{transform:translate(0,0);}20%{transform:translate(-4px,2px);}40%{transform:translate(4px,-2px);}60%{transform:translate(-3px,3px);}80%{transform:translate(3px,-1px);}}
+.shaking .game-wrap{animation:shake .25s ease;}
 
-    .upgrade-card:hover:not(.locked) {
-      transform: translateX(-3px);
-      box-shadow: 4px 0 0 var(--violet), 0 4px 20px rgba(0,0,0,.3);
-    }
+/* SAVE INDICATOR */
+.save-indicator{
+  position:fixed;bottom:16px;right:16px;z-index:200;
+  font-size:5px;color:var(--teal);
+  background:rgba(128,255,232,.07);border:1px solid rgba(128,255,232,.2);
+  padding:6px 10px;opacity:0;transition:opacity .3s;
+}
+.save-indicator.show{opacity:1;}
 
-    .upgrade-card:active:not(.locked) {
-      transform: translateX(0) scale(.97);
-    }
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .6s ease both;}
 
-    .upgrade-card.locked {
-      opacity: .4;
-      cursor: default !important;
-    }
+/* MOBILE */
+@media(max-width:700px){
+  .game-wrap{grid-template-columns:1fr;padding:60px 12px 80px;gap:14px;}
+  #sushiBtn{width:155px;height:155px;font-size:62px;}
+  .sushi-orbit{width:210px;height:210px;}
+  .header{flex-direction:column;gap:8px;align-items:flex-start;}
+  .header-stats{gap:12px;}
+}
 
-    .upgrade-card.locked .upgrade-emoji { filter: grayscale(1); }
-
-    .upgrade-card.bought {
-      border-image: repeating-linear-gradient(90deg, var(--teal) 0px, var(--teal) 4px, transparent 4px, transparent 8px) 2;
-      opacity: .65;
-    }
-
-    /* shimmer on affordable upgrades */
-    .upgrade-card.affordable::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.04) 50%, transparent 75%);
-      transform: translateX(-120%);
-      animation: upgradeShimmer 2s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes upgradeShimmer {
-      0%,50% { transform: translateX(-120%); }
-      100%   { transform: translateX(140%); }
-    }
-
-    .upgrade-emoji { font-size: 26px; flex-shrink: 0; }
-
-    .upgrade-info { flex: 1; min-width: 0; }
-    .upgrade-name  { font-size: 6px; color: var(--soft); margin-bottom: 5px; letter-spacing: 1px; }
-    .upgrade-desc  { font-size: 5px; color: rgba(245,230,255,.5); line-height: 1.8; margin-bottom: 5px; }
-    .upgrade-count { font-size: 5px; color: var(--teal); }
-
-    .upgrade-cost {
-      font-size: 7px; color: var(--gold); white-space: nowrap; flex-shrink: 0;
-      text-shadow: 0 0 8px rgba(255,213,128,.4);
-    }
-
-    .upgrade-cost.can-afford { color: var(--rose); text-shadow: 0 0 8px rgba(240,160,200,.4); animation: costPulse 1.2s ease-in-out infinite; }
-    @keyframes costPulse {
-      0%,100% { opacity: 1; }
-      50%      { opacity: .65; }
-    }
-
-    /* ── PRESTIGE BUTTON ────────────────────────── */
-    .prestige-wrap {
-      grid-column: 1 / -1;
-      text-align: center;
-      margin-top: 10px;
-      animation: fadeUp .8s ease .4s both;
-    }
-
-    .prestige-info {
-      font-size: 6px; color: rgba(245,230,255,.4); margin-bottom: 14px; line-height: 2;
-    }
-
-    #prestigeBtn {
-      font-family: 'Press Start 2P', monospace; font-size: 8px;
-      color: var(--deep);
-      background: linear-gradient(135deg, var(--gold) 0%, #ffaa44 100%);
-      border: none; padding: 14px 28px;
-      box-shadow: 5px 5px 0 rgba(180,127,232,.6);
-      cursor: pointer !important;
-      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-      opacity: .4;
-      pointer-events: none;
-    }
-
-    #prestigeBtn.ready {
-      opacity: 1; pointer-events: auto;
-      animation: prestigePulse 1.4s ease-in-out infinite;
-    }
-    @keyframes prestigePulse {
-      0%,100% { box-shadow: 5px 5px 0 rgba(180,127,232,.6); }
-      50%      { box-shadow: 5px 5px 0 rgba(180,127,232,.6), 0 0 30px rgba(255,213,128,.5); }
-    }
-
-    #prestigeBtn:hover.ready { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 rgba(180,127,232,.6); }
-    #prestigeBtn:active.ready { transform: translate(2px,2px); box-shadow: 2px 2px 0 rgba(180,127,232,.6); }
-
-    /* ── PIXEL DIVIDER ──────────────────────────── */
-    .px-divider {
-      grid-column: 1 / -1;
-      display: flex; align-items: center; gap: 14px; opacity: .45; margin: 4px 0;
-    }
-    .px-divider span {
-      flex: 1; height: 2px;
-      background: repeating-linear-gradient(90deg, var(--violet) 0px, var(--violet) 4px, transparent 4px, transparent 8px);
-    }
-    .px-divider i {
-      font-style: normal; font-size: 9px; color: var(--rose);
-      animation: pulseSpin 2.2s ease-in-out infinite;
-      text-shadow: 0 0 10px rgba(240,160,200,.7);
-    }
-    @keyframes pulseSpin { 0%,100% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.4); } }
-
-    /* ── PASSIVE INCOME ticker ──────────────────── */
-    .passive-ticker {
-      grid-column: 1 / -1;
-      text-align: center;
-      font-size: 6px; color: var(--violet); letter-spacing: 2px;
-      opacity: .7;
-      animation: fadeUp .8s ease .3s both;
-    }
-
-    /* ── ANIMATIONS ─────────────────────────────── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── MOBILE ─────────────────────────────────── */
-    @media (max-width: 680px) {
-      .game-wrap {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        padding: 64px 12px 100px;
-        gap: 16px;
-      }
-
-      .upgrades-panel { max-height: none; overflow-y: visible; }
-
-      .prestige-wrap { grid-column: 1; }
-      .px-divider    { grid-column: 1; }
-      .passive-ticker{ grid-column: 1; }
-
-      #sushiBtn { width: 150px; height: 150px; font-size: 58px; }
-    }
-  </style>
+/* SCROLLBAR */
+.panel-section{scrollbar-width:thin;scrollbar-color:rgba(180,127,232,.25) transparent;max-height:72vh;overflow-y:auto;}
+.panel-section::-webkit-scrollbar{width:3px;}
+.panel-section::-webkit-scrollbar-thumb{background:rgba(180,127,232,.25);}
+</style>
 </head>
 <body>
 
-  <div class="noise"></div>
+<div class="bg-gradient"></div>
+<div class="stars" id="stars"></div>
+<div class="particles" id="particles"></div>
 
-  <!-- Mountains -->
-  <div class="mountains-bg">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice">
-      <defs>
-        <linearGradient id="mg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="transparent"/>
-          <stop offset="100%" stop-color="rgba(26,10,46,.35)"/>
-        </linearGradient>
-      </defs>
-      <path fill="rgba(80,40,130,.18)"  d="M0,420 L55,340 L110,380 L180,300 L250,355 L330,270 L400,320 L470,250 L540,305 L620,230 L700,290 L780,215 L855,275 L930,240 L1000,295 L1075,255 L1150,310 L1240,270 L1330,315 L1440,285 L1440,500 L0,500Z"/>
-      <path fill="rgba(55,22,100,.38)"  d="M0,440 L90,360 L190,400 L300,320 L410,375 L520,295 L630,345 L740,268 L850,330 L950,300 L1060,355 L1165,315 L1280,370 L1440,335 L1440,500 L0,500Z"/>
-      <path fill="rgba(35,13,65,.65)"   d="M0,458 L140,400 L280,432 L420,378 L560,415 L700,375 L840,410 L980,380 L1120,408 L1280,382 L1440,415 L1440,500 L0,500Z"/>
-      <rect x="0" y="380" width="1440" height="120" fill="url(#mg)"/>
-      <path fill="rgba(18,7,36,.90)"    d="M0,482 L200,462 L400,475 L600,458 L800,470 L1000,460 L1200,472 L1440,463 L1440,500 L0,500Z"/>
-    </svg>
-  </div>
-  <div class="mountains-aurora"></div>
+<!-- Mountains -->
+<div class="mountains-bg">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice">
+    <path fill="rgba(70,30,120,.14)"  d="M0,420 L55,340 L110,380 L180,300 L250,355 L330,270 L400,320 L470,250 L540,305 L620,230 L700,290 L780,215 L855,275 L930,240 L1000,295 L1075,255 L1150,310 L1240,270 L1330,315 L1440,285 L1440,500 L0,500Z"/>
+    <path fill="rgba(45,18,90,.32)"   d="M0,440 L90,360 L190,400 L300,320 L410,375 L520,295 L630,345 L740,268 L850,330 L950,300 L1060,355 L1165,315 L1280,370 L1440,335 L1440,500 L0,500Z"/>
+    <path fill="rgba(28,10,55,.60)"   d="M0,460 L140,405 L280,435 L420,382 L560,418 L700,378 L840,415 L980,382 L1120,412 L1280,385 L1440,418 L1440,500 L0,500Z"/>
+    <path fill="rgba(12,5,26,.88)"    d="M0,485 L200,465 L400,478 L600,460 L800,472 L1000,462 L1200,475 L1440,465 L1440,500 L0,500Z"/>
+  </svg>
+</div>
 
-  <!-- Stars -->
-  <div class="stars" id="stars"></div>
-  <div class="particles" id="particles"></div>
+<!-- Cursor -->
+<canvas id="cursor" width="24" height="24"></canvas>
 
-  <!-- Cursor -->
-  <canvas id="cursor" width="24" height="24"></canvas>
+<!-- Corners -->
+<div class="corner tl">🍣</div>
+<div class="corner tr">♡</div>
+<div class="corner bl">✦</div>
 
-  <!-- Corners -->
-  <div class="corner tl">🍣</div>
-  <div class="corner tr">♡</div>
-  <div class="corner bl">✦</div>
+<!-- Golden sushi event -->
+<button class="golden-event-btn" id="goldenEventBtn" aria-label="Golden Sushi!">🌟</button>
 
-  <!-- Back -->
-  <a href="index.html" class="back-btn">← back to tally ♡</a>
+<!-- Save indicator -->
+<div class="save-indicator" id="saveIndicator">✦ saved</div>
 
-  <!-- ═══════════════════ GAME ═══════════════════ -->
-  <div class="game-wrap">
+<!-- ═══════════════════ GAME ═══════════════════ -->
+<div class="game-wrap">
 
-    <!-- Header -->
-    <div class="header">
-      <div class="pixel-label">✦ bonus stage ✦</div>
+  <!-- Header -->
+  <div class="header fade-up">
+    <div class="header-logo">
+      <span id="headerEmoji">🍣</span>
       <h1>sushi clicker</h1>
-      <div class="header-sub">tap the sushi. keep tapping. forever.</div>
+      <div class="prestige-badge" id="prestigeBadge"></div>
+    </div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-label">sushi</div>
+        <div class="hstat-value gold" id="sushiCount">0</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-label">per sec</div>
+        <div class="hstat-value" id="perSec">0</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-label">per click</div>
+        <div class="hstat-value" id="perClick">1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEFT -->
+  <div class="left-panel fade-up" style="animation-delay:.1s">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-box" id="statTotal">
+        <div class="stat-label">all time</div>
+        <div class="stat-value" id="allTime">0</div>
+      </div>
+      <div class="stat-box" id="statClicks">
+        <div class="stat-label">clicks</div>
+        <div class="stat-value" id="totalClicks">0</div>
+      </div>
+      <div class="stat-box" id="statCrit">
+        <div class="stat-label">criticals</div>
+        <div class="stat-value" id="totalCrits">0</div>
+      </div>
+      <div class="stat-box" id="statGolden">
+        <div class="stat-label">golden</div>
+        <div class="stat-value gold" id="totalGolden">0</div>
+      </div>
     </div>
 
-    <!-- Left: Clicker -->
-    <div class="clicker-panel">
-
-      <!-- Stats -->
-      <div class="stats-row">
-        <div class="stat-box" style="animation-delay:.05s">
-          <div class="stat-label">🍣 sushi</div>
-          <div class="stat-value gold" id="sushiCount">0</div>
-        </div>
-        <div class="stat-box" style="animation-delay:.1s">
-          <div class="stat-label">per click</div>
-          <div class="stat-value" id="perClick">1</div>
-        </div>
-        <div class="stat-box" style="animation-delay:.15s">
-          <div class="stat-label">per sec</div>
-          <div class="stat-value" id="perSec">0</div>
-        </div>
-        <div class="stat-box" style="animation-delay:.2s">
-          <div class="stat-label">all time</div>
-          <div class="stat-value" id="allTime">0</div>
-        </div>
+    <!-- Big button -->
+    <div class="sushi-arena">
+      <div class="sushi-orbit"></div>
+      <button id="sushiBtn" aria-label="Click to get sushi">
+        <span class="sushi-inner" id="sushiEmoji">🍣</span>
+      </button>
+      <div class="combo-display" id="comboDisplay">
+        <span class="combo-num" id="comboNum">x1</span>
+        COMBO!
       </div>
-
-      <!-- Big button -->
-      <div class="sushi-btn-wrap">
-        <button id="sushiBtn" aria-label="Click to get sushi">
-          <span class="sushi-inner" id="sushiEmoji">🍣</span>
-        </button>
-      </div>
-
-      <!-- Passive ticker -->
-      <div class="passive-ticker" id="passiveTicker">✦ idle — no passive income yet ✦</div>
-
+      <div class="golden-timer" id="goldenTimer"></div>
     </div>
 
-    <!-- Right: Upgrades -->
-    <div class="upgrades-panel" id="upgradesPanel">
-      <div class="upgrades-title">✦ upgrades ✦</div>
-      <!-- injected by JS -->
+    <!-- CPS bar -->
+    <div class="cps-bar-wrap">
+      <div class="cps-bar-label">
+        <span>production</span>
+        <span id="cpsBarLabel">0/s</span>
+      </div>
+      <div class="cps-bar"><div class="cps-bar-fill" id="cpsBarFill"></div></div>
     </div>
 
-    <div class="px-divider" style="grid-column:1/-1"><span></span><i>✦</i><span></span></div>
+    <!-- Passive ticker -->
+    <div class="passive-ticker" id="passiveTicker">✦ tap to start your sushi empire ✦</div>
 
-    <!-- Prestige -->
-    <div class="prestige-wrap">
-      <div class="prestige-info" id="prestigeInfo">
-        prestige at 10,000 sushi — resets progress but multiplies everything ✦
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel fade-up" style="animation-delay:.18s">
+
+    <!-- Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="shop">🛒 SHOP</button>
+      <button class="tab-btn" data-tab="skills">⚡ SKILLS</button>
+      <button class="tab-btn" data-tab="achieve">🏆 ACHEIV</button>
+      <button class="tab-btn" data-tab="stats">📊 STATS</button>
+    </div>
+
+    <!-- SHOP TAB -->
+    <div class="panel-section active" id="tab-shop">
+      <div class="section-label">✦ generators</div>
+      <!-- injected -->
+    </div>
+
+    <!-- SKILLS TAB -->
+    <div class="panel-section" id="tab-skills">
+      <div class="section-label">✦ click upgrades</div>
+      <!-- injected -->
+    </div>
+
+    <!-- ACHIEVEMENTS TAB -->
+    <div class="panel-section" id="tab-achieve">
+      <div class="section-label">✦ achievements</div>
+      <div class="ach-grid" id="achGrid"></div>
+    </div>
+
+    <!-- STATS TAB -->
+    <div class="panel-section" id="tab-stats">
+      <div class="section-label">✦ your stats</div>
+      <div class="stat-row-list" id="statsList"></div>
+      <div style="margin-top:12px">
+        <div class="prestige-panel">
+          <div class="prestige-title">◆ PRESTIGE</div>
+          <span class="prestige-mult" id="prestigeMult">x1</span>
+          <div class="prestige-info" id="prestigeInfo">prestige at 10,000 total sushi — resets progress, multiplies everything</div>
+          <button id="prestigeBtn">◆ PRESTIGE NOW ◆</button>
+        </div>
       </div>
-      <button id="prestigeBtn">◆ PRESTIGE ◆</button>
     </div>
 
   </div>
 
-  <script>
-  /* ═══════════════════════════════════════════════
-     CURSOR
-  ═══════════════════════════════════════════════ */
-  (function(){
-    const c = document.getElementById('cursor');
-    const x = c.getContext('2d');
-    const map = [
-      [0,0,1,1,0,0,0,1,1,0,0,0],
-      [0,1,1,1,1,0,1,1,1,1,0,0],
-      [1,1,1,1,1,1,1,1,1,1,1,0],
-      [1,1,1,1,1,1,1,1,1,1,1,0],
-      [0,1,1,1,1,1,1,1,1,1,0,0],
-      [0,0,1,1,1,1,1,1,1,0,0,0],
-      [0,0,0,1,1,1,1,1,0,0,0,0],
-      [0,0,0,0,1,1,1,0,0,0,0,0],
-      [0,0,0,0,0,1,0,0,0,0,0,0],
-    ];
-    const cols = ['#f0a0c8','#f0a0c8','#ff80bf','#b47fe8','#b47fe8'];
-    const p=2;
-    map.forEach((row,y)=>row.forEach((cell,cx2)=>{
-      if(cell){x.fillStyle=cols[Math.floor(y/2)%cols.length];x.fillRect(cx2*p,y*p,p,p);}
-    }));
-    document.addEventListener('mousemove',e=>{
-      c.style.left=e.clientX+'px'; c.style.top=e.clientY+'px';
-    });
-  })();
+</div>
 
-  /* ═══════════════════════════════════════════════
-     STARS & PARTICLES
-  ═══════════════════════════════════════════════ */
-  (function(){
-    const starsEl = document.getElementById('stars');
-    for(let i=0;i<80;i++){
-      const s=document.createElement('div'); s.className='star';
-      s.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*100}vh;
-        animation-delay:${Math.random()*4}s;animation-duration:${1.5+Math.random()*3}s;
-        ${Math.random()>.5?'background:#b47fe8':''}`;
-      starsEl.appendChild(s);
-    }
-    const pe=document.getElementById('particles');
-    const emojis=['🍣','✦','♡','🍱','✿','♪'];
-    for(let i=0;i<16;i++){
-      const p=document.createElement('div'); p.className='particle';
-      p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-      p.style.cssText=`left:${Math.random()*100}vw;bottom:-20px;
-        animation-delay:${Math.random()*14}s;animation-duration:${10+Math.random()*12}s;
-        color:${Math.random()>.5?'#f0a0c8':'#b47fe8'}`;
-      pe.appendChild(p);
-    }
-  })();
+<script>
+/* ═══════════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════════ */
+(function(){
+  const c=document.getElementById('cursor'),x=c.getContext('2d');
+  const map=[[0,0,1,1,0,0,0,1,1,0,0,0],[0,1,1,1,1,0,1,1,1,1,0,0],[1,1,1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,1,0,0],[0,0,1,1,1,1,1,1,1,0,0,0],[0,0,0,1,1,1,1,1,0,0,0,0],[0,0,0,0,1,1,1,0,0,0,0,0],[0,0,0,0,0,1,0,0,0,0,0,0]];
+  const cols=['#f0a0c8','#f0a0c8','#ff80bf','#b47fe8','#b47fe8'],p=2;
+  map.forEach((row,y)=>row.forEach((cell,cx)=>{if(cell){x.fillStyle=cols[Math.floor(y/2)%cols.length];x.fillRect(cx*p,y*p,p,p);}}));
+  document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';});
+})();
 
-  /* ═══════════════════════════════════════════════
-     GAME STATE
-  ═══════════════════════════════════════════════ */
-
-  const UPGRADES_DEF = [
-    {
-      id:'chopsticks', name:'CHOPSTICKS', emoji:'🥢',
-      desc:'better grip = more sushi per click',
-      baseCost:10,   costMult:1.5,  clickBonus:1,  passiveBonus:0,
-    },
-    {
-      id:'wasabi',     name:'WASABI RUSH', emoji:'🟢',
-      desc:'+1 sushi/sec from the spice',
-      baseCost:25,   costMult:1.55, clickBonus:0,  passiveBonus:1,
-    },
-    {
-      id:'chef',       name:'PIXEL CHEF', emoji:'👨‍🍳',
-      desc:'a tiny chef helps you click faster',
-      baseCost:80,   costMult:1.6,  clickBonus:3,  passiveBonus:0,
-    },
-    {
-      id:'conveyor',   name:'CONVEYOR BELT', emoji:'🔄',
-      desc:'rolls sushi automatically',
-      baseCost:200,  costMult:1.65, clickBonus:0,  passiveBonus:4,
-    },
-    {
-      id:'salmon',     name:'SALMON RUN', emoji:'🐟',
-      desc:'fresh supply every second',
-      baseCost:500,  costMult:1.7,  clickBonus:5,  passiveBonus:3,
-    },
-    {
-      id:'robot',      name:'SUSHI ROBOT', emoji:'🤖',
-      desc:'automated clicking machine',
-      baseCost:1200, costMult:1.75, clickBonus:10, passiveBonus:8,
-    },
-    {
-      id:'octopus',    name:'OCTOPUS ARMS', emoji:'🐙',
-      desc:'eight arms = eight times the sushi',
-      baseCost:3000, costMult:1.8,  clickBonus:20, passiveBonus:15,
-    },
-    {
-      id:'dragon',     name:'SUSHI DRAGON', emoji:'🐉',
-      desc:'legendary sushi master awakened',
-      baseCost:8000, costMult:1.9,  clickBonus:50, passiveBonus:40,
-    },
-  ];
-
-  const MILESTONES = [
-    { score:10,    emoji:'🍣', title:'FIRST SUSHI!!',    sub:'you\'re a natural' },
-    { score:50,    emoji:'🥢', title:'CHOPSTICK PRO',    sub:'50 sushi achieved' },
-    { score:100,   emoji:'🍱', title:'BENTO UNLOCKED',   sub:'100 sushi!! nice' },
-    { score:500,   emoji:'🟢', title:'WASABI OVERLOAD',  sub:'500 sushi. spicy!!' },
-    { score:1000,  emoji:'🐟', title:'SALMON MASTER',    sub:'1000 sushi rolled' },
-    { score:5000,  emoji:'🤖', title:'ROBOT MODE',       sub:'5000 sushi. inhuman' },
-    { score:10000, emoji:'◆',  title:'LEGENDARY',        sub:'prestige awaits...' },
-  ];
-
-  let state = {
-    sushi:       0,
-    allTime:     0,
-    clickPower:  1,
-    passive:     0,
-    prestige:    0,     // multiplier stacks
-    upgrades:    {},    // id -> count
-    prestigeMult: 1,
-  };
-
-  // init upgrades count
-  UPGRADES_DEF.forEach(u => { state.upgrades[u.id] = 0; });
-
-  let shownMilestones = new Set();
-  let passiveInterval = null;
-
-  /* ── helpers ─────────────────────────────────── */
-
-  function fmt(n){
-    n = Math.floor(n);
-    if(n >= 1e9) return (n/1e9).toFixed(1)+'B';
-    if(n >= 1e6) return (n/1e6).toFixed(1)+'M';
-    if(n >= 1e3) return (n/1e3).toFixed(1)+'k';
-    return n.toString();
+/* ═══════════════════════════════════════════════
+   STARS & PARTICLES
+═══════════════════════════════════════════════ */
+(function(){
+  const starsEl=document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const s=document.createElement('div');s.className='star';
+    const size=Math.random()>.7?4:2;
+    s.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*65}vh;width:${size}px;height:${size}px;animation-delay:${Math.random()*5}s;animation-duration:${1.5+Math.random()*3}s;${Math.random()>.5?'background:#b47fe8':''}`;
+    starsEl.appendChild(s);
   }
-
-  function upgradeCost(u){
-    const count = state.upgrades[u.id];
-    return Math.floor(u.baseCost * Math.pow(u.costMult, count));
+  const pe=document.getElementById('particles');
+  const emojis=['🍣','✦','♡','🍱','✿','♪','🌸'];
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.cssText=`left:${Math.random()*100}vw;bottom:-20px;animation-delay:${Math.random()*16}s;animation-duration:${10+Math.random()*14}s;color:${Math.random()>.5?'#f0a0c8':'#b47fe8'}`;
+    pe.appendChild(p);
   }
+})();
 
-  function recomputePower(){
-    let click = 1, passive = 0;
-    UPGRADES_DEF.forEach(u => {
-      const c = state.upgrades[u.id];
-      click   += u.clickBonus  * c;
-      passive += u.passiveBonus * c;
-    });
-    state.clickPower = Math.ceil(click * state.prestigeMult);
-    state.passive    = Math.ceil(passive * state.prestigeMult);
-  }
+/* ═══════════════════════════════════════════════
+   GAME DATA
+═══════════════════════════════════════════════ */
 
-  /* ── UI update ──────────────────────────────── */
+const GENERATORS = [
+  {id:'chopsticks', name:'CHOPSTICKS',    emoji:'🥢', desc:'+1 sushi/click. classics.',        baseCost:15,   costMult:1.5,  click:1,  cps:0,  max:50},
+  {id:'wasabi',     name:'WASABI FARM',   emoji:'🟢', desc:'spicy passive income.',             baseCost:40,   costMult:1.55, click:0,  cps:1,  max:50},
+  {id:'chef',       name:'PIXEL CHEF',    emoji:'👨‍🍳', desc:'little man makes sushi.',          baseCost:120,  costMult:1.6,  click:3,  cps:1,  max:50},
+  {id:'conveyor',   name:'CONVEYOR BELT', emoji:'🔄', desc:'rolls sushi on its own.',           baseCost:350,  costMult:1.65, click:0,  cps:5,  max:50},
+  {id:'salmon',     name:'SALMON RUN',    emoji:'🐟', desc:'fresh supply every sec.',            baseCost:900,  costMult:1.7,  click:6,  cps:4,  max:50},
+  {id:'robot',      name:'SUSHI ROBOT',   emoji:'🤖', desc:'automated 24/7 production.',        baseCost:2500, costMult:1.75, click:12, cps:10, max:50},
+  {id:'octopus',    name:'OCTOPUS ARMS',  emoji:'🐙', desc:'eight arms, eight times output.',   baseCost:7000, costMult:1.8,  click:25, cps:18, max:50},
+  {id:'dragon',     name:'SUSHI DRAGON',  emoji:'🐉', desc:'legendary. unstoppable.',           baseCost:20000,costMult:1.9,  click:60, cps:50, max:50},
+  {id:'temple',     name:'SUSHI TEMPLE',  emoji:'⛩️', desc:'ancient power flows through you.', baseCost:80000,costMult:2.0,  click:150,cps:120,max:50},
+];
 
-  function updateUI(){
-    document.getElementById('sushiCount').textContent = fmt(state.sushi);
-    document.getElementById('perClick').textContent   = fmt(state.clickPower);
-    document.getElementById('perSec').textContent     = fmt(state.passive);
-    document.getElementById('allTime').textContent    = fmt(state.allTime);
+const SKILLS = [
+  {id:'sk_crit',    name:'CRITICAL TASTE', emoji:'⚡', desc:'5% crit chance → 5x sushi',           cost:200,   req:null,         effect:'crit_chance_5',   bought:false},
+  {id:'sk_combo',   name:'COMBO MASTER',   emoji:'🔥', desc:'combos give 2x bonus (was 1.5x)',      cost:500,   req:null,         effect:'combo_boost',     bought:false},
+  {id:'sk_gold',    name:'GOLDEN NOSE',    emoji:'👃', desc:'golden sushi appears 50% more often',  cost:800,   req:null,         effect:'golden_freq',     bought:false},
+  {id:'sk_passive', name:'AUTO CHEF',      emoji:'🍳', desc:'+25% to all passive income',           cost:1500,  req:'wasabi',     effect:'passive_25',      bought:false},
+  {id:'sk_click2',  name:'POWER GRIP',     emoji:'💪', desc:'+50% click power',                     cost:2000,  req:'chopsticks', effect:'click_50',        bought:false},
+  {id:'sk_crit2',   name:'RAZOR SENSES',   emoji:'🌟', desc:'crit chance +10% (total 15%)',         cost:4000,  req:'sk_crit',    effect:'crit_chance_10',  bought:false},
+  {id:'sk_golden2', name:'GOLDEN HEART',   emoji:'💛', desc:'golden sushi gives 3x reward',         cost:6000,  req:'sk_gold',    effect:'golden_3x',       bought:false},
+  {id:'sk_combo2',  name:'ETERNAL COMBO',  emoji:'♾️', desc:'combo timer lasts twice as long',      cost:8000,  req:'sk_combo',   effect:'combo_timer_2x',  bought:false},
+  {id:'sk_mega',    name:'MEGA CLICK',     emoji:'🚀', desc:'+100% click power + 10% crit',        cost:15000, req:'sk_click2',  effect:'mega_click',      bought:false},
+];
 
-    // Passive ticker
-    const ticker = document.getElementById('passiveTicker');
-    if(state.passive > 0){
-      ticker.textContent = `✦ +${fmt(state.passive)} sushi / sec ✦`;
-    } else {
-      ticker.textContent = '✦ idle — no passive income yet ✦';
-    }
+const ACHIEVEMENTS = [
+  {id:'first_click',  name:'FIRST TASTE',      emoji:'🍣', desc:'click once',              check:s=>s.totalClicks>=1},
+  {id:'clicks_100',   name:'CLICKER',          emoji:'👆', desc:'100 clicks total',        check:s=>s.totalClicks>=100},
+  {id:'clicks_1000',  name:'TAP ADDICT',       emoji:'⚡', desc:'1,000 clicks',           check:s=>s.totalClicks>=1000},
+  {id:'sushi_100',    name:'BENTO UNLOCK',     emoji:'🍱', desc:'100 sushi earned',        check:s=>s.allTime>=100},
+  {id:'sushi_1000',   name:'SALMON MASTER',    emoji:'🐟', desc:'1,000 sushi',             check:s=>s.allTime>=1000},
+  {id:'sushi_10k',    name:'SUSHI BARON',      emoji:'🤖', desc:'10,000 sushi',            check:s=>s.allTime>=10000},
+  {id:'sushi_100k',   name:'SUSHI LORD',       emoji:'🐙', desc:'100,000 sushi',           check:s=>s.allTime>=100000},
+  {id:'sushi_1m',     name:'DRAGON MASTER',    emoji:'🐉', desc:'1,000,000 sushi',         check:s=>s.allTime>=1000000},
+  {id:'first_crit',   name:'CRITICAL HIT!',    emoji:'💥', desc:'land your first critical',check:s=>s.totalCrits>=1},
+  {id:'crits_50',     name:'PRECISION',        emoji:'🎯', desc:'50 critical hits',        check:s=>s.totalCrits>=50},
+  {id:'first_golden', name:'GOLDEN MOMENT',    emoji:'🌟', desc:'click a golden sushi',    check:s=>s.totalGolden>=1},
+  {id:'golden_10',    name:'GOLDEN SOUL',      emoji:'💛', desc:'10 golden sushi',         check:s=>s.totalGolden>=10},
+  {id:'prestige_1',   name:'REBORN',           emoji:'◆',  desc:'prestige once',           check:s=>s.prestige>=1},
+  {id:'prestige_3',   name:'ETERNAL',          emoji:'✨',  desc:'prestige 3 times',        check:s=>s.prestige>=3},
+  {id:'combo_10',     name:'ON A ROLL',        emoji:'🔥', desc:'reach a 10x combo',       check:s=>s.maxCombo>=10},
+  {id:'all_gen',      name:'SUSHI EMPIRE',     emoji:'⛩️', desc:'own every generator',    check:s=>GENERATORS.every(g=>s.gen[g.id]>0)},
+];
 
-    // Prestige
-    const pBtn  = document.getElementById('prestigeBtn');
-    const pInfo = document.getElementById('prestigeInfo');
-    const threshold = 10000 * Math.pow(5, state.prestige);
-    if(state.allTime >= threshold){
-      pBtn.classList.add('ready');
-      pInfo.textContent = `ready to prestige! (x${state.prestige+2} multiplier) — all progress resets`;
-    } else {
-      pBtn.classList.remove('ready');
-      const need = threshold - state.allTime;
-      pInfo.textContent = `prestige at ${fmt(threshold)} total sushi (need ${fmt(need)} more) ✦`;
-    }
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+let state = {
+  sushi:0, allTime:0,
+  totalClicks:0, totalCrits:0, totalGolden:0,
+  prestige:0, prestigeMult:1,
+  gen:{}, skills:{},
+  achievements:new Set(),
+  clickPower:1, passive:0,
+  combo:1, comboTimer:0, maxCombo:1,
+  critChance:0, comboBoost:1.5, goldenFreq:1, goldenMult:1,
+  passiveMult:1, clickMult:1,
+  totalTime:0, sessionStart:Date.now(),
+};
+GENERATORS.forEach(g=>{state.gen[g.id]=0;});
+SKILLS.forEach(s=>{state.skills[s.id]=false;});
 
-    updateUpgradesUI();
-  }
+/* ═══════════════════════════════════════════════
+   SAVE / LOAD
+═══════════════════════════════════════════════ */
+const SAVE_KEY='sushi_clicker_v3';
+function saveGame(){
+  try{
+    const data={
+      sushi:state.sushi, allTime:state.allTime,
+      totalClicks:state.totalClicks, totalCrits:state.totalCrits, totalGolden:state.totalGolden,
+      prestige:state.prestige, prestigeMult:state.prestigeMult,
+      gen:state.gen, skills:state.skills,
+      achievements:[...state.achievements],
+      maxCombo:state.maxCombo, totalTime:state.totalTime,
+    };
+    localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+    const si=document.getElementById('saveIndicator');
+    si.classList.add('show');
+    setTimeout(()=>si.classList.remove('show'),1500);
+  }catch(e){}
+}
+function loadGame(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw)return;
+    const d=JSON.parse(raw);
+    state.sushi=d.sushi||0;
+    state.allTime=d.allTime||0;
+    state.totalClicks=d.totalClicks||0;
+    state.totalCrits=d.totalCrits||0;
+    state.totalGolden=d.totalGolden||0;
+    state.prestige=d.prestige||0;
+    state.prestigeMult=d.prestigeMult||1;
+    state.gen={...state.gen,...(d.gen||{})};
+    state.skills={...state.skills,...(d.skills||{})};
+    state.achievements=new Set(d.achievements||[]);
+    state.maxCombo=d.maxCombo||1;
+    state.totalTime=d.totalTime||0;
+  }catch(e){}
+}
 
-  function updateUpgradesUI(){
-    const panel = document.getElementById('upgradesPanel');
-    // rebuild cards (only if not present yet, else just update classes/costs)
-    UPGRADES_DEF.forEach(u => {
-      let card = document.getElementById('upg-'+u.id);
-      const cost  = upgradeCost(u);
-      const count = state.upgrades[u.id];
-      const canAfford = state.sushi >= cost;
-      const bought    = count > 0;
-
-      if(!card){
-        card = document.createElement('div');
-        card.className = 'upgrade-card';
-        card.id = 'upg-'+u.id;
-        card.innerHTML = `
-          <div class="upgrade-emoji">${u.emoji}</div>
-          <div class="upgrade-info">
-            <div class="upgrade-name">${u.name}</div>
-            <div class="upgrade-desc">${u.desc}</div>
-            <div class="upgrade-count" id="upg-count-${u.id}"></div>
-          </div>
-          <div class="upgrade-cost" id="upg-cost-${u.id}"></div>
-        `;
-        card.addEventListener('click', () => buyUpgrade(u.id));
-        card.addEventListener('touchend', e => { e.preventDefault(); buyUpgrade(u.id); });
-        panel.appendChild(card);
-      }
-
-      const costEl  = document.getElementById('upg-cost-'+u.id);
-      const countEl = document.getElementById('upg-count-'+u.id);
-
-      costEl.textContent  = fmt(cost)+'🍣';
-      countEl.textContent = count > 0 ? `owned: ${count}` : '';
-
-      card.classList.toggle('locked',    !canAfford && count === 0);
-      card.classList.toggle('affordable', canAfford);
-      card.classList.toggle('bought',     count > 0 && !canAfford);
-      costEl.classList.toggle('can-afford', canAfford);
-    });
-  }
-
-  /* ── click ──────────────────────────────────── */
-
-  function doClick(x, y){
-    const earned = state.clickPower;
-    state.sushi   += earned;
-    state.allTime += earned;
-
-    updateUI();
-    checkMilestones();
-
-    // Score float
-    const sf = document.createElement('div');
-    sf.className = 'score-float';
-    sf.textContent = '+' + fmt(earned);
-    sf.style.left = x+'px';
-    sf.style.top  = y+'px';
-    document.body.appendChild(sf);
-    setTimeout(() => sf.remove(), 850);
-
-    // Sparkles
-    const symbols = ['🍣','✦','♡','✿','★'];
-    for(let i=0;i<6;i++){
-      const sp = document.createElement('div');
-      sp.className = 'sparkle';
-      sp.textContent = symbols[Math.floor(Math.random()*symbols.length)];
-      sp.style.left = x+'px';
-      sp.style.top  = y+'px';
-      const angle = (i/6)*Math.PI*2;
-      const dist  = 40 + Math.random()*40;
-      sp.style.setProperty('--sv',`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`);
-      document.body.appendChild(sp);
-      setTimeout(() => sp.remove(), 700);
-    }
-  }
-
-  /* ── buy upgrade ────────────────────────────── */
-
-  function buyUpgrade(id){
-    const u    = UPGRADES_DEF.find(u=>u.id===id);
-    const cost = upgradeCost(u);
-    if(state.sushi < cost) return;
-    state.sushi -= cost;
-    state.upgrades[id]++;
-    recomputePower();
-    updateUI();
-
-    // Flash the button
-    const card = document.getElementById('upg-'+id);
-    if(card){
-      card.style.background = 'rgba(240,160,200,.2)';
-      setTimeout(() => { card.style.background = ''; }, 200);
-    }
-  }
-
-  /* ── milestones ─────────────────────────────── */
-
-  function checkMilestones(){
-    MILESTONES.forEach(m => {
-      if(!shownMilestones.has(m.score) && state.allTime >= m.score){
-        shownMilestones.add(m.score);
-        showToast(m.emoji, m.title, m.sub);
-      }
-    });
-  }
-
-  function showToast(emoji, title, sub){
-    const t = document.createElement('div');
-    t.className = 'milestone-toast';
-    t.innerHTML = `<span class="toast-emoji">${emoji}</span><div class="toast-title">${title}</div><div class="toast-sub">${sub}</div>`;
-    document.body.appendChild(t);
-    setTimeout(() => {
-      t.classList.add('out');
-      setTimeout(() => t.remove(), 450);
-    }, 2200);
-  }
-
-  /* ── passive income ─────────────────────────── */
-
-  function startPassive(){
-    if(passiveInterval) clearInterval(passiveInterval);
-    passiveInterval = setInterval(() => {
-      if(state.passive > 0){
-        state.sushi   += state.passive;
-        state.allTime += state.passive;
-        updateUI();
-        checkMilestones();
-      }
-    }, 1000);
-  }
-
-  /* ── prestige ───────────────────────────────── */
-
-  document.getElementById('prestigeBtn').addEventListener('click', () => {
-    const threshold = 10000 * Math.pow(5, state.prestige);
-    if(state.allTime < threshold) return;
-
-    state.prestige++;
-    state.prestigeMult = state.prestige + 1;  // mult = prestige level + 1
-
-    // Reset but keep prestige info
-    state.sushi   = 0;
-    state.allTime = 0;
-    UPGRADES_DEF.forEach(u => { state.upgrades[u.id] = 0; });
-    shownMilestones.clear();
-
-    recomputePower();
-    updateUI();
-
-    showToast('◆', `PRESTIGE ${state.prestige}!!`, `x${state.prestigeMult} multiplier active`);
-
-    // Rebuild upgrade cards
-    document.getElementById('upgradesPanel').innerHTML = '<div class="upgrades-title">✦ upgrades ✦</div>';
+/* ═══════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════ */
+function fmt(n){
+  n=Math.floor(n);
+  if(n>=1e12)return(n/1e12).toFixed(2)+'T';
+  if(n>=1e9) return(n/1e9).toFixed(2)+'B';
+  if(n>=1e6) return(n/1e6).toFixed(2)+'M';
+  if(n>=1e3) return(n/1e3).toFixed(1)+'k';
+  return n.toString();
+}
+function genCost(g){
+  return Math.floor(g.baseCost*Math.pow(g.costMult,state.gen[g.id])*state.prestigeMult**0.5);
+}
+function recompute(){
+  let click=1,cps=0;
+  GENERATORS.forEach(g=>{
+    const c=state.gen[g.id];
+    click+=g.click*c;
+    cps+=g.cps*c;
   });
+  // apply skills
+  let clickMult=1,cpsMult=1,critChance=0;
+  state.critChance=0;
+  state.comboBoost=1.5;
+  state.goldenFreq=1;
+  state.goldenMult=1;
+  if(state.skills['sk_crit'])   critChance+=0.05;
+  if(state.skills['sk_combo'])  state.comboBoost=2;
+  if(state.skills['sk_gold'])   state.goldenFreq=1.5;
+  if(state.skills['sk_passive'])cpsMult*=1.25;
+  if(state.skills['sk_click2']) clickMult*=1.5;
+  if(state.skills['sk_crit2'])  critChance+=0.10;
+  if(state.skills['sk_golden2'])state.goldenMult=3;
+  if(state.skills['sk_combo2']) {} // handled in combo logic
+  if(state.skills['sk_mega'])  {clickMult*=2; critChance+=0.10;}
+  state.critChance=critChance;
+  state.clickPower=Math.max(1,Math.ceil(click*clickMult*state.prestigeMult));
+  state.passive=Math.ceil(cps*cpsMult*state.prestigeMult);
+}
+function comboTimerMax(){
+  return state.skills['sk_combo2']?8000:4000;
+}
 
-  /* ── button events ──────────────────────────── */
-
-  const sushiBtn = document.getElementById('sushiBtn');
-
-  sushiBtn.addEventListener('click', e => {
-    const rect = sushiBtn.getBoundingClientRect();
-    doClick(rect.left + rect.width/2, rect.top + rect.height/2);
-
-    // Ripple inside btn
-    const r = document.createElement('div');
-    r.className = 'ripple';
-    r.style.left = '50%'; r.style.top = '50%';
-    sushiBtn.appendChild(r);
-    setTimeout(() => r.remove(), 520);
-
-    sushiBtn.classList.add('clicked');
-    setTimeout(() => sushiBtn.classList.remove('clicked'), 100);
-  });
-
-  sushiBtn.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const t = e.touches[0];
-    doClick(t.clientX, t.clientY);
-
-    const r = document.createElement('div');
-    r.className = 'ripple';
-    r.style.left = '50%'; r.style.top = '50%';
-    sushiBtn.appendChild(r);
-    setTimeout(() => r.remove(), 520);
-
-    sushiBtn.classList.add('clicked');
-    setTimeout(() => sushiBtn.classList.remove('clicked'), 100);
-  }, { passive: false });
-
-  /* ── sushi emoji cycles on prestige ────────── */
-  const sushiEmojis = ['🍣','🍱','🐟','🥢','🍙','🐉'];
-  function updateSushiEmoji(){
-    document.getElementById('sushiEmoji').textContent = sushiEmojis[state.prestige % sushiEmojis.length];
+/* ═══════════════════════════════════════════════
+   COMBO SYSTEM
+═══════════════════════════════════════════════ */
+let comboTimeout=null;
+function tickCombo(){
+  state.combo=Math.min(state.combo+1,100);
+  if(state.combo>state.maxCombo)state.maxCombo=state.combo;
+  clearTimeout(comboTimeout);
+  comboTimeout=setTimeout(()=>{
+    state.combo=1;
+    updateComboUI();
+  },comboTimerMax());
+  updateComboUI();
+}
+function updateComboUI(){
+  const el=document.getElementById('comboDisplay');
+  const num=document.getElementById('comboNum');
+  if(state.combo>1){
+    el.classList.add('active');
+    num.textContent='x'+state.combo;
+    num.style.color=state.combo>=10?'#ffe066':state.combo>=5?'#ff80bf':'#ffd580';
+  } else {
+    el.classList.remove('active');
   }
+}
 
-  /* ── init ───────────────────────────────────── */
+/* ═══════════════════════════════════════════════
+   GOLDEN SUSHI EVENT
+═══════════════════════════════════════════════ */
+let goldenActive=false;
+let goldenTimeout=null;
+let goldenSpawnTimeout=null;
 
-  recomputePower();
+function scheduleGolden(){
+  const base=20000; // 20s base
+  const delay=Math.max(5000,base/state.goldenFreq)*(0.5+Math.random());
+  goldenSpawnTimeout=setTimeout(spawnGolden,delay);
+}
+function spawnGolden(){
+  if(goldenActive)return scheduleGolden();
+  goldenActive=true;
+  const btn=document.getElementById('goldenEventBtn');
+  const margin=60;
+  btn.style.left=margin+Math.random()*(window.innerWidth-margin*2)+'px';
+  btn.style.top=margin+Math.random()*(window.innerHeight*.5)+'px';
+  btn.style.display='block';
+  // timer countdown in sushi btn area
+  let t=15;
+  const timerEl=document.getElementById('goldenTimer');
+  timerEl.classList.add('active');
+  timerEl.textContent='⭐ GOLDEN SUSHI — '+t+'s';
+  const countdown=setInterval(()=>{
+    t--;
+    if(t<=0){clearInterval(countdown);}
+    else{timerEl.textContent='⭐ GOLDEN SUSHI — '+t+'s';}
+  },1000);
+  goldenTimeout=setTimeout(()=>{
+    clearInterval(countdown);
+    dismissGolden();
+    scheduleGolden();
+  },15000);
+}
+function dismissGolden(){
+  goldenActive=false;
+  const btn=document.getElementById('goldenEventBtn');
+  btn.style.display='none';
+  const timerEl=document.getElementById('goldenTimer');
+  timerEl.classList.remove('active');
+}
+document.getElementById('goldenEventBtn').addEventListener('click',e=>{
+  if(!goldenActive)return;
+  clearTimeout(goldenTimeout);
+  const reward=Math.floor((state.passive*30+state.clickPower*50)*state.goldenMult*state.prestigeMult);
+  const earned=Math.max(100,reward);
+  state.sushi+=earned;
+  state.allTime+=earned;
+  state.totalGolden++;
+  dismissGolden();
+  scheduleGolden();
+  showToast('🌟','GOLDEN SUSHI!','+'+ fmt(earned)+' sushi collected!','golden');
+  spawnFloat(e.clientX,e.clientY,'+'+fmt(earned),true,false);
+  // sparkle burst
+  for(let i=0;i<12;i++){
+    spawnSparkle(e.clientX,e.clientY,['⭐','✨','🌟','💛','♡'][Math.floor(Math.random()*5)]);
+  }
   updateUI();
-  startPassive();
-  updateSushiEmoji();
+  checkAchievements();
+});
 
-  // Patch prestige to also update emoji
-  const origPrestige = document.getElementById('prestigeBtn').onclick;
-  document.getElementById('prestigeBtn').addEventListener('click', () => {
-    setTimeout(updateSushiEmoji, 50);
+/* ═══════════════════════════════════════════════
+   CLICK HANDLER
+═══════════════════════════════════════════════ */
+function doClick(x,y){
+  state.totalClicks++;
+  tickCombo();
+
+  const comboMultiplier=1+(state.combo-1)*(state.comboBoost-1)/9; // scales up to comboBoost at combo=10
+  const isCrit=Math.random()<state.critChance;
+  const critMult=isCrit?5:1;
+  if(isCrit)state.totalCrits++;
+
+  const base=state.clickPower;
+  const earned=Math.ceil(base*comboMultiplier*critMult);
+  state.sushi+=earned;
+  state.allTime+=earned;
+
+  updateUI();
+  checkAchievements();
+
+  spawnFloat(x,y,'+'+ fmt(earned),false,isCrit);
+  spawnSparkle(x,y,isCrit?'💥':'🍣');
+  spawnSparkle(x,y,['✦','♡','✿','★'][Math.floor(Math.random()*4)]);
+
+  if(isCrit){
+    const f=document.createElement('div');
+    f.className='crit-flash';
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),220);
+  }
+}
+
+function spawnFloat(x,y,text,isGolden,isCrit){
+  const sf=document.createElement('div');
+  sf.className='score-float'+(isCrit?' crit':'')+(isGolden?' golden':'');
+  sf.textContent=text;
+  sf.style.left=x+'px';
+  sf.style.top=y+'px';
+  document.body.appendChild(sf);
+  setTimeout(()=>sf.remove(),800);
+}
+function spawnSparkle(x,y,emoji){
+  const sp=document.createElement('div');
+  sp.className='sparkle';
+  sp.textContent=emoji;
+  sp.style.left=x+'px';sp.style.top=y+'px';
+  const angle=(Math.random()*Math.PI*2);
+  const dist=35+Math.random()*50;
+  sp.style.setProperty('--sv',`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`);
+  document.body.appendChild(sp);
+  setTimeout(()=>sp.remove(),680);
+}
+
+/* ═══════════════════════════════════════════════
+   BUTTON EVENTS
+═══════════════════════════════════════════════ */
+const sushiBtn=document.getElementById('sushiBtn');
+function handleClick(x,y){
+  doClick(x,y);
+  const r=document.createElement('div');r.className='ripple';
+  r.style.left='50%';r.style.top='50%';
+  sushiBtn.appendChild(r);
+  setTimeout(()=>r.remove(),480);
+  sushiBtn.classList.add('clicked');
+  setTimeout(()=>sushiBtn.classList.remove('clicked'),90);
+}
+sushiBtn.addEventListener('click',e=>{
+  const rect=sushiBtn.getBoundingClientRect();
+  handleClick(rect.left+rect.width/2,rect.top+rect.height/2);
+});
+sushiBtn.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  const t=e.touches[0];
+  handleClick(t.clientX,t.clientY);
+},{passive:false});
+
+/* ═══════════════════════════════════════════════
+   TAB SYSTEM
+═══════════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel-section').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='achieve')buildAchievements();
+    if(btn.dataset.tab==='stats')buildStats();
   });
+});
 
-  </script>
+/* ═══════════════════════════════════════════════
+   BUILD SHOP UI
+═══════════════════════════════════════════════ */
+function buildShop(){
+  const panel=document.getElementById('tab-shop');
+  // clear non-label children
+  [...panel.children].forEach(c=>{if(!c.classList.contains('section-label'))c.remove();});
+  GENERATORS.forEach(g=>{
+    if(document.getElementById('gen-'+g.id))return;
+    const card=document.createElement('div');
+    card.className='upgrade-card';card.id='gen-'+g.id;
+    card.innerHTML=`
+      <div class="upgrade-emoji">${g.emoji}</div>
+      <div class="upgrade-info">
+        <div class="upgrade-name">${g.name}</div>
+        <div class="upgrade-desc">${g.desc}</div>
+        <div class="upgrade-meta">
+          <div class="upgrade-count" id="gen-count-${g.id}">0</div>
+          <div class="upgrade-level-bar"><div class="upgrade-level-fill" id="gen-bar-${g.id}" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="upgrade-cost" id="gen-cost-${g.id}"></div>
+    `;
+    card.addEventListener('click',()=>buyGen(g.id));
+    card.addEventListener('touchend',e=>{e.preventDefault();buyGen(g.id);});
+    panel.appendChild(card);
+  });
+}
+function updateShopUI(){
+  GENERATORS.forEach(g=>{
+    const card=document.getElementById('gen-'+g.id);
+    if(!card)return;
+    const cost=genCost(g);
+    const count=state.gen[g.id];
+    const canAfford=state.sushi>=cost;
+    const maxed=count>=g.max;
+    document.getElementById('gen-count-'+g.id).textContent='owned: '+count;
+    document.getElementById('gen-cost-'+g.id).textContent=maxed?'MAX':fmt(cost)+'🍣';
+    document.getElementById('gen-bar-'+g.id).style.width=Math.min(100,count/g.max*100)+'%';
+    card.classList.toggle('locked',!canAfford&&count===0&&!maxed);
+    card.classList.toggle('affordable',canAfford&&!maxed);
+    card.classList.toggle('maxed',maxed);
+    document.getElementById('gen-cost-'+g.id).classList.toggle('can-afford',canAfford&&!maxed);
+  });
+}
+function buyGen(id){
+  const g=GENERATORS.find(x=>x.id===id);
+  if(!g||state.gen[id]>=g.max)return;
+  const cost=genCost(g);
+  if(state.sushi<cost)return;
+  state.sushi-=cost;
+  state.gen[id]++;
+  recompute();
+  updateUI();
+  checkAchievements();
+  const card=document.getElementById('gen-'+id);
+  if(card){card.style.background='rgba(240,160,200,.15)';setTimeout(()=>{card.style.background='';},200);}
+}
+
+/* ═══════════════════════════════════════════════
+   BUILD SKILLS UI
+═══════════════════════════════════════════════ */
+function buildSkills(){
+  const panel=document.getElementById('tab-skills');
+  [...panel.children].forEach(c=>{if(!c.classList.contains('section-label'))c.remove();});
+  SKILLS.forEach(sk=>{
+    if(document.getElementById('sk-'+sk.id))return;
+    const card=document.createElement('div');
+    card.className='upgrade-card';card.id='sk-'+sk.id;
+    card.innerHTML=`
+      <div class="upgrade-emoji">${sk.emoji}</div>
+      <div class="upgrade-info">
+        <div class="upgrade-name">${sk.name}</div>
+        <div class="upgrade-desc">${sk.desc}</div>
+        ${sk.req?`<div class="upgrade-count" style="color:rgba(245,230,255,.35)">req: ${sk.req}</div>`:''}
+      </div>
+      <div class="upgrade-cost" id="sk-cost-${sk.id}">${fmt(sk.cost)}🍣</div>
+    `;
+    card.addEventListener('click',()=>buySkill(sk.id));
+    card.addEventListener('touchend',e=>{e.preventDefault();buySkill(sk.id);});
+    panel.appendChild(card);
+  });
+}
+function updateSkillsUI(){
+  SKILLS.forEach(sk=>{
+    const card=document.getElementById('sk-'+sk.id);
+    if(!card)return;
+    const bought=state.skills[sk.id];
+    const req=sk.req?(sk.req.startsWith('sk_')?state.skills[sk.req]:state.gen[sk.req]>0):true;
+    const canAfford=state.sushi>=sk.cost&&!bought&&req;
+    card.classList.toggle('locked',!req&&!bought);
+    card.classList.toggle('affordable',canAfford);
+    card.classList.toggle('bought',bought);
+    card.classList.toggle('maxed',bought);
+    const costEl=document.getElementById('sk-cost-'+sk.id);
+    if(costEl)costEl.textContent=bought?'✓ OWNED':fmt(sk.cost)+'🍣';
+    if(costEl)costEl.classList.toggle('can-afford',canAfford);
+  });
+}
+function buySkill(id){
+  const sk=SKILLS.find(x=>x.id===id);
+  if(!sk||state.skills[id])return;
+  const req=sk.req?(sk.req.startsWith('sk_')?state.skills[sk.req]:state.gen[sk.req]>0):true;
+  if(!req||state.sushi<sk.cost)return;
+  state.sushi-=sk.cost;
+  state.skills[id]=true;
+  recompute();
+  updateUI();
+  showToast(sk.emoji,'SKILL UNLOCKED!',sk.name+' active','ach');
+  const card=document.getElementById('sk-'+id);
+  if(card){card.style.background='rgba(128,255,232,.1)';setTimeout(()=>{card.style.background='';},300);}
+}
+
+/* ═══════════════════════════════════════════════
+   ACHIEVEMENTS
+═══════════════════════════════════════════════ */
+function checkAchievements(){
+  ACHIEVEMENTS.forEach(a=>{
+    if(!state.achievements.has(a.id)&&a.check(state)){
+      state.achievements.add(a.id);
+      showToast(a.emoji,'ACHIEVEMENT!',a.name+'\n'+a.desc,'ach');
+      // flash achievement tab
+      const tab=document.querySelector('[data-tab="achieve"]');
+      if(tab){tab.style.color='var(--gold)';setTimeout(()=>{tab.style.color='';},1500);}
+    }
+  });
+}
+function buildAchievements(){
+  const grid=document.getElementById('achGrid');
+  grid.innerHTML='';
+  ACHIEVEMENTS.forEach(a=>{
+    const unlocked=state.achievements.has(a.id);
+    const card=document.createElement('div');
+    card.className='ach-card '+(unlocked?'unlocked':'locked');
+    card.innerHTML=`<span class="ach-emoji">${a.emoji}</span><div class="ach-name">${a.name}</div><div class="ach-desc">${unlocked?a.desc:'???'}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   STATS TAB
+═══════════════════════════════════════════════ */
+function buildStats(){
+  const list=document.getElementById('statsList');
+  const elapsed=Math.floor((Date.now()-state.sessionStart)/1000+state.totalTime);
+  const rows=[
+    ['Total Sushi', fmt(state.allTime)],
+    ['Sushi/sec', fmt(state.passive)],
+    ['Sushi/click', fmt(state.clickPower)],
+    ['Total Clicks', fmt(state.totalClicks)],
+    ['Critical Hits', fmt(state.totalCrits)],
+    ['Golden Sushi', fmt(state.totalGolden)],
+    ['Max Combo', 'x'+state.maxCombo],
+    ['Crit Chance', Math.round(state.critChance*100)+'%'],
+    ['Prestige Level', state.prestige],
+    ['Prestige Mult', 'x'+state.prestigeMult],
+    ['Achievements', state.achievements.size+'/'+ACHIEVEMENTS.length],
+    ['Session Time', Math.floor(elapsed/60)+'m '+elapsed%60+'s'],
+  ];
+  list.innerHTML=rows.map(([l,v])=>`<div class="stat-item"><span class="stat-item-label">${l}</span><span class="stat-item-value">${v}</span></div>`).join('');
+  // prestige
+  const threshold=10000*Math.pow(5,state.prestige);
+  document.getElementById('prestigeMult').textContent='x'+state.prestigeMult;
+  const pBtn=document.getElementById('prestigeBtn');
+  if(state.allTime>=threshold){
+    pBtn.classList.add('ready');
+    document.getElementById('prestigeInfo').textContent=`ready! next mult: x${state.prestigeMult+1} — resets progress`;
+  } else {
+    pBtn.classList.remove('ready');
+    document.getElementById('prestigeInfo').textContent=`need ${fmt(threshold-state.allTime)} more sushi to prestige`;
+  }
+}
+
+document.getElementById('prestigeBtn').addEventListener('click',()=>{
+  const threshold=10000*Math.pow(5,state.prestige);
+  if(state.allTime<threshold)return;
+  state.prestige++;
+  state.prestigeMult=state.prestige+1;
+  state.sushi=0;state.allTime=0;
+  GENERATORS.forEach(g=>{state.gen[g.id]=0;});
+  SKILLS.forEach(s=>{state.skills[s.id]=false;});
+  state.combo=1;
+  recompute();
+  updateUI();
+  buildShop();buildSkills();
+  showToast('◆','PRESTIGE '+state.prestige+'!','x'+state.prestigeMult+' multiplier active now','prestige');
+  document.getElementById('upgradesPanel');
+  updateSushiEmoji();
+});
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+let toastQueue=[];let toastActive=false;
+function showToast(emoji,title,sub,type=''){
+  toastQueue.push({emoji,title,sub,type});
+  if(!toastActive)processToast();
+}
+function processToast(){
+  if(!toastQueue.length){toastActive=false;return;}
+  toastActive=true;
+  const {emoji,title,sub,type}=toastQueue.shift();
+  const t=document.createElement('div');
+  t.className='milestone-toast'+(type?' toast-type-'+type:'');
+  t.innerHTML=`<span class="toast-emoji">${emoji}</span><div class="toast-title">${title}</div><div class="toast-sub">${sub}</div>`;
+  document.body.appendChild(t);
+  setTimeout(()=>{
+    t.classList.add('out');
+    setTimeout(()=>{t.remove();processToast();},380);
+  },2000);
+}
+
+/* ═══════════════════════════════════════════════
+   SUSHI EMOJI CYCLE
+═══════════════════════════════════════════════ */
+const sushiEmojis=['🍣','🍱','🐟','🥢','🍙','🐉','⛩️'];
+function updateSushiEmoji(){
+  const e=sushiEmojis[state.prestige%sushiEmojis.length];
+  document.getElementById('sushiEmoji').textContent=e;
+  document.getElementById('headerEmoji').textContent=e;
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN UI UPDATE
+═══════════════════════════════════════════════ */
+function updateUI(){
+  document.getElementById('sushiCount').textContent=fmt(state.sushi);
+  document.getElementById('perClick').textContent=fmt(state.clickPower);
+  document.getElementById('perSec').textContent=fmt(state.passive);
+  document.getElementById('allTime').textContent=fmt(state.allTime);
+  document.getElementById('totalClicks').textContent=fmt(state.totalClicks);
+  document.getElementById('totalCrits').textContent=fmt(state.totalCrits);
+  document.getElementById('totalGolden').textContent=fmt(state.totalGolden);
+
+  const ticker=document.getElementById('passiveTicker');
+  if(state.passive>0) ticker.textContent=`✦ +${fmt(state.passive)} sushi / sec ✦`;
+  else ticker.textContent='✦ tap to start your sushi empire ✦';
+
+  // CPS bar (log scale up to 1M cps)
+  const pct=Math.min(100,Math.log10(Math.max(1,state.passive))/6*100);
+  document.getElementById('cpsBarFill').style.width=pct+'%';
+  document.getElementById('cpsBarLabel').textContent=fmt(state.passive)+'/s';
+
+  // Prestige badge
+  const badge=document.getElementById('prestigeBadge');
+  if(state.prestige>0){
+    badge.style.display='block';
+    badge.textContent='◆ PRESTIGE '+state.prestige+' ✦ x'+state.prestigeMult;
+  }
+
+  updateShopUI();
+  updateSkillsUI();
+
+  // Highlight stats on activity
+  if(state.passive>0)document.getElementById('statClicks').classList.add('highlight');
+}
+
+/* ═══════════════════════════════════════════════
+   PASSIVE INCOME LOOP
+═══════════════════════════════════════════════ */
+let lastTick=Date.now();
+function gameTick(){
+  const now=Date.now();
+  const dt=(now-lastTick)/1000;
+  lastTick=now;
+  if(state.passive>0){
+    const earned=state.passive*dt;
+    state.sushi+=earned;
+    state.allTime+=earned;
+    updateUI();
+    checkAchievements();
+  }
+  state.totalTime+=dt;
+  requestAnimationFrame(gameTick);
+}
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+loadGame();
+recompute();
+buildShop();
+buildSkills();
+updateUI();
+updateSushiEmoji();
+scheduleGolden();
+requestAnimationFrame(gameTick);
+
+// Auto-save every 15s
+setInterval(saveGame,15000);
+// Also save on visibility change
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame();});
+
+// check milestones on load (for returning players)
+setTimeout(checkAchievements,500);
+
+// keyboard shortcut: space/enter to click
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'||e.code==='Enter'){
+    e.preventDefault();
+    const rect=sushiBtn.getBoundingClientRect();
+    handleClick(rect.left+rect.width/2,rect.top+rect.height/2);
+  }
+});
+
+// offline bonus on load
+(function(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY+'_lastSeen');
+    const last=raw?parseInt(raw):null;
+    if(last){
+      const seconds=Math.floor((Date.now()-last)/1000);
+      const offlineCps=state.passive;
+      if(seconds>30&&offlineCps>0){
+        const bonus=Math.floor(offlineCps*seconds*0.5); // 50% offline efficiency
+        state.sushi+=bonus;state.allTime+=bonus;
+        showToast('😴','OFFLINE BONUS','+'+fmt(bonus)+' sushi while away ('+Math.floor(seconds/60)+'m)','ach');
+        updateUI();
+      }
+    }
+    localStorage.setItem(SAVE_KEY+'_lastSeen',Date.now().toString());
+  }catch(e){}
+})();
+
+// Update lastSeen on unload
+window.addEventListener('beforeunload',()=>{
+  saveGame();
+  try{localStorage.setItem(SAVE_KEY+'_lastSeen',Date.now().toString());}catch(e){}
+});
+</script>
 </body>
 </html>
