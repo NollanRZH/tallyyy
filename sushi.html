@@ -209,14 +209,7 @@ body::after{
 .combo-display .combo-num{font-size:13px;color:var(--gold);text-shadow:0 0 10px rgba(255,213,128,.7);}
 .combo-label{font-size:6px;opacity:.7;}
 
-/* GOLDEN TIMER */
-.golden-timer{
-  position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);
-  font-size:7px;color:var(--gold);
-  text-shadow:0 0 8px rgba(255,213,128,.5);
-  opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;
-}
-.golden-timer.active{opacity:1;}
+
 
 /* CPS BAR */
 .cps-bar-wrap{
@@ -409,15 +402,23 @@ body::after{
 
 /* GOLDEN SUSHI EVENT */
 .golden-event-btn{
-  position:fixed;pointer-events:auto;z-index:8000;
-  font-size:38px;
-  background:none;border:none;
-  cursor:pointer!important;
-  animation:goldenFloat 3s ease-in-out infinite;
-  filter:drop-shadow(0 0 12px rgba(255,213,128,.8));
+  width:100%;max-width:320px;
   display:none;
+  align-items:center;justify-content:center;gap:10px;
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  color:var(--deep);
+  background:linear-gradient(135deg,var(--gold),#ffaa33);
+  border:none;
+  padding:12px 20px;
+  cursor:pointer!important;
+  touch-action:manipulation;
+  box-shadow:0 0 30px rgba(255,213,128,.4),4px 4px 0 rgba(180,127,232,.5);
+  animation:goldenPulseBtn 1s ease-in-out infinite;
 }
-@keyframes goldenFloat{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-12px) rotate(5deg);}}
+.golden-event-btn.active{display:flex;}
+@keyframes goldenPulseBtn{0%,100%{box-shadow:0 0 20px rgba(255,213,128,.3),4px 4px 0 rgba(180,127,232,.4);}50%{box-shadow:0 0 40px rgba(255,213,128,.6),4px 4px 0 rgba(180,127,232,.6);}}
+.golden-event-emoji{font-size:22px;animation:goldenBob 1s ease-in-out infinite;}
+@keyframes goldenBob{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
 
 /* CRIT FLASH */
 .crit-flash{
@@ -487,9 +488,6 @@ body::after{
 <!-- Back button -->
 <a href="index.html" class="back-btn">← back to tally ♡</a>
 
-<!-- Golden sushi event -->
-<button class="golden-event-btn" id="goldenEventBtn" aria-label="Golden Sushi!">🌟</button>
-
 <!-- Save indicator -->
 <div class="save-indicator" id="saveIndicator">✦ saved</div>
 
@@ -547,7 +545,7 @@ body::after{
       <button id="sushiBtn" aria-label="Click to get sushi">
         <span class="sushi-inner" id="sushiEmoji">🍣</span>
       </button>
-      <div class="golden-timer" id="goldenTimer"></div>
+
     </div>
 
     <!-- Combo -->
@@ -567,6 +565,13 @@ body::after{
 
     <!-- Passive ticker -->
     <div class="passive-ticker" id="passiveTicker">✦ tap to start your sushi empire ✦</div>
+
+    <!-- Golden sushi event -->
+    <button class="golden-event-btn" id="goldenEventBtn" aria-label="Golden Sushi!">
+      <span class="golden-event-emoji">🌟</span>
+      <span>GOLDEN SUSHI! CLICK NOW!</span>
+      <span id="goldenCountdown"></span>
+    </button>
 
   </div>
 
@@ -841,19 +846,14 @@ function spawnGolden(){
   if(goldenActive)return scheduleGolden();
   goldenActive=true;
   const btn=document.getElementById('goldenEventBtn');
-  const margin=60;
-  btn.style.left=margin+Math.random()*(window.innerWidth-margin*2)+'px';
-  btn.style.top=margin+Math.random()*(window.innerHeight*.5)+'px';
-  btn.style.display='block';
-  // timer countdown in sushi btn area
+  btn.classList.add('active');
   let t=15;
-  const timerEl=document.getElementById('goldenTimer');
-  timerEl.classList.add('active');
-  timerEl.textContent='⭐ GOLDEN SUSHI — '+t+'s';
+  const countEl=document.getElementById('goldenCountdown');
+  if(countEl)countEl.textContent='('+t+'s)';
   const countdown=setInterval(()=>{
     t--;
-    if(t<=0){clearInterval(countdown);}
-    else{timerEl.textContent='⭐ GOLDEN SUSHI — '+t+'s';}
+    if(countEl)countEl.textContent='('+t+'s)';
+    if(t<=0)clearInterval(countdown);
   },1000);
   goldenTimeout=setTimeout(()=>{
     clearInterval(countdown);
@@ -864,9 +864,7 @@ function spawnGolden(){
 function dismissGolden(){
   goldenActive=false;
   const btn=document.getElementById('goldenEventBtn');
-  btn.style.display='none';
-  const timerEl=document.getElementById('goldenTimer');
-  timerEl.classList.remove('active');
+  btn.classList.remove('active');
 }
 document.getElementById('goldenEventBtn').addEventListener('click',e=>{
   if(!goldenActive)return;
@@ -878,11 +876,12 @@ document.getElementById('goldenEventBtn').addEventListener('click',e=>{
   state.totalGolden++;
   dismissGolden();
   scheduleGolden();
-  showToast('🌟','GOLDEN SUSHI!','+'+ fmt(earned)+' sushi collected!','golden');
-  spawnFloat(e.clientX,e.clientY,'+'+fmt(earned),true,false);
-  // sparkle burst
-  for(let i=0;i<12;i++){
-    spawnSparkle(e.clientX,e.clientY,['⭐','✨','🌟','💛','♡'][Math.floor(Math.random()*5)]);
+  showToast('🌟','GOLDEN SUSHI!','+'+fmt(earned)+' sushi!','golden');
+  const rect=document.getElementById('goldenEventBtn').getBoundingClientRect();
+  const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+  spawnFloat(cx,cy,'+'+fmt(earned),true,false);
+  for(let i=0;i<10;i++){
+    spawnSparkle(cx,cy,['⭐','✨','🌟','💛','♡'][Math.floor(Math.random()*5)]);
   }
   updateUI();
   checkAchievements();
