@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -16,6 +15,7 @@
       --mid:#2d1355;
       --soft:#f5e6ff;
       --accent:#ff80bf;
+      --gold:#ffd580;
 
       --shadow-violet:rgba(180,127,232,.35);
       --shadow-rose:rgba(240,160,200,.35);
@@ -41,10 +41,9 @@
 
     body{
       background:
-      radial-gradient(circle at top, rgba(180,127,232,.15), transparent 35%),
-      radial-gradient(circle at bottom, rgba(240,160,200,.08), transparent 35%),
-      var(--deep);
-
+        radial-gradient(circle at top, rgba(180,127,232,.15), transparent 35%),
+        radial-gradient(circle at bottom, rgba(240,160,200,.08), transparent 35%),
+        var(--deep);
       color:var(--soft);
       font-family:'DM Serif Display', serif;
       overflow-x:hidden;
@@ -107,6 +106,7 @@
       50% { transform: scale(1.15); }
     }
 
+    /* FIX: text clipping on "Tallyyy" - was line-height too tight */
     .splash-title {
       font-family: 'DM Serif Display', serif;
       font-style: italic;
@@ -115,7 +115,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.1;
+      line-height: 1.25;
+      padding-bottom: 0.2em;
+      overflow: visible;
     }
 
     .splash-sub {
@@ -166,11 +168,9 @@
       content:'';
       position:fixed;
       inset:0;
-
       background-image:
-      linear-gradient(rgba(180,127,232,.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(180,127,232,.045) 1px, transparent 1px);
-
+        linear-gradient(rgba(180,127,232,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180,127,232,.045) 1px, transparent 1px);
       background-size:24px 24px;
       pointer-events:none;
       z-index:0;
@@ -180,16 +180,14 @@
       content:'';
       position:fixed;
       inset:0;
-
       background:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,.05) 2px,
-        rgba(0,0,0,.05) 3px
-      );
-
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0,0,0,.05) 2px,
+          rgba(0,0,0,.05) 3px
+        );
       mix-blend-mode:soft-light;
       pointer-events:none;
       z-index:50;
@@ -215,7 +213,51 @@
     }
 
     /* =========================================
-       CUSTOM CURSOR
+       MOUNTAINS BACKGROUND — new!
+    ========================================= */
+
+    .mountains-bg {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 52vh;
+      min-height: 260px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .mountains-bg svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Atmospheric aurora shimmer above the mountains */
+    .mountains-aurora {
+      position: fixed;
+      bottom: 28vh;
+      left: 0;
+      right: 0;
+      height: 180px;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(
+        to top,
+        rgba(180,127,232,.07) 0%,
+        rgba(240,160,200,.04) 40%,
+        transparent 100%
+      );
+      animation: auroraShift 8s ease-in-out infinite alternate;
+      filter: blur(12px);
+    }
+
+    @keyframes auroraShift {
+      0%   { opacity: 0.4; transform: translateX(-1%); }
+      100% { opacity: 0.8; transform: translateX(1%); }
+    }
+
+    /* =========================================
+       CUSTOM CURSOR — z-index raised above splash
     ========================================= */
 
     #cursor{
@@ -223,13 +265,13 @@
       width:24px;
       height:24px;
       pointer-events:none;
-      z-index:9999;
+      z-index:100000; /* FIX: was 9999, now above splash (99999) */
       image-rendering:pixelated;
       transform:translate(-4px,-4px);
       transition:transform .05s linear;
       filter:
-      drop-shadow(0 0 4px rgba(240,160,200,.7))
-      drop-shadow(0 0 10px rgba(180,127,232,.4));
+        drop-shadow(0 0 4px rgba(240,160,200,.7))
+        drop-shadow(0 0 10px rgba(180,127,232,.4));
     }
 
     /* =========================================
@@ -253,19 +295,13 @@
       image-rendering:pixelated;
       animation:twinkle infinite ease-in-out;
       box-shadow:
-      0 0 6px rgba(240,160,200,.6),
-      0 0 12px rgba(180,127,232,.3);
+        0 0 6px rgba(240,160,200,.6),
+        0 0 12px rgba(180,127,232,.3);
     }
 
     @keyframes twinkle{
-      0%,100%{
-        opacity:.2;
-        transform:scale(1);
-      }
-      50%{
-        opacity:1;
-        transform:scale(1.8);
-      }
+      0%,100%{ opacity:.2; transform:scale(1); }
+      50%{ opacity:1; transform:scale(1.8); }
     }
 
     .particle{
@@ -277,17 +313,9 @@
     }
 
     @keyframes floatUp{
-      0%{
-        opacity:0;
-        transform:translateY(0) rotate(0deg);
-      }
-      10%{
-        opacity:.7;
-      }
-      100%{
-        opacity:0;
-        transform:translateY(-110vh) rotate(360deg);
-      }
+      0%{ opacity:0; transform:translateY(0) rotate(0deg); }
+      10%{ opacity:.7; }
+      100%{ opacity:0; transform:translateY(-110vh) rotate(360deg); }
     }
 
     /* =========================================
@@ -320,8 +348,7 @@
       width:320px;
       height:320px;
       transform:translateX(-50%);
-      background:
-      radial-gradient(circle, rgba(180,127,232,.22), transparent 70%);
+      background: radial-gradient(circle, rgba(180,127,232,.22), transparent 70%);
       filter:blur(20px);
       z-index:-1;
     }
@@ -348,30 +375,28 @@
       box-shadow:0 0 6px rgba(180,127,232,.5);
     }
 
+    /* FIX: text clipping — "Tallyyy" y-descenders were cut off by tight line-height */
     .hero h1{
       position:relative;
-
       font-size:clamp(3rem, 8vw, 5.5rem);
-      line-height:.95;
+      line-height:1.05;          /* was .95 — caused y-descender clipping */
+      padding-bottom:0.14em;     /* extra room for descenders */
+      overflow:visible;
       font-style:italic;
-
       margin-bottom:30px;
-
       background:
-      linear-gradient(
-        135deg,
-        var(--soft) 0%,
-        var(--rose) 45%,
-        var(--violet) 100%
-      );
-
+        linear-gradient(
+          135deg,
+          var(--soft) 0%,
+          var(--rose) 45%,
+          var(--violet) 100%
+        );
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
-
       filter:
-      drop-shadow(0 0 12px rgba(240,160,200,.18))
-      drop-shadow(0 0 30px rgba(180,127,232,.18));
+        drop-shadow(0 0 12px rgba(240,160,200,.18))
+        drop-shadow(0 0 30px rgba(180,127,232,.18));
     }
 
     .hero h1::before,
@@ -380,15 +405,13 @@
       position:absolute;
       inset:0;
       pointer-events:none;
-
       background:
-      linear-gradient(
-        135deg,
-        var(--soft) 0%,
-        var(--rose) 45%,
-        var(--violet) 100%
-      );
-
+        linear-gradient(
+          135deg,
+          var(--soft) 0%,
+          var(--rose) 45%,
+          var(--violet) 100%
+        );
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
@@ -405,41 +428,17 @@
     }
 
     @keyframes glitch1{
-      0%,90%,100%{
-        opacity:0;
-        transform:translate(0);
-      }
-      92%{
-        opacity:.7;
-        transform:translate(-3px,1px);
-      }
-      94%{
-        opacity:.5;
-        transform:translate(3px,-1px);
-      }
-      96%{
-        opacity:.8;
-        transform:translate(-2px,2px);
-      }
+      0%,90%,100%{ opacity:0; transform:translate(0); }
+      92%{ opacity:.7; transform:translate(-3px,1px); }
+      94%{ opacity:.5; transform:translate(3px,-1px); }
+      96%{ opacity:.8; transform:translate(-2px,2px); }
     }
 
     @keyframes glitch2{
-      0%,90%,100%{
-        opacity:0;
-        transform:translate(0);
-      }
-      93%{
-        opacity:.5;
-        transform:translate(3px,1px);
-      }
-      95%{
-        opacity:.7;
-        transform:translate(-3px,-1px);
-      }
-      97%{
-        opacity:.6;
-        transform:translate(2px,-2px);
-      }
+      0%,90%,100%{ opacity:0; transform:translate(0); }
+      93%{ opacity:.5; transform:translate(3px,1px); }
+      95%{ opacity:.7; transform:translate(-3px,-1px); }
+      97%{ opacity:.6; transform:translate(2px,-2px); }
     }
 
     .hero-sub{
@@ -456,10 +455,9 @@
       border-right:2px solid var(--rose);
       width:0;
       display:inline-block;
-
       animation:
-      typing 1.6s steps(32) .7s forwards,
-      blink .7s step-end infinite;
+        typing 1.6s steps(32) .7s forwards,
+        blink .7s step-end infinite;
     }
 
     @keyframes typing{
@@ -486,45 +484,31 @@
       display:inline-block;
       position:relative;
       padding:10px;
-
       background:
-      repeating-linear-gradient(
-        0deg,
-        var(--violet) 0,
-        var(--violet) 8px,
-        transparent 8px,
-        transparent 16px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        var(--rose) 0,
-        var(--rose) 8px,
-        transparent 8px,
-        transparent 16px
-      );
-
+        repeating-linear-gradient(
+          0deg, var(--violet) 0, var(--violet) 8px, transparent 8px, transparent 16px
+        ),
+        repeating-linear-gradient(
+          90deg, var(--rose) 0, var(--rose) 8px, transparent 8px, transparent 16px
+        );
       image-rendering:pixelated;
-
       box-shadow:
-      0 0 0 2px rgba(180,127,232,.3),
-      0 0 30px rgba(180,127,232,.25),
-      0 0 60px rgba(240,160,200,.12);
-
+        0 0 0 2px rgba(180,127,232,.3),
+        0 0 30px rgba(180,127,232,.25),
+        0 0 60px rgba(240,160,200,.12);
       animation:frameGlow 3s ease-in-out infinite;
     }
 
     @keyframes frameGlow{
       0%,100%{
         transform:translateY(0);
-        filter:
-        drop-shadow(0 0 8px rgba(180,127,232,.4));
+        filter:drop-shadow(0 0 8px rgba(180,127,232,.4));
       }
-
       50%{
         transform:translateY(-4px);
         filter:
-        drop-shadow(0 0 18px rgba(240,160,200,.8))
-        drop-shadow(0 0 40px rgba(180,127,232,.4));
+          drop-shadow(0 0 18px rgba(240,160,200,.8))
+          drop-shadow(0 0 40px rgba(180,127,232,.4));
       }
     }
 
@@ -549,22 +533,13 @@
       object-fit:cover;
       position:relative;
       z-index:1;
-
-      transition:
-      transform .45s ease,
-      filter .45s ease;
-
-      filter:
-      saturate(1.12)
-      contrast(1.05);
+      transition: transform .45s ease, filter .45s ease;
+      filter: saturate(1.12) contrast(1.05);
     }
 
     .pixel-frame:hover img{
       transform:scale(1.03);
-      filter:
-      saturate(1.28)
-      contrast(1.08)
-      hue-rotate(8deg);
+      filter: saturate(1.28) contrast(1.08) hue-rotate(8deg);
     }
 
     .pixel-frame::after{
@@ -591,15 +566,10 @@
     .px-divider span{
       flex:1;
       height:2px;
-
       background:
-      repeating-linear-gradient(
-        90deg,
-        var(--violet) 0px,
-        var(--violet) 4px,
-        transparent 4px,
-        transparent 8px
-      );
+        repeating-linear-gradient(
+          90deg, var(--violet) 0px, var(--violet) 4px, transparent 4px, transparent 8px
+        );
     }
 
     .px-divider i{
@@ -607,21 +577,15 @@
       font-family:'Press Start 2P', monospace;
       font-size:9px;
       color:var(--rose);
-
       animation:pulseSpin 2.2s ease-in-out infinite;
-
       text-shadow:
-      0 0 10px rgba(240,160,200,.7),
-      0 0 20px rgba(180,127,232,.4);
+        0 0 10px rgba(240,160,200,.7),
+        0 0 20px rgba(180,127,232,.4);
     }
 
     @keyframes pulseSpin{
-      0%,100%{
-        transform:rotate(0deg) scale(1);
-      }
-      50%{
-        transform:rotate(180deg) scale(1.4);
-      }
+      0%,100%{ transform:rotate(0deg) scale(1); }
+      50%{ transform:rotate(180deg) scale(1.4); }
     }
 
     /* =========================================
@@ -637,39 +601,23 @@
     .card{
       position:relative;
       overflow:hidden;
-
       padding:30px 34px;
-
       background:
-      linear-gradient(
-        180deg,
-        rgba(255,255,255,.02),
-        rgba(255,255,255,0)
-      ),
-      var(--glass);
-
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)),
+        var(--glass);
       border:2px solid transparent;
-
       border-image:
-      repeating-linear-gradient(
-        90deg,
-        var(--violet) 0px,
-        var(--violet) 4px,
-        transparent 4px,
-        transparent 8px
-      ) 2;
-
+        repeating-linear-gradient(
+          90deg, var(--violet) 0px, var(--violet) 4px, transparent 4px, transparent 8px
+        ) 2;
       backdrop-filter:blur(10px);
-
       box-shadow:
-      0 0 0 1px rgba(255,255,255,.03),
-      0 18px 40px rgba(0,0,0,.22);
-
+        0 0 0 1px rgba(255,255,255,.03),
+        0 18px 40px rgba(0,0,0,.22);
       transition:
-      transform .28s ease,
-      box-shadow .28s ease,
-      border-color .28s ease;
-
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
       animation:fadeUp .8s ease both;
     }
 
@@ -677,67 +625,44 @@
       content:'';
       position:absolute;
       inset:0;
-
       background:
-      linear-gradient(
-        120deg,
-        transparent 0%,
-        rgba(255,255,255,.04) 30%,
-        transparent 60%
-      );
-
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,.04) 30%, transparent 60%);
       transform:translateX(-120%);
       transition:transform .6s ease;
       pointer-events:none;
     }
 
-    .card:hover::before{
-      transform:translateX(120%);
-    }
+    .card:hover::before{ transform:translateX(120%); }
 
     .card::after{
       content:'';
       position:absolute;
       inset:0;
-
       background:
-      radial-gradient(circle at top right,
-      rgba(240,160,200,.12),
-      transparent 40%);
-
+        radial-gradient(circle at top right, rgba(240,160,200,.12), transparent 40%);
       opacity:0;
       transition:opacity .3s ease;
       pointer-events:none;
     }
 
-    .card:hover::after{
-      opacity:1;
-    }
+    .card:hover::after{ opacity:1; }
 
     .card:hover{
-      transform:
-      translateY(-4px)
-      translateX(6px);
-
+      transform: translateY(-4px) translateX(6px);
       box-shadow:
-      -8px 8px 0 rgba(180,127,232,.18),
-      0 18px 50px rgba(0,0,0,.35),
-      0 0 30px rgba(180,127,232,.15);
+        -8px 8px 0 rgba(180,127,232,.18),
+        0 18px 50px rgba(0,0,0,.35),
+        0 0 30px rgba(180,127,232,.15);
     }
 
     .card-tag{
       display:inline-block;
       margin-bottom:16px;
-
       font-family:'Press Start 2P', monospace;
       font-size:7px;
       letter-spacing:2px;
-
       color:var(--accent);
-
-      transition:
-      transform .2s ease,
-      color .2s ease;
+      transition: transform .2s ease, color .2s ease;
     }
 
     .card:hover .card-tag{
@@ -746,21 +671,14 @@
     }
 
     @keyframes shake{
-      0%,100%{
-        transform:translateX(0);
-      }
-      25%{
-        transform:translateX(-2px);
-      }
-      75%{
-        transform:translateX(2px);
-      }
+      0%,100%{ transform:translateX(0); }
+      25%{ transform:translateX(-2px); }
+      75%{ transform:translateX(2px); }
     }
 
     .card p{
       position:relative;
       z-index:2;
-
       font-size:clamp(1.1rem,3vw,1.45rem);
       line-height:1.65;
       font-style:italic;
@@ -772,29 +690,21 @@
       font-style:normal;
       position:relative;
       display:inline-block;
-
-      text-shadow:
-      0 0 10px rgba(240,160,200,.18);
+      text-shadow:0 0 10px rgba(240,160,200,.18);
     }
 
     .card em::after{
       content:'';
       position:absolute;
-      left:0;
-      right:0;
-      bottom:-3px;
-
+      left:0; right:0; bottom:-3px;
       height:2px;
       background:var(--rose);
-
       transform:scaleX(0);
       transform-origin:left;
       transition:transform .3s ease;
     }
 
-    .card:hover em::after{
-      transform:scaleX(1);
-    }
+    .card:hover em::after{ transform:scaleX(1); }
 
     /* =========================================
        FINALE
@@ -814,8 +724,7 @@
       width:420px;
       height:220px;
       transform:translateX(-50%);
-      background:
-      radial-gradient(circle, rgba(240,160,200,.14), transparent 70%);
+      background:radial-gradient(circle, rgba(240,160,200,.14), transparent 70%);
       filter:blur(30px);
       z-index:-1;
     }
@@ -826,25 +735,17 @@
       font-style:italic;
       color:var(--soft);
       margin-bottom:22px;
-
-      text-shadow:
-      0 0 18px rgba(180,127,232,.12);
+      text-shadow:0 0 18px rgba(180,127,232,.12);
     }
 
-    .finale h2 span{
-      color:var(--rose);
-    }
+    .finale h2 span{ color:var(--rose); }
 
     .finale .pixel-label{
       margin-top:30px;
       animation:softBlink 1.4s step-start infinite;
     }
 
-    @keyframes softBlink{
-      50%{
-        opacity:.35;
-      }
-    }
+    @keyframes softBlink{ 50%{ opacity:.35; } }
 
     /* =========================================
        MUSIC BAR
@@ -855,39 +756,26 @@
       bottom:24px;
       right:24px;
       z-index:100;
-
       display:flex;
       align-items:center;
       gap:12px;
-
       padding:12px 16px;
-
       background:
-      linear-gradient(
-        180deg,
-        rgba(255,255,255,.03),
-        rgba(255,255,255,0)
-      ),
-      rgba(26,10,46,.86);
-
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+        rgba(26,10,46,.86);
       border:2px solid rgba(180,127,232,.65);
-
       backdrop-filter:blur(12px);
-
       box-shadow:
-      0 0 0 1px rgba(255,255,255,.04),
-      0 0 30px rgba(180,127,232,.2);
+        0 0 0 1px rgba(255,255,255,.04),
+        0 0 30px rgba(180,127,232,.2);
     }
 
     .music-icon{
       font-family:'Press Start 2P', monospace;
       font-size:8px;
       color:var(--rose);
-
       animation:spin 2s linear infinite;
-
-      text-shadow:
-      0 0 10px rgba(240,160,200,.8);
+      text-shadow:0 0 10px rgba(240,160,200,.8);
     }
 
     @keyframes spin{
@@ -912,11 +800,8 @@
     .music-bars span{
       width:3px;
       background:var(--rose);
-
       animation:bar .8s ease-in-out infinite alternate;
-
-      box-shadow:
-      0 0 8px rgba(240,160,200,.8);
+      box-shadow:0 0 8px rgba(240,160,200,.8);
     }
 
     .music-bars span:nth-child(1){ animation-delay:0s; }
@@ -929,7 +814,6 @@
       to{ height:16px; }
     }
 
-    /* music paused state */
     .music-bars.paused span {
       animation-play-state: paused;
       height: 4px;
@@ -949,23 +833,17 @@
       font-family:'DM Serif Display', serif;
       font-style:italic;
       font-size:clamp(1.9rem,4vw,2.6rem);
-
       color:var(--soft);
-
       margin-bottom:12px;
     }
 
-    .game-title span{
-      color:var(--rose);
-    }
+    .game-title span{ color:var(--rose); }
 
     .game-desc{
       font-family:'Press Start 2P', monospace;
       font-size:6px;
       line-height:2.1;
-
       color:var(--violet);
-
       margin-bottom:30px;
       opacity:.85;
     }
@@ -975,23 +853,14 @@
       width:100%;
       max-width:560px;
       margin:0 auto;
-
       overflow:hidden;
-
       background:
-      linear-gradient(
-        180deg,
-        rgba(255,255,255,.02),
-        rgba(255,255,255,0)
-      ),
-      rgba(26,10,46,.85);
-
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)),
+        rgba(26,10,46,.85);
       border:2px solid rgba(180,127,232,.7);
-
       box-shadow:
-      0 0 0 1px rgba(255,255,255,.03),
-      0 0 30px rgba(180,127,232,.18);
-
+        0 0 0 1px rgba(255,255,255,.03),
+        0 0 30px rgba(180,127,232,.18);
       backdrop-filter:blur(10px);
     }
 
@@ -1007,10 +876,8 @@
       top:12px;
       left:0;
       right:0;
-
       display:flex;
       justify-content:space-between;
-
       padding:0 14px;
       z-index:10;
       pointer-events:none;
@@ -1019,85 +886,70 @@
     .hud-item{
       font-family:'Press Start 2P', monospace;
       font-size:7px;
-
       color:var(--soft);
-
       background:rgba(26,10,46,.72);
-
       padding:6px 9px;
-
       border:1px solid rgba(180,127,232,.35);
-
-      box-shadow:
-      0 0 10px rgba(0,0,0,.2);
+      box-shadow:0 0 10px rgba(0,0,0,.2);
     }
 
-    .hud-item span{
-      color:var(--rose);
+    .hud-item span{ color:var(--rose); }
+
+    /* Power-up HUD badge */
+    #powerupHud {
+      display: none;
+      animation: powerupPulse .6s ease-in-out infinite alternate;
+    }
+
+    #powerupHud.active {
+      display: block;
+    }
+
+    #powerupHud span {
+      color: var(--gold) !important;
+    }
+
+    @keyframes powerupPulse {
+      from { box-shadow: 0 0 6px rgba(255,213,128,.4); }
+      to   { box-shadow: 0 0 16px rgba(255,213,128,.9); }
     }
 
     .game-btn{
       position:relative;
       z-index:20;
-
       font-family:'Press Start 2P', monospace;
       font-size:8px;
       letter-spacing:1px;
-
       color:var(--deep);
-
       background:var(--rose);
-
       border:none;
-
       padding:14px 26px;
-
       margin-top:20px;
-
-      box-shadow:
-      5px 5px 0 var(--violet);
-
-      transition:
-      transform .12s ease,
-      box-shadow .12s ease,
-      filter .12s ease;
-
+      box-shadow:5px 5px 0 var(--violet);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
       cursor:pointer !important;
     }
 
     .game-btn:hover{
       transform:translate(-2px,-2px);
-
-      box-shadow:
-      7px 7px 0 var(--violet);
-
+      box-shadow:7px 7px 0 var(--violet);
       filter:brightness(1.05);
     }
 
     .game-btn:active{
       transform:translate(2px,2px);
-
-      box-shadow:
-      2px 2px 0 var(--violet);
+      box-shadow:2px 2px 0 var(--violet);
     }
 
     .game-overlay{
       position:absolute;
       inset:0;
-
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
       gap:14px;
-
-      background:
-      linear-gradient(
-        180deg,
-        rgba(26,10,46,.9),
-        rgba(26,10,46,.94)
-      );
-
+      background:linear-gradient(180deg, rgba(26,10,46,.9), rgba(26,10,46,.94));
       z-index:20;
     }
 
@@ -1105,11 +957,8 @@
       font-family:'Press Start 2P', monospace;
       font-size:12px;
       line-height:1.8;
-
       color:var(--rose);
-
-      text-shadow:
-      0 0 12px rgba(240,160,200,.5);
+      text-shadow:0 0 12px rgba(240,160,200,.5);
     }
 
     .overlay-sub,
@@ -1119,40 +968,26 @@
       text-align:center;
     }
 
-    .overlay-sub{
-      font-size:7px;
-      color:var(--violet);
-    }
-
-    .overlay-score{
-      font-size:9px;
-      color:var(--soft);
-    }
+    .overlay-sub{ font-size:7px; color:var(--violet); }
+    .overlay-score{ font-size:9px; color:var(--soft); }
 
     /* =========================================
-       SCORE POP
+       SCORE POP — FIX: position:fixed so it
+       uses viewport coords (getBoundingClientRect)
     ========================================= */
 
     .score-pop{
-      position:absolute;
+      position:fixed;  /* was missing — caused wrong position on scroll */
       pointer-events:none;
-      z-index:1000;
-
+      z-index:9998;
       font-family:'Press Start 2P', monospace;
       font-size:9px;
-
-      animation:scorePop .8s ease forwards;
+      animation:scorePop .85s ease forwards;
     }
 
     @keyframes scorePop{
-      0%{
-        opacity:1;
-        transform:translateY(0) scale(1);
-      }
-      100%{
-        opacity:0;
-        transform:translateY(-42px) scale(1.45);
-      }
+      0%{   opacity:1; transform:translateY(0) scale(1); }
+      100%{ opacity:0; transform:translateY(-48px) scale(1.5); }
     }
 
     /* =========================================
@@ -1162,9 +997,7 @@
     .reveal{
       opacity:0;
       transform:translateY(32px);
-      transition:
-      opacity .75s ease,
-      transform .75s ease;
+      transition: opacity .75s ease, transform .75s ease;
     }
 
     .reveal.visible{
@@ -1181,19 +1014,12 @@
       pointer-events:none;
       z-index:1000;
       font-size:14px;
-
       animation:burstOut .7s ease forwards;
     }
 
     @keyframes burstOut{
-      0%{
-        opacity:1;
-        transform:translate(0,0) scale(.5);
-      }
-      100%{
-        opacity:0;
-        transform:var(--end) scale(1.7);
-      }
+      0%{   opacity:1; transform:translate(0,0) scale(.5); }
+      100%{ opacity:0; transform:var(--end) scale(1.7); }
     }
 
     /* =========================================
@@ -1210,30 +1036,13 @@
       animation:cornerFloat 4s ease-in-out infinite;
     }
 
-    .corner.top-left{
-      top:18px;
-      left:18px;
-    }
-
-    .corner.top-right{
-      top:18px;
-      right:18px;
-      animation-delay:1s;
-    }
-
-    .corner.bottom-left{
-      bottom:18px;
-      left:18px;
-      animation-delay:2s;
-    }
+    .corner.top-left{ top:18px; left:18px; }
+    .corner.top-right{ top:18px; right:18px; animation-delay:1s; }
+    .corner.bottom-left{ bottom:18px; left:18px; animation-delay:2s; }
 
     @keyframes cornerFloat{
-      0%,100%{
-        transform:translateY(0);
-      }
-      50%{
-        transform:translateY(-4px);
-      }
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-4px); }
     }
 
     /* =========================================
@@ -1241,14 +1050,8 @@
     ========================================= */
 
     @keyframes fadeUp{
-      from{
-        opacity:0;
-        transform:translateY(24px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
+      from{ opacity:0; transform:translateY(24px); }
+      to{   opacity:1; transform:translateY(0); }
     }
 
     .card:nth-child(1){ animation-delay:.08s; }
@@ -1264,318 +1067,240 @@
     ========================================= */
 
     @media (max-width:700px){
-
-      main{
-        padding:70px 18px 130px;
-      }
-
-      .music-bar{
-        right:12px;
-        bottom:12px;
-        transform:scale(.92);
-        transform-origin:bottom right;
-      }
-
-      .pixel-frame img{
-        width:210px;
-        height:210px;
-      }
-
-      .card{
-        padding:24px;
-      }
-
-      .game-desc{
-        line-height:2.3;
-      }
+      main{ padding:70px 18px 130px; }
+      .music-bar{ right:12px; bottom:12px; transform:scale(.92); transform-origin:bottom right; }
+      .pixel-frame img{ width:210px; height:210px; }
+      .card{ padding:24px; }
+      .game-desc{ line-height:2.3; }
+      .mountains-bg{ height:35vh; min-height:180px; }
     }
-
   </style>
-
 </head>
 
 <body>
 
-  <!-- =========================================
-       SPLASH SCREEN — forces user tap → unlocks audio on mobile
-  ========================================= -->
-
+  <!-- SPLASH SCREEN -->
   <div id="splash">
     <div class="splash-stars" id="splashStars"></div>
 
-```
-<div class="splash-heart">♡</div>
+    <div class="splash-heart">♡</div>
 
-<div class="splash-title">
-  hey,<br/>Tallyyy.
-</div>
+    <div class="splash-title">
+      hey,<br/>Tallyyy.
+    </div>
 
-<div class="splash-sub">
-  quelque chose de spécial t'attend<br/>
-  appuie pour entrer ♡
-</div>
+    <div class="splash-sub">
+      quelque chose de spécial t'attend<br/>
+      appuie pour entrer ♡
+    </div>
 
-<button id="splashBtn">
-  ENTRER ♡
-</button>
+    <button id="splashBtn">ENTRER ♡</button>
 
-<div class="splash-note">
-  ✦ avec musique ✦
-</div>
-```
-
+    <div class="splash-note">✦ avec musique ✦</div>
   </div>
 
   <div class="noise"></div>
+
+  <!-- MOUNTAINS BACKGROUND — new atmospheric layer -->
+  <div class="mountains-bg">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <linearGradient id="mistGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="transparent"/>
+          <stop offset="100%" stop-color="rgba(26,10,46,0.35)"/>
+        </linearGradient>
+        <linearGradient id="glow1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(180,127,232,0.0)"/>
+          <stop offset="100%" stop-color="rgba(180,127,232,0.06)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Layer 1: Farthest tiny peaks — barely visible -->
+      <path
+        fill="rgba(80,40,130,0.18)"
+        d="M0,420 L55,340 L110,380 L180,300 L250,355 L330,270 L400,320 L470,250 L540,305 L620,230 L700,290 L780,215 L855,275 L930,240 L1000,295 L1075,255 L1150,310 L1240,270 L1330,315 L1440,285 L1440,500 L0,500 Z"
+      />
+
+      <!-- Layer 2: Far mountains -->
+      <path
+        fill="rgba(55,22,100,0.38)"
+        d="M0,440 L90,360 L190,400 L300,320 L410,375 L520,295 L630,345 L740,268 L850,330 L950,300 L1060,355 L1165,315 L1280,370 L1440,335 L1440,500 L0,500 Z"
+      />
+
+      <!-- Aurora/glow between layers -->
+      <rect x="0" y="350" width="1440" height="80" fill="url(#glow1)" opacity="0.7"/>
+
+      <!-- Layer 3: Mid mountains -->
+      <path
+        fill="rgba(35,13,65,0.65)"
+        d="M0,458 L140,400 L280,432 L420,378 L560,415 L700,375 L840,410 L980,380 L1120,408 L1280,382 L1440,415 L1440,500 L0,500 Z"
+      />
+
+      <!-- Mist overlay -->
+      <rect x="0" y="380" width="1440" height="120" fill="url(#mistGrad)"/>
+
+      <!-- Layer 4: Foreground silhouette -->
+      <path
+        fill="rgba(18,7,36,0.90)"
+        d="M0,482 L200,462 L400,475 L600,458 L800,470 L1000,460 L1200,472 L1440,463 L1440,500 L0,500 Z"
+      />
+
+      <!-- Subtle violet glow at mountain peaks -->
+      <ellipse cx="720" cy="270" rx="340" ry="40" fill="rgba(180,127,232,0.04)"/>
+      <ellipse cx="300" cy="295" rx="200" ry="28" fill="rgba(240,160,200,0.03)"/>
+      <ellipse cx="1150" cy="310" rx="220" ry="30" fill="rgba(180,127,232,0.03)"/>
+    </svg>
+  </div>
+  <div class="mountains-aurora"></div>
 
   <div class="corner top-left">✦</div>
   <div class="corner top-right">♡</div>
   <div class="corner bottom-left">♪</div>
 
-<canvas id="cursor" width="24" height="24"></canvas>
+  <canvas id="cursor" width="24" height="24"></canvas>
 
   <div class="stars" id="stars"></div>
   <div class="particles" id="particles"></div>
 
-<audio id="bgm" src="images/music.mp3" loop preload="auto"></audio>
+  <audio id="bgm" src="images/music.mp3" loop preload="auto"></audio>
 
   <!-- MUSIC BAR -->
-
   <div class="music-bar" id="musicBar" style="cursor:pointer !important" title="tap to play/pause">
     <div class="music-icon">♪</div>
-
-```
-<div>
-  <div class="music-text">now playing</div>
-  <div class="music-text" style="color:var(--soft)">for tally ♡</div>
-</div>
-
-<div class="music-bars" id="musicBars">
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-</div>
-```
-
+    <div>
+      <div class="music-text">now playing</div>
+      <div class="music-text" style="color:var(--soft)">for tally ♡</div>
+    </div>
+    <div class="music-bars" id="musicBars">
+      <span></span><span></span><span></span><span></span>
+    </div>
   </div>
 
   <main>
 
-```
-<!-- HERO -->
-<section class="hero">
+    <!-- HERO -->
+    <section class="hero">
+      <span class="pixel-label">✦ a little something ✦</span>
+      <h1 data-text="hey,&#10;Tallyyy.">
+        hey,<br/>Tallyyy.
+      </h1>
+      <p class="hero-sub">
+        <span class="typewriter">this one's for you!! &nbsp;♡</span>
+      </p>
+    </section>
 
-  <span class="pixel-label">
-    ✦ a little something ✦
-  </span>
+    <!-- PHOTO -->
+    <section class="photo-section reveal">
+      <div class="pixel-frame">
+        <img src="images/tally.png" alt="Tally"/>
+      </div>
+    </section>
 
-  <h1 data-text="hey,&#10;Tallyyy.">
-    hey,<br/>
-    Tallyyy.
-  </h1>
+    <div class="px-divider"><span></span><i>✦</i><span></span></div>
 
-  <p class="hero-sub">
-    <span class="typewriter">
-      this one's for you!! &nbsp;♡
-    </span>
-  </p>
+    <!-- CARDS -->
+    <div class="cards">
 
-</section>
-
-<!-- PHOTO -->
-<section class="photo-section reveal">
-
-  <div class="pixel-frame">
-    <img src="images/tally.png" alt="Tally"/>
-  </div>
-
-</section>
-
-<div class="px-divider">
-  <span></span>
-  <i>✦</i>
-  <span></span>
-</div>
-
-<!-- CARDS -->
-<div class="cards">
-
-  <div class="card reveal">
-    <span class="card-tag">001 / first thing</span>
-
-    <p>
-      Your hair. I don't even know how to explain it
-      <br/>
-      it's just <em>greuigh as I say... stunning!!</em>,
-      And it's... everything.
-    </p>
-  </div>
-
-  <div class="card reveal">
-    <span class="card-tag">002 / your energyyy</span>
-
-    <p>
-      I'm sure you walk into a room and something shifts.
-      <br/>
-      You don't try. You just
-      <em>are because... stunning!</em>.
-    </p>
-  </div>
-
-  <div class="card reveal">
-    <span class="card-tag">003 / the way you tease mee</span>
-
-    <p>
-      You know exactly what you'ree doing.
-      <br/>
-      And I <em>love</em> hum... that you-... you- do it anyway.
-    </p>
-  </div>
-
-  <div class="card reveal">
-    <span class="card-tag">004 / your confidence</span>
-
-    <p>
-      Sublime, Parfait. That are the words.
-      <br/>
-      You carry yourself like you already know you're <em>it</em>
-      <br/>
-      because you are.
-    </p>
-  </div>
-
-  <div class="card reveal">
-    <span class="card-tag">005 / what you do to me</span>
-
-    <p>
-      You make me smile without trying!
-      <br/>
-      You hypee meeee.
-      <br/>
-      You make me blush <em>every single time</em>.
-    </p>
-  </div>
-
-  <div class="card reveal">
-    <span class="card-tag">006 / your good boy</span>
-
-    <p>
-      When you call me your <em>shorty good boy</em>
-      <br/>
-      welll... yeah. I'm not complaining. And not ashamed!
-    </p>
-  </div>
-
-  <div class="card reveal">
-    <span class="card-tag">007 / last thing</span>
-
-    <p>
-      There would be nothing about you I would change.
-      <br/>
-      <em>Nothing.</em>
-      <br/>
-      I love you for exactly what you are!!!
-    </p>
-  </div>
-
-</div>
-
-<div class="px-divider">
-  <span></span>
-  <i>✦</i>
-  <span></span>
-</div>
-
-<!-- FINALE -->
-<section class="finale reveal">
-
-  <h2>
-    you make everything feel
-    <br/>
-    <span>a little more special.</span>
-  </h2>
-
-  <span class="pixel-label">always ♡</span>
-
-</section>
-
-<!-- MINI GAME -->
-<section class="game-section reveal">
-
-  <span class="pixel-label">✦ mini game ✦</span>
-
-  <h2 class="game-title">
-    catch the <span>hearts</span>
-  </h2>
-
-  <p class="game-desc">
-    move your mouse / tap to catch the falling hearts!
-    <br/>
-    don't let them slip away... just like you
-  </p>
-
-  <div class="game-container">
-
-    <div class="game-hud">
-      <div class="hud-item">
-        score <span id="score">0</span>
+      <div class="card reveal">
+        <span class="card-tag">001 / first thing</span>
+        <p>Your hair. I don't even know how to explain it<br/>it's just <em>greuigh as I say... stunning!!</em>,<br/>And it's... everything.</p>
       </div>
 
-      <div class="hud-item">
-        lives <span id="lives">♡♡♡</span>
+      <div class="card reveal">
+        <span class="card-tag">002 / your energyyy</span>
+        <p>I'm sure you walk into a room and something shifts.<br/>You don't try. You just <em>are because... stunning!</em>.</p>
       </div>
 
-      <div class="hud-item">
-        best <span id="best">0</span>
-      </div>
-    </div>
-
-    <canvas id="gameCanvas" width="560" height="340"></canvas>
-
-    <div class="game-overlay" id="gameOverlay">
-
-      <div class="overlay-title">
-        catch the hearts
+      <div class="card reveal">
+        <span class="card-tag">003 / the way you tease mee</span>
+        <p>You know exactly what you'ree doing.<br/>And I <em>love</em> hum... that you-... you- do it anyway.</p>
       </div>
 
-      <div class="overlay-sub">
-        use mouse or tap to move the basket
-        <br/>
-        don't let the hearts fall!!
+      <div class="card reveal">
+        <span class="card-tag">004 / your confidence</span>
+        <p>Sublime, Parfait. That are the words.<br/>You carry yourself like you already know you're <em>it</em><br/>because you are.</p>
       </div>
 
-      <button class="game-btn" id="startBtn">
-        PLAY ♡
-      </button>
+      <div class="card reveal">
+        <span class="card-tag">005 / what you do to me</span>
+        <p>You make me smile without trying!<br/>You hypee meeee.<br/>You make me blush <em>every single time</em>.</p>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-tag">006 / your good boy</span>
+        <p>When you call me your <em>shorty good boy</em><br/>welll... yeah. I'm not complaining. And not ashamed!</p>
+      </div>
+
+      <div class="card reveal">
+        <span class="card-tag">007 / last thing</span>
+        <p>There would be nothing about you I would change.<br/><em>Nothing.</em><br/>I love you for exactly what you are!!!</p>
+      </div>
 
     </div>
 
-  </div>
+    <div class="px-divider"><span></span><i>✦</i><span></span></div>
 
-</section>
-```
+    <!-- FINALE -->
+    <section class="finale reveal">
+      <h2>you make everything feel<br/><span>a little more special.</span></h2>
+      <span class="pixel-label">always ♡</span>
+    </section>
+
+    <!-- MINI GAME -->
+    <section class="game-section reveal">
+
+      <span class="pixel-label">✦ mini game ✦</span>
+      <h2 class="game-title">catch the <span>hearts</span></h2>
+      <p class="game-desc">
+        move your mouse / tap to catch the falling hearts!<br/>
+        ★ = double points &nbsp;|&nbsp; ◆ = bonus +8 &nbsp;|&nbsp; ↯ = wide basket<br/>
+        don't let them slip away... just like you
+      </p>
+
+      <div class="game-container">
+
+        <div class="game-hud">
+          <div class="hud-item">score <span id="score">0</span></div>
+          <div class="hud-item" id="powerupHud">2X <span id="powerupTimer">8</span>s</div>
+          <div class="hud-item">lives <span id="lives">♡♡♡</span></div>
+          <div class="hud-item">best <span id="best">0</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="560" height="340"></canvas>
+
+        <div class="game-overlay" id="gameOverlay">
+          <div class="overlay-title">catch the hearts</div>
+          <div class="overlay-sub">
+            use mouse or tap to move the basket<br/>
+            don't let the hearts fall!!<br/>
+            ★ double pts &nbsp;◆ bonus &nbsp;↯ wide basket
+          </div>
+          <button class="game-btn" id="startBtn">PLAY ♡</button>
+        </div>
+
+      </div>
+    </section>
 
   </main>
 
   <script>
 
     /* =========================================
-       SPLASH — tap to unlock audio (Android fix)
+       SPLASH — tap to unlock audio
     ========================================= */
 
-    const splash = document.getElementById('splash');
-    const splashBtn = document.getElementById('splashBtn');
-    const bgm = document.getElementById('bgm');
-    const musicBarsEl = document.getElementById('musicBars');
-    const musicBar = document.getElementById('musicBar');
+    const splash     = document.getElementById('splash');
+    const splashBtn  = document.getElementById('splashBtn');
+    const bgm        = document.getElementById('bgm');
+    const musicBarsEl= document.getElementById('musicBars');
+    const musicBar   = document.getElementById('musicBar');
 
     bgm.volume = 0.55;
 
     let audioUnlocked = false;
-    let isPlaying = false;
+    let isPlaying     = false;
 
-    // Add stars to splash
+    // Splash stars
     const splashStars = document.getElementById('splashStars');
     for(let i = 0; i < 40; i++){
       const s = document.createElement('div');
@@ -1602,18 +1327,12 @@
     }
 
     splashBtn.addEventListener('click', () => {
-      // This click event is the "user gesture" Android needs
       audioUnlocked = true;
       startAudio();
-
-      // Fade out splash
       splash.classList.add('hidden');
-      setTimeout(() => {
-        splash.style.display = 'none';
-      }, 650);
+      setTimeout(() => { splash.style.display = 'none'; }, 650);
     });
 
-    // Music bar tap = toggle play/pause
     musicBar.addEventListener('click', () => {
       if(!audioUnlocked) return;
       if(isPlaying){
@@ -1630,23 +1349,14 @@
     ========================================= */
 
     const starsEl = document.getElementById('stars');
-
     for(let i = 0; i < 85; i++){
-
       const s = document.createElement('div');
-
       s.className = 'star';
-
       s.style.left = Math.random() * 100 + 'vw';
-      s.style.top = Math.random() * 100 + 'vh';
-
-      s.style.animationDelay = Math.random() * 4 + 's';
+      s.style.top  = Math.random() * 100 + 'vh';
+      s.style.animationDelay    = Math.random() * 4 + 's';
       s.style.animationDuration = (1.5 + Math.random() * 3) + 's';
-
-      if(Math.random() > .5){
-        s.style.background = '#b47fe8';
-      }
-
+      if(Math.random() > .5) s.style.background = '#b47fe8';
       starsEl.appendChild(s);
     }
 
@@ -1655,39 +1365,27 @@
     ========================================= */
 
     const particlesEl = document.getElementById('particles');
-
     const emojis = ['♡','✦','✿','♪','☆','✨'];
-
     for(let i = 0; i < 22; i++){
-
       const p = document.createElement('div');
-
       p.className = 'particle';
-
       p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
       p.style.left = Math.random() * 100 + 'vw';
       p.style.bottom = '-20px';
-
-      p.style.animationDelay = Math.random() * 12 + 's';
+      p.style.animationDelay    = Math.random() * 12 + 's';
       p.style.animationDuration = (9 + Math.random() * 12) + 's';
-
-      p.style.color =
-      Math.random() > .5
-      ? '#f0a0c8'
-      : '#b47fe8';
-
+      p.style.color = Math.random() > .5 ? '#f0a0c8' : '#b47fe8';
       particlesEl.appendChild(p);
     }
 
     /* =========================================
-       CURSOR
+       CURSOR — z-index 100000 (above splash)
     ========================================= */
 
     const cursorEl = document.getElementById('cursor');
-    const ctx = cursorEl.getContext('2d');
+    const ctx      = cursorEl.getContext('2d');
 
-    const heart = [
+    const heartMap = [
       [0,0,1,1,0,0,0,1,1,0,0,0],
       [0,1,1,1,1,0,1,1,1,1,0,0],
       [1,1,1,1,1,1,1,1,1,1,1,0],
@@ -1699,229 +1397,173 @@
       [0,0,0,0,0,1,0,0,0,0,0,0],
     ];
 
-    const colors = [
-      '#f0a0c8',
-      '#f0a0c8',
-      '#ff80bf',
-      '#b47fe8',
-      '#b47fe8'
-    ];
-
+    const cursorColors = ['#f0a0c8','#f0a0c8','#ff80bf','#b47fe8','#b47fe8'];
     const px = 2;
 
-    heart.forEach((row, y)=>{
-
-      row.forEach((cell, x)=>{
-
+    heartMap.forEach((row, y) => {
+      row.forEach((cell, x) => {
         if(cell){
-
-          ctx.fillStyle =
-          colors[Math.floor(y / 2) % colors.length];
-
-          ctx.fillRect(x * px, y * px, px, px);
+          ctx.fillStyle = cursorColors[Math.floor(y/2) % cursorColors.length];
+          ctx.fillRect(x*px, y*px, px, px);
         }
       });
     });
 
     document.addEventListener('mousemove', e => {
-
       cursorEl.style.left = e.clientX + 'px';
-      cursorEl.style.top = e.clientY + 'px';
+      cursorEl.style.top  = e.clientY + 'px';
     });
 
     /* =========================================
        SCROLL REVEAL
     ========================================= */
 
-    const reveals = document.querySelectorAll('.reveal');
-
+    const reveals  = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
-
       entries.forEach(entry => {
-
-        if(entry.isIntersecting){
-          entry.target.classList.add('visible');
-        }
-
+        if(entry.isIntersecting) entry.target.classList.add('visible');
       });
-
     }, { threshold:.12 });
-
     reveals.forEach(el => observer.observe(el));
 
     /* =========================================
-       HEART BURST
+       HEART BURST ON CARD CLICK
     ========================================= */
 
     document.querySelectorAll('.card').forEach(card => {
-
       card.addEventListener('click', () => {
-
         const rect = card.getBoundingClientRect();
-
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-
+        const cx = rect.left + rect.width  / 2;
+        const cy = rect.top  + rect.height / 2;
         for(let i = 0; i < 10; i++){
-
           const b = document.createElement('div');
-
           b.className = 'burst';
           b.textContent = '♡';
-
           b.style.left = cx + 'px';
-          b.style.top = cy + 'px';
-
+          b.style.top  = cy + 'px';
           const angle = (i / 10) * Math.PI * 2;
-          const dist = 50 + Math.random() * 50;
-
-          const dx = Math.cos(angle) * dist;
-          const dy = Math.sin(angle) * dist;
-
-          b.style.setProperty(
-            '--end',
-            `translate(${dx}px, ${dy}px)`
-          );
-
-          b.style.color =
-          Math.random() > .5
-          ? '#f0a0c8'
-          : '#b47fe8';
-
+          const dist  = 50 + Math.random() * 50;
+          b.style.setProperty('--end', `translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`);
+          b.style.color = Math.random() > .5 ? '#f0a0c8' : '#b47fe8';
           document.body.appendChild(b);
-
-          setTimeout(()=> b.remove(), 800);
+          setTimeout(() => b.remove(), 800);
         }
       });
-
     });
 
     /* =========================================
-       MINI GAME
+       MINI GAME — improved with power-ups,
+       bonuses, bug fixes, milestone messages
     ========================================= */
 
-    const gc = document.getElementById('gameCanvas');
-    const gctx = gc.getContext('2d');
-
+    const gc      = document.getElementById('gameCanvas');
+    const gctx    = gc.getContext('2d');
     const overlay = document.getElementById('gameOverlay');
-    const startBtn = document.getElementById('startBtn');
+    const startBtn= document.getElementById('startBtn');
 
-    const scoreEl = document.getElementById('score');
-    const livesEl = document.getElementById('lives');
-    const bestEl = document.getElementById('best');
+    const scoreEl    = document.getElementById('score');
+    const livesEl    = document.getElementById('lives');
+    const bestEl     = document.getElementById('best');
+    const powerupHud = document.getElementById('powerupHud');
+    const powerupTimerEl = document.getElementById('powerupTimer');
 
     const GW = 560;
     const GH = 340;
 
     const COLORS = {
-      violet:'#b47fe8',
-      rose:'#f0a0c8',
-      deep:'#1a0a2e',
-      mid:'#2d1355',
-      soft:'#f5e6ff',
-      accent:'#ff80bf'
+      violet:'#b47fe8', rose:'#f0a0c8',
+      deep:'#1a0a2e',   mid:'#2d1355',
+      soft:'#f5e6ff',   accent:'#ff80bf',
+      gold:'#ffd580'
     };
+
+    const BASKET_NORMAL_W = 72;
+    const BASKET_WIDE_W   = 116;
 
     let gameState = 'idle';
+    let score = 0, lives = 3, best = 0;
+    let items = [], particles_game = [];
+    let basket = { x: GW/2, width: BASKET_NORMAL_W, height: 14 };
+    let targetBasketX = GW/2;
+    let spawnTimer = 0, spawnInterval = 78, speed = 1.8;
+    let frameCount = 0, combo = 0;
 
-    let score = 0;
-    let lives = 3;
-    let best = 0;
+    // Power-up state
+    let doublePoints   = false;
+    let doubleTimer    = 0;   // frames remaining (60 fps → 8s = 480 frames)
+    let wideBasket     = false;
+    let wideTimer      = 0;
+    const DOUBLE_DURATION = 480;
+    const WIDE_DURATION   = 360;
 
-    let items = [];
-    let particles_game = [];
+    // Milestone messages
+    const MILESTONES = [
+      { score:10,  msg:'♡ cute!!',        color:'#f0a0c8', shown:false },
+      { score:25,  msg:'★ amazing!!',      color:'#ffd580', shown:false },
+      { score:50,  msg:'✦ incredible!!',   color:'#b47fe8', shown:false },
+      { score:100, msg:'◆ LEGENDARY ◆',   color:'#80ffea', shown:false },
+    ];
 
-    let basket = {
-      x:GW / 2,
-      width:72,
-      height:14
-    };
+    let milestoneMsg = '', milestoneMsgTimer = 0;
 
-    let targetBasketX = GW / 2;
-
-    let spawnTimer = 0;
-    let spawnInterval = 80;
-    let speed = 1.8;
-    let frameCount = 0;
-    let combo = 0;
-
+    /*
+      ITEM TYPES:
+      ♡  = 1pt  (common)
+      ✦  = 2pt  (uncommon)
+      ✿  = 3pt  (uncommon)
+      💔 = -1pt (trap)
+      ★  = 5pt + double-points 8s (rare power-up)
+      ◆  = instant +8pt (very rare bonus)
+      ↯  = wide basket 6s (rare power-up)
+    */
     const ITEM_TYPES = [
-      { emoji:'♡', points:1, color:'#f0a0c8', size:16, freq:60 },
-      { emoji:'✦', points:2, color:'#b47fe8', size:13, freq:20 },
-      { emoji:'✿', points:3, color:'#ff80bf', size:15, freq:15 },
-      { emoji:'💔', points:-1, color:'#884466', size:14, freq:5 }
+      { emoji:'♡',  points:1,  color:'#f0a0c8', size:16, freq:60 },
+      { emoji:'✦',  points:2,  color:'#b47fe8', size:13, freq:20 },
+      { emoji:'✿',  points:3,  color:'#ff80bf', size:15, freq:15 },
+      { emoji:'💔', points:-1, color:'#884466', size:14, freq:5  },
+      { emoji:'★',  points:5,  color:'#ffd580', size:15, freq:5,  powerup:'double' },
+      { emoji:'◆',  points:8,  color:'#80ffea', size:13, freq:3,  powerup:'bonus'  },
+      { emoji:'↯',  points:2,  color:'#a0e8ff', size:15, freq:3,  powerup:'wide'   },
     ];
 
     function pickType(){
-
-      const total =
-      ITEM_TYPES.reduce((s, t)=> s + t.freq, 0);
-
+      const total = ITEM_TYPES.reduce((s,t) => s+t.freq, 0);
       let r = Math.random() * total;
-
-      for(const t of ITEM_TYPES){
-
-        r -= t.freq;
-
-        if(r <= 0){
-          return t;
-        }
-      }
-
+      for(const t of ITEM_TYPES){ r -= t.freq; if(r <= 0) return t; }
       return ITEM_TYPES[0];
     }
 
     function spawnItem(){
-
       const t = pickType();
-
       items.push({
-
-        x:20 + Math.random() * (GW - 40),
-        y:-20,
-
-        vy:speed + Math.random() * .8,
-
-        type:t,
-
-        wobble:Math.random() * Math.PI * 2,
-        wobbleSpeed:.04 + Math.random() * .03,
-
-        opacity:1,
-
-        caught:false,
-        missed:false
+        x: 20 + Math.random() * (GW - 40),
+        y: -20,
+        vy: speed + Math.random() * .8,
+        type: t,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: .04 + Math.random() * .03,
+        opacity: 1,
+        caught: false,
+        missed: false
       });
     }
 
     function addParticle(x, y, color, emoji){
-
-      for(let i = 0; i < 5; i++){
-
+      for(let i = 0; i < 6; i++){
         particles_game.push({
-
-          x,
-          y,
-
-          vx:(Math.random() - .5) * 4,
-          vy:-2 - Math.random() * 3,
-
-          alpha:1,
-
-          color,
-          emoji,
-
-          size:10 + Math.random() * 6
+          x, y,
+          vx: (Math.random()-.5) * 4.5,
+          vy: -2.5 - Math.random() * 3,
+          alpha: 1,
+          color, emoji,
+          size: 10 + Math.random() * 6
         });
       }
     }
 
     function drawPixelHeart(ctx, x, y, size, color){
-
       const s = size / 12;
-
       ctx.fillStyle = color;
-
       const h = [
         [0,0,1,1,0,0,0,1,1,0,0,0],
         [0,1,1,1,1,0,1,1,1,1,0,0],
@@ -1933,393 +1575,350 @@
         [0,0,0,0,1,1,1,0,0,0,0,0],
         [0,0,0,0,0,1,0,0,0,0,0,0],
       ];
-
-      h.forEach((row, ry)=>{
-
-        row.forEach((cell, rx)=>{
-
-          if(cell){
-            ctx.fillRect(
-              x + rx * s,
-              y + ry * s,
-              s,
-              s
-            );
-          }
-        });
-
-      });
+      h.forEach((row,ry) => row.forEach((cell,rx) => {
+        if(cell) ctx.fillRect(x+rx*s, y+ry*s, s, s);
+      }));
     }
 
     function drawBasket(x, y, w, h){
+      // Glow when wide basket active
+      if(wideBasket){
+        gctx.shadowColor = '#a0e8ff';
+        gctx.shadowBlur  = 12;
+      }
 
-      gctx.fillStyle = 'rgba(180,127,232,.15)';
-      gctx.fillRect(x - w / 2, y, w, h);
+      gctx.fillStyle   = doublePoints ? 'rgba(255,213,128,.18)' : 'rgba(180,127,232,.15)';
+      gctx.fillRect(x - w/2, y, w, h);
 
-      gctx.strokeStyle = COLORS.violet;
-      gctx.lineWidth = 2;
+      gctx.strokeStyle = doublePoints ? COLORS.gold : COLORS.violet;
+      gctx.lineWidth   = 2;
+      gctx.strokeRect(x - w/2, y, w, h);
 
-      gctx.strokeRect(x - w / 2, y, w, h);
+      gctx.shadowBlur  = 0;
 
-      gctx.fillStyle = COLORS.rose;
-
-      gctx.font = '10px "Press Start 2P"';
-      gctx.textAlign = 'center';
-
-      gctx.fillText('♡', x, y + 11);
+      gctx.fillStyle   = doublePoints ? COLORS.gold : COLORS.rose;
+      gctx.font        = '10px "Press Start 2P"';
+      gctx.textAlign   = 'center';
+      gctx.fillText(doublePoints ? '★' : '♡', x, y + 11);
     }
 
     function drawBackground(){
-
       gctx.clearRect(0,0,GW,GH);
 
-      const gradient = gctx.createLinearGradient(0,0,0,GH);
-
-      gradient.addColorStop(0,'rgba(45,19,85,.12)');
-      gradient.addColorStop(1,'rgba(26,10,46,.02)');
-
-      gctx.fillStyle = gradient;
+      const grad = gctx.createLinearGradient(0,0,0,GH);
+      grad.addColorStop(0,'rgba(45,19,85,.12)');
+      grad.addColorStop(1,'rgba(26,10,46,.02)');
+      gctx.fillStyle = grad;
       gctx.fillRect(0,0,GW,GH);
 
       gctx.strokeStyle = 'rgba(180,127,232,.04)';
-      gctx.lineWidth = 1;
-
-      for(let x = 0; x < GW; x += 24){
-
-        gctx.beginPath();
-        gctx.moveTo(x,0);
-        gctx.lineTo(x,GH);
-        gctx.stroke();
+      gctx.lineWidth   = 1;
+      for(let x=0; x<GW; x+=24){
+        gctx.beginPath(); gctx.moveTo(x,0); gctx.lineTo(x,GH); gctx.stroke();
       }
-
-      for(let y = 0; y < GH; y += 24){
-
-        gctx.beginPath();
-        gctx.moveTo(0,y);
-        gctx.lineTo(GW,y);
-        gctx.stroke();
+      for(let y=0; y<GH; y+=24){
+        gctx.beginPath(); gctx.moveTo(0,y); gctx.lineTo(GW,y); gctx.stroke();
       }
     }
 
-    function showScorePop(x, y, text){
-
-      const pop = document.createElement('div');
-
-      pop.className = 'score-pop';
+    /* FIX: score pop uses position:fixed in CSS, so viewport coords are correct */
+    function showScorePop(x, y, text, color){
+      const pop  = document.createElement('div');
+      pop.className   = 'score-pop';
       pop.textContent = text;
 
-      const rect = gc.getBoundingClientRect();
-
-      const scaleX = rect.width / GW;
+      const rect  = gc.getBoundingClientRect();
+      const scaleX = rect.width  / GW;
       const scaleY = rect.height / GH;
 
-      pop.style.left =
-      (rect.left + x * scaleX) + 'px';
-
-      pop.style.top =
-      (rect.top + y * scaleY) + 'px';
-
-      pop.style.color =
-      text.includes('+')
-      ? COLORS.rose
-      : '#884466';
+      pop.style.left  = (rect.left + x * scaleX) + 'px';
+      pop.style.top   = (rect.top  + y * scaleY) + 'px';
+      pop.style.color = color || (text.includes('+') ? COLORS.rose : '#cc6677');
 
       document.body.appendChild(pop);
+      setTimeout(() => pop.remove(), 900);
+    }
 
-      setTimeout(()=> pop.remove(), 800);
+    function checkMilestones(){
+      for(const m of MILESTONES){
+        if(!m.shown && score >= m.score){
+          m.shown = true;
+          milestoneMsg      = m.msg;
+          milestoneMsgTimer = 100;
+          showScorePop(GW/2, GH/2 - 40, m.msg, m.color);
+          break;
+        }
+      }
+    }
+
+    function drawPowerupTimerBar(){
+      if(doublePoints){
+        const ratio = doubleTimer / DOUBLE_DURATION;
+        const bw = 120;
+        const bx = GW/2 - bw/2;
+        const by = GH - 7;
+        gctx.fillStyle = 'rgba(0,0,0,.35)';
+        gctx.fillRect(bx, by, bw, 4);
+        gctx.fillStyle = COLORS.gold;
+        gctx.fillRect(bx, by, bw * ratio, 4);
+        // Update HUD text
+        powerupTimerEl.textContent = Math.ceil(doubleTimer / 60);
+      }
+      if(wideBasket && !doublePoints){
+        const ratio = wideTimer / WIDE_DURATION;
+        const bw = 100;
+        const bx = GW/2 - bw/2;
+        const by = GH - 7;
+        gctx.fillStyle = 'rgba(0,0,0,.35)';
+        gctx.fillRect(bx, by, bw, 4);
+        gctx.fillStyle = '#a0e8ff';
+        gctx.fillRect(bx, by, bw * ratio, 4);
+      }
+    }
+
+    function drawMilestoneMsg(){
+      if(milestoneMsgTimer > 0){
+        milestoneMsgTimer--;
+        const alpha = Math.min(1, milestoneMsgTimer / 20) * Math.min(1, (100 - (100 - milestoneMsgTimer)) / 10);
+        gctx.save();
+        gctx.globalAlpha = Math.max(0, alpha);
+        gctx.font = '11px "Press Start 2P"';
+        gctx.textAlign = 'center';
+        gctx.fillStyle = COLORS.rose;
+        gctx.fillText(milestoneMsg, GW/2, GH/2 - 20);
+        gctx.restore();
+      }
     }
 
     function gameLoop(){
-
-      if(gameState !== 'playing'){
-        return;
-      }
+      if(gameState !== 'playing') return;
 
       frameCount++;
 
+      // Difficulty ramp every 5 seconds
       if(frameCount % 300 === 0){
-
-        speed = Math.min(speed + .2, 4.5);
-        spawnInterval = Math.max(spawnInterval - 5, 35);
+        speed        = Math.min(speed + .22, 4.5);
+        spawnInterval= Math.max(spawnInterval - 4, 32);
       }
 
-      basket.x +=
-      (targetBasketX - basket.x) * .18;
+      // Power-up countdown
+      if(doublePoints){
+        doubleTimer--;
+        if(doubleTimer <= 0){
+          doublePoints = false;
+          powerupHud.classList.remove('active');
+        }
+      }
+      if(wideBasket){
+        wideTimer--;
+        basket.width = BASKET_WIDE_W;
+        if(wideTimer <= 0){
+          wideBasket   = false;
+          basket.width = BASKET_NORMAL_W;
+        }
+      }
+
+      basket.x += (targetBasketX - basket.x) * .18;
 
       drawBackground();
 
       spawnTimer++;
+      if(spawnTimer >= spawnInterval){ spawnTimer = 0; spawnItem(); }
 
-      if(spawnTimer >= spawnInterval){
-
-        spawnTimer = 0;
-        spawnItem();
-      }
-
+      /* ---- items ---- */
       items = items.filter(item => {
-
         if(!item.caught && !item.missed){
 
           item.y += item.vy;
           item.wobble += item.wobbleSpeed;
 
-          const wx =
-          item.x + Math.sin(item.wobble) * 3;
-
-          const bx =
-          basket.x - basket.width / 2;
-
+          const wx  = item.x + Math.sin(item.wobble) * 3;
+          const bx  = basket.x - basket.width / 2;
           const bTop = GH - 40;
 
           /* CATCH */
-
           if(
-            wx > bx &&
-            wx < bx + basket.width &&
-            item.y > bTop &&
-            item.y < bTop + basket.height + 10
+            wx > bx && wx < bx + basket.width &&
+            item.y > bTop - 4 && item.y < bTop + basket.height + 12
           ){
-
             item.caught = true;
 
-            const pts = item.type.points;
+            let pts = item.type.points;
+            if(doublePoints && pts > 0) pts *= 2;
 
-            score += pts;
-
-            if(pts < 0){
-              combo = 0;
-            } else {
-              combo++;
+            // Activate power-ups
+            if(item.type.powerup === 'double'){
+              doublePoints = true;
+              doubleTimer  = DOUBLE_DURATION;
+              powerupHud.classList.add('active');
+            }
+            if(item.type.powerup === 'wide'){
+              wideBasket = true;
+              wideTimer  = WIDE_DURATION;
             }
 
+            if(pts < 0){ combo = 0; }
+            else { combo++; }
+
+            score += pts;
+            checkMilestones();
             scoreEl.textContent = score;
 
-            addParticle(
-              wx,
-              item.y,
-              item.type.color,
-              item.type.emoji
-            );
+            addParticle(wx, item.y, item.type.color, item.type.emoji);
+
+            const comboStr =
+              combo >= 10 ? ` MEGA x${combo}!!!` :
+              combo >= 5  ? ` hot x${combo}!!`   :
+              combo >= 3  ? ` x${combo}!`         : '';
+
+            const popColor =
+              item.type.powerup ? COLORS.gold :
+              pts < 0 ? '#cc6677' : COLORS.rose;
 
             showScorePop(
-              wx,
-              item.y,
-              pts > 0
-              ? (combo > 2
-                ? `+${pts} x${combo}!!`
-                : `+${pts}`)
-              : `${pts} oops!`
+              wx, item.y,
+              pts > 0 ? `+${pts}${comboStr}` : `${pts} oops!`,
+              popColor
             );
 
             return false;
           }
 
           /* MISS */
-
           if(item.y > GH + 10){
-
             if(item.type.points > 0){
-
               lives--;
               combo = 0;
+              livesEl.textContent = '♡'.repeat(Math.max(lives,0));
 
-              livesEl.textContent =
-              '♡'.repeat(Math.max(lives,0));
+              gc.style.transform = 'translateX(5px)';
+              setTimeout(() => { gc.style.transform = 'translateX(-5px)'; }, 65);
+              setTimeout(() => { gc.style.transform = ''; }, 130);
 
-              gc.style.transform = 'translateX(4px)';
-
-              setTimeout(()=>{
-                gc.style.transform = 'translateX(-4px)';
-              },60);
-
-              setTimeout(()=>{
-                gc.style.transform = '';
-              },120);
-
-              if(lives <= 0){
-
-                gameOver();
-                return false;
-              }
+              if(lives <= 0){ gameOver(); return false; }
             }
-
             return false;
           }
         }
 
-        /* DRAW */
-
+        /* DRAW ITEM */
         gctx.save();
-
         gctx.globalAlpha = item.opacity;
 
-        const drawX =
-        item.x + Math.sin(item.wobble) * 3;
+        const drawX = item.x + Math.sin(item.wobble) * 3;
 
-        if(
-          item.type.emoji === '♡' ||
-          item.type.emoji === '💔'
-        ){
-
+        if(item.type.emoji === '♡' || item.type.emoji === '💔'){
           const sz = item.type.size;
-
-          drawPixelHeart(
-            gctx,
-            drawX - sz / 2,
-            item.y - sz / 2,
-            sz,
-            item.type.color
-          );
-
+          drawPixelHeart(gctx, drawX - sz/2, item.y - sz/2, sz, item.type.color);
         } else {
-
+          // Power-up items get a glow
+          if(item.type.powerup){
+            gctx.shadowColor = item.type.color;
+            gctx.shadowBlur  = 10 + Math.sin(item.wobble * 3) * 5;
+          }
           gctx.fillStyle = item.type.color;
-
-          gctx.font =
-          `${item.type.size}px serif`;
-
+          gctx.font      = `${item.type.size}px serif`;
           gctx.textAlign = 'center';
-
-          gctx.fillText(
-            item.type.emoji,
-            drawX,
-            item.y + 5
-          );
+          gctx.fillText(item.type.emoji, drawX, item.y + 5);
+          gctx.shadowBlur = 0;
         }
 
         gctx.restore();
-
         return true;
       });
 
-      /* PARTICLES */
-
-      particles_game =
-      particles_game.filter(p => {
-
+      /* ---- particles ---- */
+      particles_game = particles_game.filter(p => {
         p.x += p.vx;
         p.y += p.vy;
-
         p.vy += .15;
-
         p.alpha -= .04;
-
-        if(p.alpha <= 0){
-          return false;
-        }
-
+        if(p.alpha <= 0) return false;
         gctx.save();
-
         gctx.globalAlpha = p.alpha;
-
-        gctx.fillStyle = p.color;
-
-        gctx.font = `${p.size}px serif`;
-        gctx.textAlign = 'center';
-
+        gctx.fillStyle   = p.color;
+        gctx.font        = `${p.size}px serif`;
+        gctx.textAlign   = 'center';
         gctx.fillText(p.emoji, p.x, p.y);
-
         gctx.restore();
-
         return true;
       });
 
-      /* BASKET */
+      /* ---- basket ---- */
+      drawBasket(basket.x, GH - 40, basket.width, basket.height);
 
-      drawBasket(
-        basket.x,
-        GH - 40,
-        basket.width,
-        basket.height
-      );
+      /* ---- power-up timer bar ---- */
+      drawPowerupTimerBar();
 
-      /* BOTTOM LINE */
+      /* ---- milestone text ---- */
+      drawMilestoneMsg();
 
-      gctx.strokeStyle =
-      'rgba(180,127,232,.2)';
-
-      gctx.lineWidth = 1;
-
+      /* ---- dashed floor line ---- */
+      gctx.strokeStyle = 'rgba(180,127,232,.2)';
+      gctx.lineWidth   = 1;
       gctx.setLineDash([4,4]);
-
       gctx.beginPath();
-
-      gctx.moveTo(0, GH - 10);
-      gctx.lineTo(GW, GH - 10);
-
+      gctx.moveTo(0, GH - 10); gctx.lineTo(GW, GH - 10);
       gctx.stroke();
-
       gctx.setLineDash([]);
+
+      /* ---- combo flash ---- */
+      if(combo >= 5){
+        gctx.save();
+        gctx.globalAlpha = 0.07 + Math.abs(Math.sin(frameCount * .1)) * 0.05;
+        gctx.fillStyle   = combo >= 10 ? COLORS.gold : COLORS.rose;
+        gctx.fillRect(0,0,GW,GH);
+        gctx.restore();
+      }
 
       requestAnimationFrame(gameLoop);
     }
 
     function startGame(){
-
-      score = 0;
-      lives = 3;
-
-      items = [];
-      particles_game = [];
-
+      score = 0; lives = 3;
+      items = []; particles_game = [];
       combo = 0;
+      speed = 1.8; spawnInterval = 78; spawnTimer = 0; frameCount = 0;
+      basket.x = GW/2; basket.width = BASKET_NORMAL_W;
+      targetBasketX = GW/2;
 
-      speed = 1.8;
+      doublePoints = false; doubleTimer = 0;
+      wideBasket   = false; wideTimer   = 0;
 
-      spawnInterval = 80;
-      spawnTimer = 0;
-      frameCount = 0;
+      // Reset milestones
+      MILESTONES.forEach(m => m.shown = false);
+      milestoneMsg = ''; milestoneMsgTimer = 0;
 
-      basket.x = GW / 2;
-      targetBasketX = GW / 2;
-
+      powerupHud.classList.remove('active');
       scoreEl.textContent = '0';
       livesEl.textContent = '♡♡♡';
-
       overlay.style.display = 'none';
-
       gameState = 'playing';
-
       requestAnimationFrame(gameLoop);
     }
 
     function gameOver(){
-
       gameState = 'over';
-
-      if(score > best){
-
-        best = score;
-        bestEl.textContent = best;
-      }
+      if(score > best){ best = score; bestEl.textContent = best; }
 
       overlay.innerHTML = '';
-
       overlay.style.display = 'flex';
 
       const t = document.createElement('div');
-
       t.className = 'overlay-title';
-
       t.textContent =
-      score >= 20
-      ? 'amazing!! ♡'
-      : score >= 10
-      ? 'so cute!!'
-      : 'aww...';
+        score >= 100 ? '◆ LEGENDARY!! ◆' :
+        score >= 50  ? '✦ incredible!! ✦' :
+        score >= 25  ? '★ amazing!! ★'    :
+        score >= 10  ? 'so cute!! ♡'      : 'aww... ♡';
 
       const s = document.createElement('div');
-
       s.className = 'overlay-score';
-
-      s.innerHTML =
-      `score: ${score}<br/>best: ${best}`;
+      s.innerHTML = `score: ${score}<br/>best: ${best}`;
 
       const b = document.createElement('button');
-
-      b.className = 'game-btn';
+      b.className   = 'game-btn';
       b.textContent = 'RETRY ♡';
-
       b.addEventListener('click', startGame);
 
       overlay.appendChild(t);
@@ -2334,52 +1933,36 @@
     ========================================= */
 
     function updateBasket(clientX){
-
-      const rect = gc.getBoundingClientRect();
-
+      const rect   = gc.getBoundingClientRect();
       const scaleX = GW / rect.width;
-
-      targetBasketX =
-      (clientX - rect.left) * scaleX;
-
+      targetBasketX = (clientX - rect.left) * scaleX;
       targetBasketX = Math.max(
         basket.width / 2,
-        Math.min(
-          GW - basket.width / 2,
-          targetBasketX
-        )
+        Math.min(GW - basket.width/2, targetBasketX)
       );
     }
 
     gc.addEventListener('mousemove', e => {
-
-      if(gameState === 'playing'){
-        updateBasket(e.clientX);
-      }
+      if(gameState === 'playing') updateBasket(e.clientX);
     });
 
-    gc.addEventListener('touchmove', e => {
-
+    // FIX: also listen on touchstart for immediate repositioning
+    gc.addEventListener('touchstart', e => {
       e.preventDefault();
-
-      if(gameState === 'playing'){
-        updateBasket(e.touches[0].clientX);
-      }
-
+      if(gameState === 'playing') updateBasket(e.touches[0].clientX);
     }, { passive:false });
 
+    gc.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if(gameState === 'playing') updateBasket(e.touches[0].clientX);
+    }, { passive:false });
+
+    // Mouse fallback outside canvas (near vertical range)
     document.addEventListener('mousemove', e => {
-
-      if(gameState === 'playing'){
-
-        const rect = gc.getBoundingClientRect();
-
-        if(
-          e.clientY > rect.top - 20 &&
-          e.clientY < rect.bottom + 20
-        ){
-          updateBasket(e.clientX);
-        }
+      if(gameState !== 'playing') return;
+      const rect = gc.getBoundingClientRect();
+      if(e.clientY > rect.top - 20 && e.clientY < rect.bottom + 20){
+        updateBasket(e.clientX);
       }
     });
 
