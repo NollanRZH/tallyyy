@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>sushi clicker ♡</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
@@ -61,7 +61,7 @@ body::after{
 
 /* STARS */
 .stars{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
-.star{position:absolute;background:var(--rose);image-rendering:pixelated;animation:twinkle infinite ease-in-out;box-shadow:0 0 4px rgba(240,160,200,.5);}
+.star{position:absolute;background:var(--rose);image-rendering:pixelated;animation:twinkle infinite ease-in-out;box-shadow:0 0 4px rgba(240,160,200,.5);pointer-events:none;}
 @keyframes twinkle{0%,100%{opacity:.15;transform:scale(1);}50%{opacity:.9;transform:scale(1.9);}}
 
 /* MOUNTAINS */
@@ -81,13 +81,31 @@ body::after{
 .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;animation-delay:1s;}.corner.bl{bottom:16px;left:16px;animation-delay:2s;}
 @keyframes cornerFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
 
+/* BACK BUTTON */
+.back-btn{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  z-index:300;
+  font-family:'Press Start 2P',monospace;font-size:6px;
+  color:rgba(240,160,200,.55);
+  background:rgba(15,7,32,.85);
+  border:1px solid rgba(180,127,232,.3);
+  padding:7px 14px;
+  text-decoration:none;
+  backdrop-filter:blur(8px);
+  transition:color .2s,border-color .2s;
+  cursor:pointer!important;
+  white-space:nowrap;
+  touch-action:manipulation;
+}
+.back-btn:hover{color:var(--rose);border-color:rgba(240,160,200,.5);}
+
 /* ══════════════════════════════
    MAIN LAYOUT
 ══════════════════════════════ */
 .game-wrap{
   position:relative;z-index:5;
   max-width:1020px;margin:0 auto;
-  padding:28px 16px 100px;
+  padding:58px 16px 100px;
   display:grid;
   grid-template-columns:1fr 300px;
   gap:18px;
@@ -136,20 +154,10 @@ body::after{
 .sushi-arena{
   position:relative;display:flex;align-items:center;justify-content:center;
   width:100%;
+  padding:38px 0 28px;
 }
 
-.sushi-orbit{
-  position:absolute;width:260px;height:260px;border-radius:50%;
-  border:1px dashed rgba(180,127,232,.15);
-  animation:orbitSpin 20s linear infinite;
-  pointer-events:none;
-}
-.sushi-orbit::before,.sushi-orbit::after{
-  content:'✦';position:absolute;font-size:10px;color:rgba(240,160,200,.4);
-}
-.sushi-orbit::before{top:-6px;left:50%;transform:translateX(-50%);}
-.sushi-orbit::after{bottom:-6px;left:50%;transform:translateX(-50%);}
-@keyframes orbitSpin{to{transform:rotate(360deg);}}
+/* orbit removed */
 
 #sushiBtn{
   position:relative;
@@ -187,7 +195,7 @@ body::after{
 
 /* COMBO */
 .combo-display{
-  position:absolute;top:-44px;right:-20px;z-index:10;
+  position:absolute;top:-42px;left:50%;transform:translateX(-50%);z-index:10;text-align:center;
   font-size:8px;color:var(--rose);
   text-shadow:0 0 10px rgba(240,160,200,.6);
   opacity:0;transition:opacity .2s;
@@ -435,9 +443,10 @@ body::after{
 @media(max-width:700px){
   .game-wrap{grid-template-columns:1fr;padding:60px 12px 80px;gap:14px;}
   #sushiBtn{width:155px;height:155px;font-size:62px;}
-  .sushi-orbit{width:210px;height:210px;}
   .header{flex-direction:column;gap:8px;align-items:flex-start;}
   .header-stats{gap:12px;}
+  .sushi-arena{padding:32px 0 22px;}
+  .back-btn{font-size:5px;padding:6px 10px;}
 }
 
 /* SCROLLBAR */
@@ -469,6 +478,9 @@ body::after{
 <div class="corner tl">🍣</div>
 <div class="corner tr">♡</div>
 <div class="corner bl">✦</div>
+
+<!-- Back button -->
+<a href="index.html" class="back-btn">← back to tally ♡</a>
 
 <!-- Golden sushi event -->
 <button class="golden-event-btn" id="goldenEventBtn" aria-label="Golden Sushi!">🌟</button>
@@ -527,7 +539,6 @@ body::after{
 
     <!-- Big button -->
     <div class="sushi-arena">
-      <div class="sushi-orbit"></div>
       <button id="sushiBtn" aria-label="Click to get sushi">
         <span class="sushi-inner" id="sushiEmoji">🍣</span>
       </button>
