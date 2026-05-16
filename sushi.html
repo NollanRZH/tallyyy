@@ -195,14 +195,19 @@ body::after{
 
 /* COMBO */
 .combo-display{
-  position:absolute;top:-42px;left:50%;transform:translateX(-50%);z-index:10;text-align:center;
-  font-size:8px;color:var(--rose);
-  text-shadow:0 0 10px rgba(240,160,200,.6);
-  opacity:0;transition:opacity .2s;
-  pointer-events:none;
+  display:none;
+  align-items:center;gap:8px;
+  font-size:7px;color:var(--rose);
+  background:rgba(255,213,128,.07);
+  border:1px solid rgba(255,213,128,.25);
+  padding:6px 16px;
+  text-shadow:0 0 8px rgba(240,160,200,.5);
+  animation:comboAppear .2s ease;
 }
-.combo-display.active{opacity:1;}
-.combo-display .combo-num{font-size:14px;color:var(--gold);display:block;text-shadow:0 0 12px rgba(255,213,128,.7);}
+.combo-display.active{display:flex;}
+@keyframes comboAppear{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.combo-display .combo-num{font-size:13px;color:var(--gold);text-shadow:0 0 10px rgba(255,213,128,.7);}
+.combo-label{font-size:6px;opacity:.7;}
 
 /* GOLDEN TIMER */
 .golden-timer{
@@ -542,11 +547,13 @@ body::after{
       <button id="sushiBtn" aria-label="Click to get sushi">
         <span class="sushi-inner" id="sushiEmoji">🍣</span>
       </button>
-      <div class="combo-display" id="comboDisplay">
-        <span class="combo-num" id="comboNum">x1</span>
-        COMBO!
-      </div>
       <div class="golden-timer" id="goldenTimer"></div>
+    </div>
+
+    <!-- Combo -->
+    <div class="combo-display" id="comboDisplay">
+      <span class="combo-num" id="comboNum">x1</span>
+      <span class="combo-label">COMBO</span>
     </div>
 
     <!-- CPS bar -->
