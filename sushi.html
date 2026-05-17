@@ -27,7 +27,7 @@
 *,*::before,*::after{cursor:none!important;}
 
 body{
-  background: var(--deep);
+  background:var(--deep);
   color:var(--soft);
   font-family:'Press Start 2P',monospace;
   overflow-x:hidden;
@@ -37,13 +37,12 @@ body{
   -webkit-user-select:none;
 }
 
-/* BG layers */
 .bg-gradient{
   position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 80% 40% at 20% 0%, rgba(180,127,232,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(240,160,200,.08) 0%, transparent 60%),
-    radial-gradient(ellipse 100% 60% at 50% 50%, rgba(15,7,32,.9) 0%, transparent 100%);
+    radial-gradient(ellipse 80% 40% at 20% 0%,rgba(180,127,232,.12) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 100%,rgba(240,160,200,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 100% 60% at 50% 50%,rgba(15,7,32,.9) 0%,transparent 100%);
 }
 body::before{
   content:'';position:fixed;inset:0;
@@ -68,7 +67,7 @@ body::after{
 .mountains-bg{position:fixed;bottom:0;left:0;right:0;height:45vh;pointer-events:none;z-index:1;}
 .mountains-bg svg{width:100%;height:100%;}
 
-/* FLOATING PARTICLES */
+/* PARTICLES */
 .particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
 .particle{position:absolute;opacity:0;font-size:11px;animation:floatUp linear infinite;filter:drop-shadow(0 0 5px rgba(240,160,200,.3));}
 @keyframes floatUp{0%{opacity:0;transform:translateY(0) rotate(0deg);}10%{opacity:.6;}100%{opacity:0;transform:translateY(-110vh) rotate(360deg);}}
@@ -76,7 +75,7 @@ body::after{
 /* CURSOR */
 #cursor{position:fixed;width:24px;height:24px;pointer-events:none;z-index:100000;image-rendering:pixelated;transform:translate(-4px,-4px);filter:drop-shadow(0 0 4px rgba(240,160,200,.7));}
 
-/* CORNER DECO */
+/* CORNERS */
 .corner{position:fixed;font-family:'Press Start 2P',monospace;font-size:8px;color:rgba(240,160,200,.2);z-index:10;pointer-events:none;animation:cornerFloat 4s ease-in-out infinite;}
 .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;animation-delay:1s;}.corner.bl{bottom:16px;left:16px;animation-delay:2s;}
 @keyframes cornerFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
@@ -100,8 +99,49 @@ body::after{
 .back-btn:hover{color:var(--rose);border-color:rgba(240,160,200,.5);}
 
 /* ══════════════════════════════
+   PLAY SCREEN (OVERLAY)
+══════════════════════════════ */
+#playScreen{
+  position:fixed;inset:0;z-index:99999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--deep);
+  gap:28px;
+}
+#playScreen.hidden{display:none;}
+.play-logo{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:clamp(2rem,6vw,3.5rem);
+  background:linear-gradient(135deg,var(--soft) 0%,var(--rose) 50%,var(--violet) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(240,160,200,.3));
+  text-align:center;
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 12px rgba(240,160,200,.2));}50%{filter:drop-shadow(0 0 28px rgba(240,160,200,.5));}}
+.play-emoji{font-size:64px;animation:sushiBob 2s ease-in-out infinite;}
+@keyframes sushiBob{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-12px) rotate(5deg);}}
+#playBtn{
+  font-family:'Press Start 2P',monospace;font-size:11px;
+  color:var(--deep);
+  background:linear-gradient(135deg,var(--rose) 0%,var(--violet) 100%);
+  border:none;padding:18px 48px;
+  cursor:pointer!important;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 0 40px rgba(240,160,200,.4),6px 6px 0 rgba(100,50,150,.5);
+  transition:transform .12s,box-shadow .12s;
+  animation:btnPulse 1.5s ease-in-out infinite;
+}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 20px rgba(240,160,200,.3),6px 6px 0 rgba(100,50,150,.5);}50%{box-shadow:0 0 50px rgba(240,160,200,.6),6px 6px 0 rgba(100,50,150,.6);}}
+#playBtn:hover{transform:translate(-2px,-2px);box-shadow:0 0 40px rgba(240,160,200,.5),8px 8px 0 rgba(100,50,150,.6);}
+#playBtn:active{transform:translate(2px,2px);box-shadow:0 0 20px rgba(240,160,200,.3),4px 4px 0 rgba(100,50,150,.5);}
+.play-hint{font-size:5px;color:rgba(245,230,255,.35);letter-spacing:2px;text-align:center;line-height:2.5;}
+
+/* ══════════════════════════════
    MAIN LAYOUT
 ══════════════════════════════ */
+#gameContainer{display:block;}
+#gameContainer.hidden{display:none;}
+
 .game-wrap{
   position:relative;z-index:5;
   max-width:1020px;margin:0 auto;
@@ -120,9 +160,7 @@ body::after{
   border-bottom:1px solid rgba(180,127,232,.15);
   margin-bottom:4px;
 }
-.header-logo{
-  display:flex;align-items:center;gap:12px;
-}
+.header-logo{display:flex;align-items:center;gap:12px;}
 .header-logo h1{
   font-family:'DM Serif Display',serif;font-style:italic;
   font-size:clamp(1.4rem,3vw,2rem);
@@ -135,36 +173,41 @@ body::after{
   font-size:6px;color:var(--gold);
   background:rgba(255,213,128,.08);
   border:1px solid rgba(255,213,128,.3);
-  padding:4px 10px;
-  display:none;
+  padding:4px 10px;display:none;
   animation:badgePulse 2s ease-in-out infinite;
 }
 @keyframes badgePulse{0%,100%{box-shadow:0 0 0 rgba(255,213,128,0);}50%{box-shadow:0 0 12px rgba(255,213,128,.3);}}
-.header-stats{
-  display:flex;gap:16px;align-items:center;
-}
+.header-stats{display:flex;gap:16px;align-items:center;}
 .hstat{text-align:right;}
 .hstat-label{font-size:5px;color:var(--violet);opacity:.7;margin-bottom:3px;}
 .hstat-value{font-size:9px;color:var(--soft);}
 
-/* ── LEFT PANEL ── */
+/* MUSIC TOGGLE */
+.music-btn{
+  font-family:'Press Start 2P',monospace;font-size:5px;
+  color:rgba(245,230,255,.5);
+  background:rgba(30,13,58,.6);
+  border:1px solid rgba(180,127,232,.2);
+  padding:6px 10px;
+  cursor:pointer!important;
+  touch-action:manipulation;
+  transition:color .2s,border-color .2s,background .2s;
+  white-space:nowrap;
+}
+.music-btn:hover{color:var(--rose);border-color:rgba(240,160,200,.4);}
+.music-btn.playing{color:var(--teal);border-color:rgba(128,255,232,.3);background:rgba(128,255,232,.05);}
+
+/* LEFT PANEL */
 .left-panel{display:flex;flex-direction:column;align-items:center;gap:16px;}
 
 /* SUSHI BUTTON */
 .sushi-arena{
   position:relative;display:flex;align-items:center;justify-content:center;
-  width:100%;
-  padding:38px 0 28px;
+  width:100%;padding:38px 0 28px;
 }
-
-/* orbit removed */
-
 #sushiBtn{
-  position:relative;
-  width:190px;height:190px;
-  border-radius:0;
-  background:var(--glass);
-  border:2px solid var(--border);
+  position:relative;width:190px;height:190px;
+  background:var(--glass);border:2px solid var(--border);
   backdrop-filter:blur(14px);
   box-shadow:0 0 0 1px rgba(255,255,255,.03),0 0 50px rgba(240,160,200,.1),0 20px 60px rgba(0,0,0,.35);
   display:flex;align-items:center;justify-content:center;
@@ -172,7 +215,7 @@ body::after{
   transition:transform .07s ease,box-shadow .07s ease,filter .07s ease;
   cursor:pointer!important;
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  overflow:visible;z-index:2;
+  overflow:visible;z-index:2;border-radius:0;
 }
 #sushiBtn::before{
   content:'';position:absolute;inset:0;
@@ -190,16 +233,14 @@ body::after{
   animation:goldenPulse .8s ease-in-out infinite!important;
 }
 @keyframes goldenPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,213,128,.2),0 0 40px rgba(255,213,128,.3);}50%{box-shadow:0 0 0 1px rgba(255,213,128,.3),0 0 80px rgba(255,213,128,.6);}}
-.sushi-inner{display:block;animation:sushiBob 2.5s ease-in-out infinite;pointer-events:none;transition:filter .15s;}
-@keyframes sushiBob{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-7px) rotate(3deg);}}
+.sushi-inner{display:block;animation:sushiBob2 2.5s ease-in-out infinite;pointer-events:none;transition:filter .15s;}
+@keyframes sushiBob2{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-7px) rotate(3deg);}}
 
 /* COMBO */
 .combo-display{
-  display:none;
-  align-items:center;gap:8px;
+  display:none;align-items:center;gap:8px;
   font-size:7px;color:var(--rose);
-  background:rgba(255,213,128,.07);
-  border:1px solid rgba(255,213,128,.25);
+  background:rgba(255,213,128,.07);border:1px solid rgba(255,213,128,.25);
   padding:6px 16px;
   text-shadow:0 0 8px rgba(240,160,200,.5);
   animation:comboAppear .2s ease;
@@ -209,12 +250,8 @@ body::after{
 .combo-display .combo-num{font-size:13px;color:var(--gold);text-shadow:0 0 10px rgba(255,213,128,.7);}
 .combo-label{font-size:6px;opacity:.7;}
 
-
-
 /* CPS BAR */
-.cps-bar-wrap{
-  width:100%;max-width:280px;
-}
+.cps-bar-wrap{width:100%;max-width:280px;}
 .cps-bar-label{font-size:5px;color:var(--violet);opacity:.7;margin-bottom:5px;display:flex;justify-content:space-between;}
 .cps-bar{height:4px;background:rgba(255,255,255,.05);position:relative;overflow:hidden;}
 .cps-bar-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .4s ease;width:0%;}
@@ -234,21 +271,19 @@ body::after{
 .stat-value.gold{color:var(--gold);text-shadow:0 0 10px rgba(255,213,128,.4);}
 
 /* PASSIVE TICKER */
-.passive-ticker{
-  font-size:5px;color:var(--violet);letter-spacing:2px;opacity:.75;text-align:center;
-}
+.passive-ticker{font-size:5px;color:var(--violet);letter-spacing:2px;opacity:.75;text-align:center;}
 
-/* ── RIGHT PANEL ── */
+/* RIGHT PANEL */
 .right-panel{display:flex;flex-direction:column;gap:12px;}
 
 /* TAB NAV */
-.tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);}
+.tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
 .tab-btn{
-  font-family:'Press Start 2P',monospace;font-size:6px;
+  font-family:'Press Start 2P',monospace;font-size:5.5px;
   background:none;border:none;color:rgba(245,230,255,.45);
-  padding:8px 14px;cursor:pointer!important;
+  padding:8px 10px;cursor:pointer!important;
   transition:color .2s,background .2s;
-  position:relative;
+  position:relative;white-space:nowrap;
 }
 .tab-btn.active{color:var(--rose);}
 .tab-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--rose);}
@@ -272,12 +307,12 @@ body::after{
   transition:transform .15s ease,box-shadow .15s ease,border-color .15s;
   box-shadow:0 3px 12px rgba(0,0,0,.2);
 }
-.upgrade-card:hover:not(.locked){
+.upgrade-card:hover:not(.locked):not(.maxed){
   transform:translateX(-3px);
   border-color:rgba(240,160,200,.4);
   box-shadow:4px 0 0 var(--violet),0 3px 14px rgba(0,0,0,.25);
 }
-.upgrade-card:active:not(.locked){transform:translateX(0) scale(.97);}
+.upgrade-card:active:not(.locked):not(.maxed){transform:translateX(0) scale(.97);}
 .upgrade-card.locked{opacity:.35;cursor:default!important;}
 .upgrade-card.locked .upgrade-emoji{filter:grayscale(1);}
 .upgrade-card.affordable{border-color:rgba(240,160,200,.45);}
@@ -326,7 +361,7 @@ body::after{
 .stat-item-label{color:rgba(245,230,255,.5);}
 .stat-item-value{color:var(--soft);}
 
-/* PRESTIGE SECTION */
+/* PRESTIGE */
 .prestige-panel{
   background:var(--glass2);border:1px solid rgba(255,213,128,.2);
   padding:16px;text-align:center;
@@ -340,9 +375,8 @@ body::after{
   color:var(--deep);
   background:linear-gradient(135deg,var(--gold) 0%,#ffaa44 100%);
   border:none;padding:12px 24px;
-  cursor:pointer!important;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  transition:transform .12s,box-shadow .12s,filter .12s;
+  cursor:pointer!important;touch-action:manipulation;
+  transition:transform .12s,box-shadow .12s;
   opacity:.4;pointer-events:none;
   box-shadow:4px 4px 0 rgba(180,127,232,.5);
   width:100%;
@@ -350,9 +384,46 @@ body::after{
 #prestigeBtn.ready{opacity:1;pointer-events:auto;animation:prestigePulse 1.5s ease-in-out infinite;}
 @keyframes prestigePulse{0%,100%{box-shadow:4px 4px 0 rgba(180,127,232,.5);}50%{box-shadow:4px 4px 0 rgba(180,127,232,.6),0 0 24px rgba(255,213,128,.4);}}
 #prestigeBtn:hover.ready{transform:translate(-2px,-2px);box-shadow:6px 6px 0 rgba(180,127,232,.5);}
-#prestigeBtn:active.ready{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(180,127,232,.5);}
+#prestigeBtn:active.ready{transform:translate(2px,2px);}
 
-/* TOASTS & FLOATS */
+/* EXPORT/IMPORT */
+.save-controls{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;
+}
+.save-btn{
+  font-family:'Press Start 2P',monospace;font-size:5px;
+  color:var(--violet);
+  background:rgba(180,127,232,.08);
+  border:1px solid rgba(180,127,232,.3);
+  padding:8px 12px;
+  cursor:pointer!important;touch-action:manipulation;
+  transition:color .2s,border-color .2s,background .2s;
+  flex:1;text-align:center;
+}
+.save-btn:hover{color:var(--rose);border-color:rgba(240,160,200,.4);background:rgba(240,160,200,.08);}
+.save-btn.danger{color:var(--red);border-color:rgba(255,96,96,.3);background:rgba(255,96,96,.05);}
+.save-btn.danger:hover{background:rgba(255,96,96,.12);border-color:rgba(255,96,96,.5);}
+#importFileInput{display:none;}
+
+/* GOLDEN EVENT */
+.golden-event-btn{
+  width:100%;max-width:320px;
+  display:none;
+  align-items:center;justify-content:center;gap:10px;
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  color:var(--deep);
+  background:linear-gradient(135deg,var(--gold),#ffaa33);
+  border:none;padding:12px 20px;
+  cursor:pointer!important;touch-action:manipulation;
+  box-shadow:0 0 30px rgba(255,213,128,.4),4px 4px 0 rgba(180,127,232,.5);
+  animation:goldenPulseBtn 1s ease-in-out infinite;
+}
+.golden-event-btn.active{display:flex;}
+@keyframes goldenPulseBtn{0%,100%{box-shadow:0 0 20px rgba(255,213,128,.3),4px 4px 0 rgba(180,127,232,.4);}50%{box-shadow:0 0 40px rgba(255,213,128,.6),4px 4px 0 rgba(180,127,232,.6);}}
+.golden-event-emoji{font-size:22px;animation:goldenBob 1s ease-in-out infinite;}
+@keyframes goldenBob{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
+
+/* FLOATERS & TOASTS */
 .score-float{
   position:fixed;pointer-events:none;z-index:9999;
   font-family:'Press Start 2P',monospace;font-size:9px;
@@ -377,7 +448,6 @@ body::after{
 }
 @keyframes rippleOut{to{transform:translate(-50%,-50%) scale(24);opacity:0;}}
 
-/* MILESTONE TOAST */
 .milestone-toast{
   position:fixed;top:50%;left:50%;
   transform:translate(-50%,-50%) scale(0);
@@ -400,37 +470,9 @@ body::after{
 .toast-type-prestige{border-color:var(--gold);box-shadow:0 0 80px rgba(255,213,128,.3);}
 .toast-type-golden{border-color:var(--gold);box-shadow:0 0 60px rgba(255,213,128,.4);}
 
-/* GOLDEN SUSHI EVENT */
-.golden-event-btn{
-  width:100%;max-width:320px;
-  display:none;
-  align-items:center;justify-content:center;gap:10px;
-  font-family:'Press Start 2P',monospace;font-size:7px;
-  color:var(--deep);
-  background:linear-gradient(135deg,var(--gold),#ffaa33);
-  border:none;
-  padding:12px 20px;
-  cursor:pointer!important;
-  touch-action:manipulation;
-  box-shadow:0 0 30px rgba(255,213,128,.4),4px 4px 0 rgba(180,127,232,.5);
-  animation:goldenPulseBtn 1s ease-in-out infinite;
-}
-.golden-event-btn.active{display:flex;}
-@keyframes goldenPulseBtn{0%,100%{box-shadow:0 0 20px rgba(255,213,128,.3),4px 4px 0 rgba(180,127,232,.4);}50%{box-shadow:0 0 40px rgba(255,213,128,.6),4px 4px 0 rgba(180,127,232,.6);}}
-.golden-event-emoji{font-size:22px;animation:goldenBob 1s ease-in-out infinite;}
-@keyframes goldenBob{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
-
 /* CRIT FLASH */
-.crit-flash{
-  position:fixed;inset:0;pointer-events:none;z-index:7000;
-  background:rgba(240,160,200,.08);
-  animation:critFlash .2s ease forwards;
-}
+.crit-flash{position:fixed;inset:0;pointer-events:none;z-index:7000;background:rgba(240,160,200,.08);animation:critFlash .2s ease forwards;}
 @keyframes critFlash{0%{opacity:1;}100%{opacity:0;}}
-
-/* SCREEN SHAKE */
-@keyframes shake{0%,100%{transform:translate(0,0);}20%{transform:translate(-4px,2px);}40%{transform:translate(4px,-2px);}60%{transform:translate(-3px,3px);}80%{transform:translate(3px,-1px);}}
-.shaking .game-wrap{animation:shake .25s ease;}
 
 /* SAVE INDICATOR */
 .save-indicator{
@@ -441,11 +483,18 @@ body::after{
 }
 .save-indicator.show{opacity:1;}
 
-/* ANIMATIONS */
+/* IMPORT SUCCESS */
+.import-indicator{
+  position:fixed;bottom:48px;right:16px;z-index:200;
+  font-size:5px;color:var(--gold);
+  background:rgba(255,213,128,.07);border:1px solid rgba(255,213,128,.3);
+  padding:6px 10px;opacity:0;transition:opacity .3s;
+}
+.import-indicator.show{opacity:1;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
 .fade-up{animation:fadeUp .6s ease both;}
 
-/* MOBILE */
 @media(max-width:700px){
   .game-wrap{grid-template-columns:1fr;padding:60px 12px 80px;gap:14px;}
   #sushiBtn{width:155px;height:155px;font-size:62px;}
@@ -455,7 +504,6 @@ body::after{
   .back-btn{font-size:5px;padding:6px 10px;}
 }
 
-/* SCROLLBAR */
 .panel-section{scrollbar-width:thin;scrollbar-color:rgba(180,127,232,.25) transparent;max-height:72vh;overflow-y:auto;}
 .panel-section::-webkit-scrollbar{width:3px;}
 .panel-section::-webkit-scrollbar-thumb{background:rgba(180,127,232,.25);}
@@ -467,7 +515,6 @@ body::after{
 <div class="stars" id="stars"></div>
 <div class="particles" id="particles"></div>
 
-<!-- Mountains -->
 <div class="mountains-bg">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax slice">
     <path fill="rgba(70,30,120,.14)"  d="M0,420 L55,340 L110,380 L180,300 L250,355 L330,270 L400,320 L470,250 L540,305 L620,230 L700,290 L780,215 L855,275 L930,240 L1000,295 L1075,255 L1150,310 L1240,270 L1330,315 L1440,285 L1440,500 L0,500Z"/>
@@ -477,149 +524,163 @@ body::after{
   </svg>
 </div>
 
-<!-- Cursor -->
 <canvas id="cursor" width="24" height="24"></canvas>
 
-<!-- Corners -->
 <div class="corner tl">🍣</div>
 <div class="corner tr">♡</div>
 <div class="corner bl">✦</div>
 
-<!-- Back button -->
-<a href="index.html" class="back-btn">← back to tally ♡</a>
-
-<!-- Save indicator -->
-<div class="save-indicator" id="saveIndicator">✦ saved</div>
-
-<!-- ═══════════════════ GAME ═══════════════════ -->
-<div class="game-wrap">
-
-  <!-- Header -->
-  <div class="header fade-up">
-    <div class="header-logo">
-      <span id="headerEmoji">🍣</span>
-      <h1>sushi clicker</h1>
-      <div class="prestige-badge" id="prestigeBadge"></div>
-    </div>
-    <div class="header-stats">
-      <div class="hstat">
-        <div class="hstat-label">sushi</div>
-        <div class="hstat-value gold" id="sushiCount">0</div>
-      </div>
-      <div class="hstat">
-        <div class="hstat-label">per sec</div>
-        <div class="hstat-value" id="perSec">0</div>
-      </div>
-      <div class="hstat">
-        <div class="hstat-label">per click</div>
-        <div class="hstat-value" id="perClick">1</div>
-      </div>
-    </div>
+<!-- ═══════════ PLAY SCREEN ═══════════ -->
+<div id="playScreen">
+  <div class="play-emoji" id="playEmoji">🍣</div>
+  <div class="play-logo">sushi clicker</div>
+  <button id="playBtn">▶ PLAY ♡</button>
+  <div class="play-hint">
+    ✦ click to start your empire ✦<br>
+    <span id="playHintSub" style="opacity:.5">music will start automatically</span>
   </div>
+</div>
 
-  <!-- LEFT -->
-  <div class="left-panel fade-up" style="animation-delay:.1s">
+<!-- ═══════════ GAME ═══════════ -->
+<div id="gameContainer" class="hidden">
 
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-box" id="statTotal">
-        <div class="stat-label">all time</div>
-        <div class="stat-value" id="allTime">0</div>
+  <a href="index.html" class="back-btn">← back to tally ♡</a>
+  <div class="save-indicator" id="saveIndicator">✦ saved</div>
+  <div class="import-indicator" id="importIndicator">✦ save imported!</div>
+
+  <!-- Hidden audio element -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="images/music.mp3" type="audio/mpeg">
+    <source src="images/music.ogg" type="audio/ogg">
+  </audio>
+
+  <div class="game-wrap">
+
+    <!-- Header -->
+    <div class="header fade-up">
+      <div class="header-logo">
+        <span id="headerEmoji">🍣</span>
+        <h1>sushi clicker</h1>
+        <div class="prestige-badge" id="prestigeBadge"></div>
       </div>
-      <div class="stat-box" id="statClicks">
-        <div class="stat-label">clicks</div>
-        <div class="stat-value" id="totalClicks">0</div>
-      </div>
-      <div class="stat-box" id="statCrit">
-        <div class="stat-label">criticals</div>
-        <div class="stat-value" id="totalCrits">0</div>
-      </div>
-      <div class="stat-box" id="statGolden">
-        <div class="stat-label">golden</div>
-        <div class="stat-value gold" id="totalGolden">0</div>
+      <div class="header-stats">
+        <div class="hstat">
+          <div class="hstat-label">sushi</div>
+          <div class="hstat-value gold" id="sushiCount">0</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-label">per sec</div>
+          <div class="hstat-value" id="perSec">0</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-label">per click</div>
+          <div class="hstat-value" id="perClick">1</div>
+        </div>
+        <button class="music-btn" id="musicToggle">♪ ON</button>
       </div>
     </div>
 
-    <!-- Big button -->
-    <div class="sushi-arena">
-      <button id="sushiBtn" aria-label="Click to get sushi">
-        <span class="sushi-inner" id="sushiEmoji">🍣</span>
+    <!-- LEFT -->
+    <div class="left-panel fade-up" style="animation-delay:.1s">
+
+      <div class="stats-row">
+        <div class="stat-box" id="statTotal">
+          <div class="stat-label">all time</div>
+          <div class="stat-value" id="allTime">0</div>
+        </div>
+        <div class="stat-box" id="statClicks">
+          <div class="stat-label">clicks</div>
+          <div class="stat-value" id="totalClicks">0</div>
+        </div>
+        <div class="stat-box" id="statCrit">
+          <div class="stat-label">criticals</div>
+          <div class="stat-value" id="totalCrits">0</div>
+        </div>
+        <div class="stat-box" id="statGolden">
+          <div class="stat-label">golden</div>
+          <div class="stat-value gold" id="totalGolden">0</div>
+        </div>
+      </div>
+
+      <div class="sushi-arena">
+        <button id="sushiBtn" aria-label="Click to get sushi">
+          <span class="sushi-inner" id="sushiEmoji">🍣</span>
+        </button>
+      </div>
+
+      <div class="combo-display" id="comboDisplay">
+        <span class="combo-num" id="comboNum">x1</span>
+        <span class="combo-label">COMBO</span>
+      </div>
+
+      <div class="cps-bar-wrap">
+        <div class="cps-bar-label">
+          <span>production</span>
+          <span id="cpsBarLabel">0/s</span>
+        </div>
+        <div class="cps-bar"><div class="cps-bar-fill" id="cpsBarFill"></div></div>
+      </div>
+
+      <div class="passive-ticker" id="passiveTicker">✦ tap to start your sushi empire ✦</div>
+
+      <button class="golden-event-btn" id="goldenEventBtn" aria-label="Golden Sushi!">
+        <span class="golden-event-emoji">🌟</span>
+        <span>GOLDEN SUSHI!</span>
+        <span id="goldenCountdown" style="font-size:6px;opacity:.8"></span>
       </button>
 
     </div>
 
-    <!-- Combo -->
-    <div class="combo-display" id="comboDisplay">
-      <span class="combo-num" id="comboNum">x1</span>
-      <span class="combo-label">COMBO</span>
-    </div>
+    <!-- RIGHT -->
+    <div class="right-panel fade-up" style="animation-delay:.18s">
 
-    <!-- CPS bar -->
-    <div class="cps-bar-wrap">
-      <div class="cps-bar-label">
-        <span>production</span>
-        <span id="cpsBarLabel">0/s</span>
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="shop">🛒 SHOP</button>
+        <button class="tab-btn" data-tab="skills">⚡ SKILLS</button>
+        <button class="tab-btn" data-tab="achieve">🏆 ACH</button>
+        <button class="tab-btn" data-tab="stats">📊 STATS</button>
       </div>
-      <div class="cps-bar"><div class="cps-bar-fill" id="cpsBarFill"></div></div>
-    </div>
 
-    <!-- Passive ticker -->
-    <div class="passive-ticker" id="passiveTicker">✦ tap to start your sushi empire ✦</div>
+      <div class="panel-section active" id="tab-shop">
+        <div class="section-label">✦ generators</div>
+      </div>
 
-    <!-- Golden sushi event -->
-    <button class="golden-event-btn" id="goldenEventBtn" aria-label="Golden Sushi!">
-      <span class="golden-event-emoji">🌟</span>
-      <span>GOLDEN SUSHI! CLICK NOW!</span>
-      <span id="goldenCountdown"></span>
-    </button>
+      <div class="panel-section" id="tab-skills">
+        <div class="section-label">✦ click upgrades</div>
+      </div>
 
-  </div>
+      <div class="panel-section" id="tab-achieve">
+        <div class="section-label">✦ achievements</div>
+        <div class="ach-grid" id="achGrid"></div>
+      </div>
 
-  <!-- RIGHT -->
-  <div class="right-panel fade-up" style="animation-delay:.18s">
-
-    <!-- Tabs -->
-    <div class="tab-nav">
-      <button class="tab-btn active" data-tab="shop">🛒 SHOP</button>
-      <button class="tab-btn" data-tab="skills">⚡ SKILLS</button>
-      <button class="tab-btn" data-tab="achieve">🏆 ACHEIV</button>
-      <button class="tab-btn" data-tab="stats">📊 STATS</button>
-    </div>
-
-    <!-- SHOP TAB -->
-    <div class="panel-section active" id="tab-shop">
-      <div class="section-label">✦ generators</div>
-      <!-- injected -->
-    </div>
-
-    <!-- SKILLS TAB -->
-    <div class="panel-section" id="tab-skills">
-      <div class="section-label">✦ click upgrades</div>
-      <!-- injected -->
-    </div>
-
-    <!-- ACHIEVEMENTS TAB -->
-    <div class="panel-section" id="tab-achieve">
-      <div class="section-label">✦ achievements</div>
-      <div class="ach-grid" id="achGrid"></div>
-    </div>
-
-    <!-- STATS TAB -->
-    <div class="panel-section" id="tab-stats">
-      <div class="section-label">✦ your stats</div>
-      <div class="stat-row-list" id="statsList"></div>
-      <div style="margin-top:12px">
-        <div class="prestige-panel">
-          <div class="prestige-title">◆ PRESTIGE</div>
-          <span class="prestige-mult" id="prestigeMult">x1</span>
-          <div class="prestige-info" id="prestigeInfo">prestige at 10,000 total sushi — resets progress, multiplies everything</div>
-          <button id="prestigeBtn">◆ PRESTIGE NOW ◆</button>
+      <div class="panel-section" id="tab-stats">
+        <div class="section-label">✦ your stats</div>
+        <div class="stat-row-list" id="statsList"></div>
+        <div style="margin-top:12px">
+          <div class="prestige-panel">
+            <div class="prestige-title">◆ PRESTIGE</div>
+            <span class="prestige-mult" id="prestigeMult">x1</span>
+            <div class="prestige-info" id="prestigeInfo">prestige at 10,000 total sushi — resets progress, multiplies everything</div>
+            <button id="prestigeBtn">◆ PRESTIGE NOW ◆</button>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="section-label">✦ save data</div>
+          <div class="save-controls">
+            <button class="save-btn" id="exportBtn">⬇ export save</button>
+            <button class="save-btn" id="importBtn">⬆ import save</button>
+            <input type="file" id="importFileInput" accept=".json,application/json">
+          </div>
+          <div class="save-controls" style="margin-top:6px">
+            <button class="save-btn danger" id="resetBtn">✕ reset save</button>
+          </div>
         </div>
       </div>
+
     </div>
 
   </div>
-
 </div>
 
 <script>
@@ -634,9 +695,7 @@ body::after{
   document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';});
 })();
 
-/* ═══════════════════════════════════════════════
-   STARS & PARTICLES
-═══════════════════════════════════════════════ */
+/* STARS & PARTICLES */
 (function(){
   const starsEl=document.getElementById('stars');
   for(let i=0;i<70;i++){
@@ -658,48 +717,47 @@ body::after{
 /* ═══════════════════════════════════════════════
    GAME DATA
 ═══════════════════════════════════════════════ */
-
 const GENERATORS = [
-  {id:'chopsticks', name:'CHOPSTICKS',    emoji:'🥢', desc:'+1 sushi/click. classics.',        baseCost:15,   costMult:1.5,  click:1,  cps:0,  max:50},
-  {id:'wasabi',     name:'WASABI FARM',   emoji:'🟢', desc:'spicy passive income.',             baseCost:40,   costMult:1.55, click:0,  cps:1,  max:50},
-  {id:'chef',       name:'PIXEL CHEF',    emoji:'👨‍🍳', desc:'little man makes sushi.',          baseCost:120,  costMult:1.6,  click:3,  cps:1,  max:50},
-  {id:'conveyor',   name:'CONVEYOR BELT', emoji:'🔄', desc:'rolls sushi on its own.',           baseCost:350,  costMult:1.65, click:0,  cps:5,  max:50},
-  {id:'salmon',     name:'SALMON RUN',    emoji:'🐟', desc:'fresh supply every sec.',            baseCost:900,  costMult:1.7,  click:6,  cps:4,  max:50},
-  {id:'robot',      name:'SUSHI ROBOT',   emoji:'🤖', desc:'automated 24/7 production.',        baseCost:2500, costMult:1.75, click:12, cps:10, max:50},
-  {id:'octopus',    name:'OCTOPUS ARMS',  emoji:'🐙', desc:'eight arms, eight times output.',   baseCost:7000, costMult:1.8,  click:25, cps:18, max:50},
-  {id:'dragon',     name:'SUSHI DRAGON',  emoji:'🐉', desc:'legendary. unstoppable.',           baseCost:20000,costMult:1.9,  click:60, cps:50, max:50},
-  {id:'temple',     name:'SUSHI TEMPLE',  emoji:'⛩️', desc:'ancient power flows through you.', baseCost:80000,costMult:2.0,  click:150,cps:120,max:50},
+  {id:'chopsticks',name:'CHOPSTICKS',   emoji:'🥢',desc:'+1 sushi/click. classics.',       baseCost:15,   costMult:1.5,  click:1,  cps:0,  max:50},
+  {id:'wasabi',    name:'WASABI FARM',  emoji:'🟢',desc:'spicy passive income.',            baseCost:40,   costMult:1.55, click:0,  cps:1,  max:50},
+  {id:'chef',      name:'PIXEL CHEF',   emoji:'👨‍🍳',desc:'little man makes sushi.',         baseCost:120,  costMult:1.6,  click:3,  cps:1,  max:50},
+  {id:'conveyor',  name:'CONVEYOR BELT',emoji:'🔄',desc:'rolls sushi on its own.',          baseCost:350,  costMult:1.65, click:0,  cps:5,  max:50},
+  {id:'salmon',    name:'SALMON RUN',   emoji:'🐟',desc:'fresh supply every sec.',          baseCost:900,  costMult:1.7,  click:6,  cps:4,  max:50},
+  {id:'robot',     name:'SUSHI ROBOT',  emoji:'🤖',desc:'automated 24/7 production.',      baseCost:2500, costMult:1.75, click:12, cps:10, max:50},
+  {id:'octopus',   name:'OCTOPUS ARMS', emoji:'🐙',desc:'eight arms, eight times output.', baseCost:7000, costMult:1.8,  click:25, cps:18, max:50},
+  {id:'dragon',    name:'SUSHI DRAGON', emoji:'🐉',desc:'legendary. unstoppable.',         baseCost:20000,costMult:1.9,  click:60, cps:50, max:50},
+  {id:'temple',    name:'SUSHI TEMPLE', emoji:'⛩️',desc:'ancient power flows.',            baseCost:80000,costMult:2.0,  click:150,cps:120,max:50},
 ];
 
 const SKILLS = [
-  {id:'sk_crit',    name:'CRITICAL TASTE', emoji:'⚡', desc:'5% crit chance → 5x sushi',           cost:200,   req:null,         effect:'crit_chance_5',   bought:false},
-  {id:'sk_combo',   name:'COMBO MASTER',   emoji:'🔥', desc:'combos give 2x bonus (was 1.5x)',      cost:500,   req:null,         effect:'combo_boost',     bought:false},
-  {id:'sk_gold',    name:'GOLDEN NOSE',    emoji:'👃', desc:'golden sushi appears 50% more often',  cost:800,   req:null,         effect:'golden_freq',     bought:false},
-  {id:'sk_passive', name:'AUTO CHEF',      emoji:'🍳', desc:'+25% to all passive income',           cost:1500,  req:'wasabi',     effect:'passive_25',      bought:false},
-  {id:'sk_click2',  name:'POWER GRIP',     emoji:'💪', desc:'+50% click power',                     cost:2000,  req:'chopsticks', effect:'click_50',        bought:false},
-  {id:'sk_crit2',   name:'RAZOR SENSES',   emoji:'🌟', desc:'crit chance +10% (total 15%)',         cost:4000,  req:'sk_crit',    effect:'crit_chance_10',  bought:false},
-  {id:'sk_golden2', name:'GOLDEN HEART',   emoji:'💛', desc:'golden sushi gives 3x reward',         cost:6000,  req:'sk_gold',    effect:'golden_3x',       bought:false},
-  {id:'sk_combo2',  name:'ETERNAL COMBO',  emoji:'♾️', desc:'combo timer lasts twice as long',      cost:8000,  req:'sk_combo',   effect:'combo_timer_2x',  bought:false},
-  {id:'sk_mega',    name:'MEGA CLICK',     emoji:'🚀', desc:'+100% click power + 10% crit',        cost:15000, req:'sk_click2',  effect:'mega_click',      bought:false},
+  {id:'sk_crit',   name:'CRITICAL TASTE',emoji:'⚡',desc:'5% crit chance → 5x sushi',          cost:200,  req:null,        effect:'crit_chance_5',  bought:false},
+  {id:'sk_combo',  name:'COMBO MASTER',  emoji:'🔥',desc:'combos give 2x bonus (was 1.5x)',     cost:500,  req:null,        effect:'combo_boost',    bought:false},
+  {id:'sk_gold',   name:'GOLDEN NOSE',   emoji:'👃',desc:'golden sushi 50% more often',         cost:800,  req:null,        effect:'golden_freq',    bought:false},
+  {id:'sk_passive',name:'AUTO CHEF',     emoji:'🍳',desc:'+25% to all passive income',          cost:1500, req:'wasabi',    effect:'passive_25',     bought:false},
+  {id:'sk_click2', name:'POWER GRIP',    emoji:'💪',desc:'+50% click power',                    cost:2000, req:'chopsticks',effect:'click_50',       bought:false},
+  {id:'sk_crit2',  name:'RAZOR SENSES', emoji:'🌟',desc:'crit chance +10% (total 15%)',        cost:4000, req:'sk_crit',   effect:'crit_chance_10', bought:false},
+  {id:'sk_golden2',name:'GOLDEN HEART',  emoji:'💛',desc:'golden sushi gives 3x reward',        cost:6000, req:'sk_gold',   effect:'golden_3x',      bought:false},
+  {id:'sk_combo2', name:'ETERNAL COMBO', emoji:'♾️',desc:'combo timer lasts twice as long',     cost:8000, req:'sk_combo',  effect:'combo_timer_2x', bought:false},
+  {id:'sk_mega',   name:'MEGA CLICK',    emoji:'🚀',desc:'+100% click power + 10% crit',       cost:15000,req:'sk_click2', effect:'mega_click',     bought:false},
 ];
 
 const ACHIEVEMENTS = [
-  {id:'first_click',  name:'FIRST TASTE',      emoji:'🍣', desc:'click once',              check:s=>s.totalClicks>=1},
-  {id:'clicks_100',   name:'CLICKER',          emoji:'👆', desc:'100 clicks total',        check:s=>s.totalClicks>=100},
-  {id:'clicks_1000',  name:'TAP ADDICT',       emoji:'⚡', desc:'1,000 clicks',           check:s=>s.totalClicks>=1000},
-  {id:'sushi_100',    name:'BENTO UNLOCK',     emoji:'🍱', desc:'100 sushi earned',        check:s=>s.allTime>=100},
-  {id:'sushi_1000',   name:'SALMON MASTER',    emoji:'🐟', desc:'1,000 sushi',             check:s=>s.allTime>=1000},
-  {id:'sushi_10k',    name:'SUSHI BARON',      emoji:'🤖', desc:'10,000 sushi',            check:s=>s.allTime>=10000},
-  {id:'sushi_100k',   name:'SUSHI LORD',       emoji:'🐙', desc:'100,000 sushi',           check:s=>s.allTime>=100000},
-  {id:'sushi_1m',     name:'DRAGON MASTER',    emoji:'🐉', desc:'1,000,000 sushi',         check:s=>s.allTime>=1000000},
-  {id:'first_crit',   name:'CRITICAL HIT!',    emoji:'💥', desc:'land your first critical',check:s=>s.totalCrits>=1},
-  {id:'crits_50',     name:'PRECISION',        emoji:'🎯', desc:'50 critical hits',        check:s=>s.totalCrits>=50},
-  {id:'first_golden', name:'GOLDEN MOMENT',    emoji:'🌟', desc:'click a golden sushi',    check:s=>s.totalGolden>=1},
-  {id:'golden_10',    name:'GOLDEN SOUL',      emoji:'💛', desc:'10 golden sushi',         check:s=>s.totalGolden>=10},
-  {id:'prestige_1',   name:'REBORN',           emoji:'◆',  desc:'prestige once',           check:s=>s.prestige>=1},
-  {id:'prestige_3',   name:'ETERNAL',          emoji:'✨',  desc:'prestige 3 times',        check:s=>s.prestige>=3},
-  {id:'combo_10',     name:'ON A ROLL',        emoji:'🔥', desc:'reach a 10x combo',       check:s=>s.maxCombo>=10},
-  {id:'all_gen',      name:'SUSHI EMPIRE',     emoji:'⛩️', desc:'own every generator',    check:s=>GENERATORS.every(g=>s.gen[g.id]>0)},
+  {id:'first_click', name:'FIRST TASTE',  emoji:'🍣',desc:'click once',              check:s=>s.totalClicks>=1},
+  {id:'clicks_100',  name:'CLICKER',      emoji:'👆',desc:'100 clicks total',        check:s=>s.totalClicks>=100},
+  {id:'clicks_1000', name:'TAP ADDICT',   emoji:'⚡',desc:'1,000 clicks',           check:s=>s.totalClicks>=1000},
+  {id:'sushi_100',   name:'BENTO UNLOCK', emoji:'🍱',desc:'100 sushi earned',        check:s=>s.allTime>=100},
+  {id:'sushi_1000',  name:'SALMON MASTER',emoji:'🐟',desc:'1,000 sushi',             check:s=>s.allTime>=1000},
+  {id:'sushi_10k',   name:'SUSHI BARON',  emoji:'🤖',desc:'10,000 sushi',            check:s=>s.allTime>=10000},
+  {id:'sushi_100k',  name:'SUSHI LORD',   emoji:'🐙',desc:'100,000 sushi',           check:s=>s.allTime>=100000},
+  {id:'sushi_1m',    name:'DRAGON MASTER',emoji:'🐉',desc:'1,000,000 sushi',         check:s=>s.allTime>=1000000},
+  {id:'first_crit',  name:'CRITICAL HIT!',emoji:'💥',desc:'land your first critical',check:s=>s.totalCrits>=1},
+  {id:'crits_50',    name:'PRECISION',    emoji:'🎯',desc:'50 critical hits',        check:s=>s.totalCrits>=50},
+  {id:'first_golden',name:'GOLDEN MOMENT',emoji:'🌟',desc:'click a golden sushi',    check:s=>s.totalGolden>=1},
+  {id:'golden_10',   name:'GOLDEN SOUL',  emoji:'💛',desc:'10 golden sushi',         check:s=>s.totalGolden>=10},
+  {id:'prestige_1',  name:'REBORN',       emoji:'◆', desc:'prestige once',           check:s=>s.prestige>=1},
+  {id:'prestige_3',  name:'ETERNAL',      emoji:'✨', desc:'prestige 3 times',        check:s=>s.prestige>=3},
+  {id:'combo_10',    name:'ON A ROLL',    emoji:'🔥',desc:'reach a 10x combo',       check:s=>s.maxCombo>=10},
+  {id:'all_gen',     name:'SUSHI EMPIRE', emoji:'⛩️',desc:'own every generator',    check:s=>GENERATORS.every(g=>s.gen[g.id]>0)},
 ];
 
 /* ═══════════════════════════════════════════════
@@ -721,9 +779,59 @@ GENERATORS.forEach(g=>{state.gen[g.id]=0;});
 SKILLS.forEach(s=>{state.skills[s.id]=false;});
 
 /* ═══════════════════════════════════════════════
+   MUSIC
+═══════════════════════════════════════════════ */
+let musicEnabled = true;
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 0.45;
+
+function startMusic(){
+  if(!musicEnabled) return;
+  const p = bgMusic.play();
+  if(p && p.catch) p.catch(()=>{});
+}
+function toggleMusic(){
+  musicEnabled = !musicEnabled;
+  const btn = document.getElementById('musicToggle');
+  if(musicEnabled){
+    startMusic();
+    btn.textContent = '♪ ON';
+    btn.classList.add('playing');
+  } else {
+    bgMusic.pause();
+    btn.textContent = '♪ OFF';
+    btn.classList.remove('playing');
+  }
+}
+document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+// Update btn state on load
+document.getElementById('musicToggle').classList.add('playing');
+
+/* ═══════════════════════════════════════════════
+   PLAY SCREEN
+═══════════════════════════════════════════════ */
+document.getElementById('playBtn').addEventListener('click', function(){
+  document.getElementById('playScreen').classList.add('hidden');
+  document.getElementById('gameContainer').classList.remove('hidden');
+  startMusic();
+  // Small vibration feedback on mobile
+  if(navigator.vibrate) navigator.vibrate(30);
+});
+
+// Cycle emojis on play screen
+const playEmojis = ['🍣','🍱','🥢','🌸','🐟','✨'];
+let playEmojiIdx = 0;
+setInterval(()=>{
+  playEmojiIdx = (playEmojiIdx + 1) % playEmojis.length;
+  document.getElementById('playEmoji').textContent = playEmojis[playEmojiIdx];
+}, 1200);
+
+/* ═══════════════════════════════════════════════
    SAVE / LOAD
 ═══════════════════════════════════════════════ */
-const SAVE_KEY='sushi_clicker_v3';
+const SAVE_KEY = 'sushi_clicker_v3';
+const SEEN_KEY = SAVE_KEY + '_lastSeen';
+
 function saveGame(){
   try{
     const data={
@@ -734,16 +842,17 @@ function saveGame(){
       achievements:[...state.achievements],
       maxCombo:state.maxCombo, totalTime:state.totalTime,
     };
-    localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
     const si=document.getElementById('saveIndicator');
     si.classList.add('show');
     setTimeout(()=>si.classList.remove('show'),1500);
   }catch(e){}
 }
+
 function loadGame(){
   try{
     const raw=localStorage.getItem(SAVE_KEY);
-    if(!raw)return;
+    if(!raw) return;
     const d=JSON.parse(raw);
     state.sushi=d.sushi||0;
     state.allTime=d.allTime||0;
@@ -760,48 +869,128 @@ function loadGame(){
   }catch(e){}
 }
 
+/* ─── EXPORT ─── */
+function exportSave(){
+  try{
+    const data={
+      sushi:state.sushi, allTime:state.allTime,
+      totalClicks:state.totalClicks, totalCrits:state.totalCrits, totalGolden:state.totalGolden,
+      prestige:state.prestige, prestigeMult:state.prestigeMult,
+      gen:state.gen, skills:state.skills,
+      achievements:[...state.achievements],
+      maxCombo:state.maxCombo, totalTime:state.totalTime,
+      exportDate:new Date().toISOString(),
+      version:'v3',
+    };
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='sushi_clicker_save_'+Date.now()+'.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('⬇','SAVE EXPORTED!','your progress is safe ♡','ach');
+  }catch(e){
+    showToast('✕','EXPORT FAILED','check your browser settings','');
+  }
+}
+
+/* ─── IMPORT ─── */
+function importSave(file){
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const d=JSON.parse(e.target.result);
+      // Validate basic structure
+      if(typeof d.allTime==='undefined' && typeof d.sushi==='undefined'){
+        showToast('✕','INVALID FILE','not a valid save file','');
+        return;
+      }
+      state.sushi=d.sushi||0;
+      state.allTime=d.allTime||0;
+      state.totalClicks=d.totalClicks||0;
+      state.totalCrits=d.totalCrits||0;
+      state.totalGolden=d.totalGolden||0;
+      state.prestige=d.prestige||0;
+      state.prestigeMult=d.prestigeMult||1;
+      GENERATORS.forEach(g=>{state.gen[g.id]=0;});
+      state.gen={...state.gen,...(d.gen||{})};
+      SKILLS.forEach(s=>{state.skills[s.id]=false;});
+      state.skills={...state.skills,...(d.skills||{})};
+      state.achievements=new Set(d.achievements||[]);
+      state.maxCombo=d.maxCombo||1;
+      state.totalTime=d.totalTime||0;
+      state.sessionStart=Date.now();
+      recompute();
+      updateUI();
+      buildShop();
+      buildSkills();
+      updateSushiEmoji();
+      saveGame();
+      const ii=document.getElementById('importIndicator');
+      ii.classList.add('show');
+      setTimeout(()=>ii.classList.remove('show'),2500);
+      showToast('⬆','SAVE IMPORTED!','welcome back ♡','ach');
+    }catch(err){
+      showToast('✕','IMPORT FAILED','corrupted or invalid file','');
+    }
+  };
+  reader.readAsText(file);
+}
+
+document.getElementById('exportBtn').addEventListener('click', exportSave);
+document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFileInput').click());
+document.getElementById('importFileInput').addEventListener('change',function(){
+  if(this.files&&this.files[0]) importSave(this.files[0]);
+  this.value=''; // reset so same file can be re-imported
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(!confirm('Reset ALL progress? This cannot be undone!')) return;
+  localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(SEEN_KEY);
+  location.reload();
+});
+
 /* ═══════════════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════════════ */
 function fmt(n){
   n=Math.floor(n);
-  if(n>=1e12)return(n/1e12).toFixed(2)+'T';
-  if(n>=1e9) return(n/1e9).toFixed(2)+'B';
-  if(n>=1e6) return(n/1e6).toFixed(2)+'M';
-  if(n>=1e3) return(n/1e3).toFixed(1)+'k';
+  if(n>=1e12) return(n/1e12).toFixed(2)+'T';
+  if(n>=1e9)  return(n/1e9).toFixed(2)+'B';
+  if(n>=1e6)  return(n/1e6).toFixed(2)+'M';
+  if(n>=1e3)  return(n/1e3).toFixed(1)+'k';
   return n.toString();
 }
 function genCost(g){
-  return Math.floor(g.baseCost*Math.pow(g.costMult,state.gen[g.id])*state.prestigeMult**0.5);
+  return Math.floor(g.baseCost*Math.pow(g.costMult,state.gen[g.id])*Math.pow(state.prestigeMult,.5));
 }
 function recompute(){
-  let click=1,cps=0;
+  let click=1, cps=0;
   GENERATORS.forEach(g=>{
     const c=state.gen[g.id];
     click+=g.click*c;
     cps+=g.cps*c;
   });
-  // apply skills
-  let clickMult=1,cpsMult=1,critChance=0;
+  let clickMult=1, cpsMult=1, critChance=0;
   state.critChance=0;
   state.comboBoost=1.5;
   state.goldenFreq=1;
   state.goldenMult=1;
-  if(state.skills['sk_crit'])   critChance+=0.05;
-  if(state.skills['sk_combo'])  state.comboBoost=2;
-  if(state.skills['sk_gold'])   state.goldenFreq=1.5;
-  if(state.skills['sk_passive'])cpsMult*=1.25;
-  if(state.skills['sk_click2']) clickMult*=1.5;
-  if(state.skills['sk_crit2'])  critChance+=0.10;
-  if(state.skills['sk_golden2'])state.goldenMult=3;
-  if(state.skills['sk_combo2']) {} // handled in combo logic
-  if(state.skills['sk_mega'])  {clickMult*=2; critChance+=0.10;}
+  if(state.skills['sk_crit'])    critChance+=0.05;
+  if(state.skills['sk_combo'])   state.comboBoost=2;
+  if(state.skills['sk_gold'])    state.goldenFreq=1.5;
+  if(state.skills['sk_passive']) cpsMult*=1.25;
+  if(state.skills['sk_click2'])  clickMult*=1.5;
+  if(state.skills['sk_crit2'])   critChance+=0.10;
+  if(state.skills['sk_golden2']) state.goldenMult=3;
+  if(state.skills['sk_mega'])    {clickMult*=2; critChance+=0.10;}
   state.critChance=critChance;
   state.clickPower=Math.max(1,Math.ceil(click*clickMult*state.prestigeMult));
   state.passive=Math.ceil(cps*cpsMult*state.prestigeMult);
-}
-function comboTimerMax(){
-  return state.skills['sk_combo2']?8000:4000;
 }
 
 /* ═══════════════════════════════════════════════
@@ -810,12 +999,12 @@ function comboTimerMax(){
 let comboTimeout=null;
 function tickCombo(){
   state.combo=Math.min(state.combo+1,100);
-  if(state.combo>state.maxCombo)state.maxCombo=state.combo;
+  if(state.combo>state.maxCombo) state.maxCombo=state.combo;
   clearTimeout(comboTimeout);
   comboTimeout=setTimeout(()=>{
     state.combo=1;
     updateComboUI();
-  },comboTimerMax());
+  },state.skills['sk_combo2']?8000:4000);
   updateComboUI();
 }
 function updateComboUI(){
@@ -831,57 +1020,66 @@ function updateComboUI(){
 }
 
 /* ═══════════════════════════════════════════════
-   GOLDEN SUSHI EVENT
+   GOLDEN SUSHI — FIXED TIMER
 ═══════════════════════════════════════════════ */
-let goldenActive=false;
-let goldenTimeout=null;
-let goldenSpawnTimeout=null;
+let goldenActive = false;
+let goldenEndTime = 0;        // absolute timestamp when golden expires
+let goldenSpawnTimeout = null;
+let goldenCountdownRAF = null;
 
 function scheduleGolden(){
-  const base=20000; // 20s base
-  const delay=Math.max(5000,base/state.goldenFreq)*(0.5+Math.random());
-  goldenSpawnTimeout=setTimeout(spawnGolden,delay);
+  clearTimeout(goldenSpawnTimeout);
+  const base = 20000;
+  const delay = Math.max(5000, base / state.goldenFreq) * (0.5 + Math.random());
+  goldenSpawnTimeout = setTimeout(spawnGolden, delay);
 }
+
 function spawnGolden(){
-  if(goldenActive)return scheduleGolden();
-  goldenActive=true;
-  const btn=document.getElementById('goldenEventBtn');
-  btn.classList.add('active');
-  let t=15;
-  const countEl=document.getElementById('goldenCountdown');
-  if(countEl)countEl.textContent='('+t+'s)';
-  const countdown=setInterval(()=>{
-    t--;
-    if(countEl)countEl.textContent='('+t+'s)';
-    if(t<=0)clearInterval(countdown);
-  },1000);
-  goldenTimeout=setTimeout(()=>{
-    clearInterval(countdown);
+  if(goldenActive) return scheduleGolden();
+  goldenActive = true;
+  goldenEndTime = Date.now() + 15000;
+  document.getElementById('goldenEventBtn').classList.add('active');
+  tickGoldenCountdown();
+}
+
+function tickGoldenCountdown(){
+  cancelAnimationFrame(goldenCountdownRAF);
+  const remaining = Math.ceil((goldenEndTime - Date.now()) / 1000);
+  const el = document.getElementById('goldenCountdown');
+  if(remaining > 0 && goldenActive){
+    if(el) el.textContent = '(' + remaining + 's)';
+    goldenCountdownRAF = requestAnimationFrame(tickGoldenCountdown);
+  } else if(goldenActive){
+    // expired
     dismissGolden();
     scheduleGolden();
-  },15000);
+  }
 }
+
 function dismissGolden(){
-  goldenActive=false;
-  const btn=document.getElementById('goldenEventBtn');
+  goldenActive = false;
+  cancelAnimationFrame(goldenCountdownRAF);
+  const btn = document.getElementById('goldenEventBtn');
   btn.classList.remove('active');
+  const el = document.getElementById('goldenCountdown');
+  if(el) el.textContent = '';
 }
-document.getElementById('goldenEventBtn').addEventListener('click',e=>{
-  if(!goldenActive)return;
-  clearTimeout(goldenTimeout);
-  const reward=Math.floor((state.passive*30+state.clickPower*50)*state.goldenMult*state.prestigeMult);
-  const earned=Math.max(100,reward);
-  state.sushi+=earned;
-  state.allTime+=earned;
+
+document.getElementById('goldenEventBtn').addEventListener('click', e=>{
+  if(!goldenActive) return;
+  const reward = Math.floor((state.passive*30+state.clickPower*50)*state.goldenMult*state.prestigeMult);
+  const earned = Math.max(100, reward);
+  state.sushi += earned;
+  state.allTime += earned;
   state.totalGolden++;
   dismissGolden();
   scheduleGolden();
   showToast('🌟','GOLDEN SUSHI!','+'+fmt(earned)+' sushi!','golden');
-  const rect=document.getElementById('goldenEventBtn').getBoundingClientRect();
-  const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
-  spawnFloat(cx,cy,'+'+fmt(earned),true,false);
+  const rect = document.getElementById('goldenEventBtn').getBoundingClientRect();
+  const cx = rect.left+rect.width/2, cy = rect.top+rect.height/2;
+  spawnFloat(cx, cy, '+'+fmt(earned), true, false);
   for(let i=0;i<10;i++){
-    spawnSparkle(cx,cy,['⭐','✨','🌟','💛','♡'][Math.floor(Math.random()*5)]);
+    spawnSparkle(cx, cy, ['⭐','✨','🌟','💛','♡'][Math.floor(Math.random()*5)]);
   }
   updateUI();
   checkAchievements();
@@ -893,24 +1091,18 @@ document.getElementById('goldenEventBtn').addEventListener('click',e=>{
 function doClick(x,y){
   state.totalClicks++;
   tickCombo();
-
-  const comboMultiplier=1+(state.combo-1)*(state.comboBoost-1)/9; // scales up to comboBoost at combo=10
-  const isCrit=Math.random()<state.critChance;
-  const critMult=isCrit?5:1;
-  if(isCrit)state.totalCrits++;
-
-  const base=state.clickPower;
-  const earned=Math.ceil(base*comboMultiplier*critMult);
-  state.sushi+=earned;
-  state.allTime+=earned;
-
+  const comboMultiplier = 1 + (state.combo-1) * (state.comboBoost-1) / 9;
+  const isCrit = Math.random() < state.critChance;
+  const critMult = isCrit ? 5 : 1;
+  if(isCrit) state.totalCrits++;
+  const earned = Math.ceil(state.clickPower * comboMultiplier * critMult);
+  state.sushi += earned;
+  state.allTime += earned;
   updateUI();
   checkAchievements();
-
-  spawnFloat(x,y,'+'+ fmt(earned),false,isCrit);
-  spawnSparkle(x,y,isCrit?'💥':'🍣');
-  spawnSparkle(x,y,['✦','♡','✿','★'][Math.floor(Math.random()*4)]);
-
+  spawnFloat(x, y, '+'+fmt(earned), false, isCrit);
+  spawnSparkle(x, y, isCrit?'💥':'🍣');
+  spawnSparkle(x, y, ['✦','♡','✿','★'][Math.floor(Math.random()*4)]);
   if(isCrit){
     const f=document.createElement('div');
     f.className='crit-flash';
@@ -923,17 +1115,15 @@ function spawnFloat(x,y,text,isGolden,isCrit){
   const sf=document.createElement('div');
   sf.className='score-float'+(isCrit?' crit':'')+(isGolden?' golden':'');
   sf.textContent=text;
-  sf.style.left=x+'px';
-  sf.style.top=y+'px';
+  sf.style.left=x+'px';sf.style.top=y+'px';
   document.body.appendChild(sf);
   setTimeout(()=>sf.remove(),800);
 }
 function spawnSparkle(x,y,emoji){
   const sp=document.createElement('div');
-  sp.className='sparkle';
-  sp.textContent=emoji;
+  sp.className='sparkle';sp.textContent=emoji;
   sp.style.left=x+'px';sp.style.top=y+'px';
-  const angle=(Math.random()*Math.PI*2);
+  const angle=Math.random()*Math.PI*2;
   const dist=35+Math.random()*50;
   sp.style.setProperty('--sv',`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`);
   document.body.appendChild(sp);
@@ -941,7 +1131,7 @@ function spawnSparkle(x,y,emoji){
 }
 
 /* ═══════════════════════════════════════════════
-   BUTTON EVENTS
+   SUSHI BUTTON
 ═══════════════════════════════════════════════ */
 const sushiBtn=document.getElementById('sushiBtn');
 function handleClick(x,y){
@@ -964,7 +1154,7 @@ sushiBtn.addEventListener('touchstart',e=>{
 },{passive:false});
 
 /* ═══════════════════════════════════════════════
-   TAB SYSTEM
+   TABS
 ═══════════════════════════════════════════════ */
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -972,20 +1162,18 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     document.querySelectorAll('.panel-section').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
-    if(btn.dataset.tab==='achieve')buildAchievements();
-    if(btn.dataset.tab==='stats')buildStats();
+    if(btn.dataset.tab==='achieve') buildAchievements();
+    if(btn.dataset.tab==='stats') buildStats();
   });
 });
 
 /* ═══════════════════════════════════════════════
-   BUILD SHOP UI
+   SHOP
 ═══════════════════════════════════════════════ */
 function buildShop(){
   const panel=document.getElementById('tab-shop');
-  // clear non-label children
   [...panel.children].forEach(c=>{if(!c.classList.contains('section-label'))c.remove();});
   GENERATORS.forEach(g=>{
-    if(document.getElementById('gen-'+g.id))return;
     const card=document.createElement('div');
     card.className='upgrade-card';card.id='gen-'+g.id;
     card.innerHTML=`
@@ -1008,7 +1196,7 @@ function buildShop(){
 function updateShopUI(){
   GENERATORS.forEach(g=>{
     const card=document.getElementById('gen-'+g.id);
-    if(!card)return;
+    if(!card) return;
     const cost=genCost(g);
     const count=state.gen[g.id];
     const canAfford=state.sushi>=cost;
@@ -1024,9 +1212,9 @@ function updateShopUI(){
 }
 function buyGen(id){
   const g=GENERATORS.find(x=>x.id===id);
-  if(!g||state.gen[id]>=g.max)return;
+  if(!g||state.gen[id]>=g.max) return;
   const cost=genCost(g);
-  if(state.sushi<cost)return;
+  if(state.sushi<cost) return;
   state.sushi-=cost;
   state.gen[id]++;
   recompute();
@@ -1037,13 +1225,12 @@ function buyGen(id){
 }
 
 /* ═══════════════════════════════════════════════
-   BUILD SKILLS UI
+   SKILLS
 ═══════════════════════════════════════════════ */
 function buildSkills(){
   const panel=document.getElementById('tab-skills');
   [...panel.children].forEach(c=>{if(!c.classList.contains('section-label'))c.remove();});
   SKILLS.forEach(sk=>{
-    if(document.getElementById('sk-'+sk.id))return;
     const card=document.createElement('div');
     card.className='upgrade-card';card.id='sk-'+sk.id;
     card.innerHTML=`
@@ -1063,24 +1250,23 @@ function buildSkills(){
 function updateSkillsUI(){
   SKILLS.forEach(sk=>{
     const card=document.getElementById('sk-'+sk.id);
-    if(!card)return;
+    if(!card) return;
     const bought=state.skills[sk.id];
     const req=sk.req?(sk.req.startsWith('sk_')?state.skills[sk.req]:state.gen[sk.req]>0):true;
     const canAfford=state.sushi>=sk.cost&&!bought&&req;
     card.classList.toggle('locked',!req&&!bought);
     card.classList.toggle('affordable',canAfford);
-    card.classList.toggle('bought',bought);
     card.classList.toggle('maxed',bought);
     const costEl=document.getElementById('sk-cost-'+sk.id);
-    if(costEl)costEl.textContent=bought?'✓ OWNED':fmt(sk.cost)+'🍣';
-    if(costEl)costEl.classList.toggle('can-afford',canAfford);
+    if(costEl) costEl.textContent=bought?'✓ OWNED':fmt(sk.cost)+'🍣';
+    if(costEl) costEl.classList.toggle('can-afford',canAfford);
   });
 }
 function buySkill(id){
   const sk=SKILLS.find(x=>x.id===id);
-  if(!sk||state.skills[id])return;
+  if(!sk||state.skills[id]) return;
   const req=sk.req?(sk.req.startsWith('sk_')?state.skills[sk.req]:state.gen[sk.req]>0):true;
-  if(!req||state.sushi<sk.cost)return;
+  if(!req||state.sushi<sk.cost) return;
   state.sushi-=sk.cost;
   state.skills[id]=true;
   recompute();
@@ -1098,7 +1284,6 @@ function checkAchievements(){
     if(!state.achievements.has(a.id)&&a.check(state)){
       state.achievements.add(a.id);
       showToast(a.emoji,'ACHIEVEMENT!',a.name+'\n'+a.desc,'ach');
-      // flash achievement tab
       const tab=document.querySelector('[data-tab="achieve"]');
       if(tab){tab.style.color='var(--gold)';setTimeout(()=>{tab.style.color='';},1500);}
     }
@@ -1123,21 +1308,20 @@ function buildStats(){
   const list=document.getElementById('statsList');
   const elapsed=Math.floor((Date.now()-state.sessionStart)/1000+state.totalTime);
   const rows=[
-    ['Total Sushi', fmt(state.allTime)],
-    ['Sushi/sec', fmt(state.passive)],
-    ['Sushi/click', fmt(state.clickPower)],
-    ['Total Clicks', fmt(state.totalClicks)],
-    ['Critical Hits', fmt(state.totalCrits)],
-    ['Golden Sushi', fmt(state.totalGolden)],
-    ['Max Combo', 'x'+state.maxCombo],
-    ['Crit Chance', Math.round(state.critChance*100)+'%'],
+    ['Total Sushi',    fmt(state.allTime)],
+    ['Sushi/sec',      fmt(state.passive)],
+    ['Sushi/click',    fmt(state.clickPower)],
+    ['Total Clicks',   fmt(state.totalClicks)],
+    ['Critical Hits',  fmt(state.totalCrits)],
+    ['Golden Sushi',   fmt(state.totalGolden)],
+    ['Max Combo',      'x'+state.maxCombo],
+    ['Crit Chance',    Math.round(state.critChance*100)+'%'],
     ['Prestige Level', state.prestige],
-    ['Prestige Mult', 'x'+state.prestigeMult],
-    ['Achievements', state.achievements.size+'/'+ACHIEVEMENTS.length],
-    ['Session Time', Math.floor(elapsed/60)+'m '+elapsed%60+'s'],
+    ['Prestige Mult',  'x'+state.prestigeMult],
+    ['Achievements',   state.achievements.size+'/'+ACHIEVEMENTS.length],
+    ['Session Time',   Math.floor(elapsed/60)+'m '+elapsed%60+'s'],
   ];
   list.innerHTML=rows.map(([l,v])=>`<div class="stat-item"><span class="stat-item-label">${l}</span><span class="stat-item-value">${v}</span></div>`).join('');
-  // prestige
   const threshold=10000*Math.pow(5,state.prestige);
   document.getElementById('prestigeMult').textContent='x'+state.prestigeMult;
   const pBtn=document.getElementById('prestigeBtn');
@@ -1152,28 +1336,28 @@ function buildStats(){
 
 document.getElementById('prestigeBtn').addEventListener('click',()=>{
   const threshold=10000*Math.pow(5,state.prestige);
-  if(state.allTime<threshold)return;
+  if(state.allTime<threshold) return;
   state.prestige++;
   state.prestigeMult=state.prestige+1;
-  state.sushi=0;state.allTime=0;
+  state.sushi=0; state.allTime=0;
   GENERATORS.forEach(g=>{state.gen[g.id]=0;});
   SKILLS.forEach(s=>{state.skills[s.id]=false;});
   state.combo=1;
   recompute();
   updateUI();
-  buildShop();buildSkills();
+  buildShop(); buildSkills();
   showToast('◆','PRESTIGE '+state.prestige+'!','x'+state.prestigeMult+' multiplier active now','prestige');
-  document.getElementById('upgradesPanel');
   updateSushiEmoji();
 });
 
 /* ═══════════════════════════════════════════════
-   TOAST
+   TOAST QUEUE
 ═══════════════════════════════════════════════ */
-let toastQueue=[];let toastActive=false;
+let toastQueue=[];
+let toastActive=false;
 function showToast(emoji,title,sub,type=''){
   toastQueue.push({emoji,title,sub,type});
-  if(!toastActive)processToast();
+  if(!toastActive) processToast();
 }
 function processToast(){
   if(!toastQueue.length){toastActive=false;return;}
@@ -1186,7 +1370,7 @@ function processToast(){
   setTimeout(()=>{
     t.classList.add('out');
     setTimeout(()=>{t.remove();processToast();},380);
-  },2000);
+  },2200);
 }
 
 /* ═══════════════════════════════════════════════
@@ -1212,15 +1396,12 @@ function updateUI(){
   document.getElementById('totalGolden').textContent=fmt(state.totalGolden);
 
   const ticker=document.getElementById('passiveTicker');
-  if(state.passive>0) ticker.textContent=`✦ +${fmt(state.passive)} sushi / sec ✦`;
-  else ticker.textContent='✦ tap to start your sushi empire ✦';
+  ticker.textContent=state.passive>0?`✦ +${fmt(state.passive)} sushi / sec ✦`:'✦ tap to start your sushi empire ✦';
 
-  // CPS bar (log scale up to 1M cps)
   const pct=Math.min(100,Math.log10(Math.max(1,state.passive))/6*100);
   document.getElementById('cpsBarFill').style.width=pct+'%';
   document.getElementById('cpsBarLabel').textContent=fmt(state.passive)+'/s';
 
-  // Prestige badge
   const badge=document.getElementById('prestigeBadge');
   if(state.prestige>0){
     badge.style.display='block';
@@ -1230,8 +1411,7 @@ function updateUI(){
   updateShopUI();
   updateSkillsUI();
 
-  // Highlight stats on activity
-  if(state.passive>0)document.getElementById('statClicks').classList.add('highlight');
+  if(state.passive>0) document.getElementById('statClicks').classList.add('highlight');
 }
 
 /* ═══════════════════════════════════════════════
@@ -1242,16 +1422,27 @@ function gameTick(){
   const now=Date.now();
   const dt=(now-lastTick)/1000;
   lastTick=now;
-  if(state.passive>0){
+  if(state.passive>0&&dt>0&&dt<2){ // ignore huge dt (tab was hidden etc)
     const earned=state.passive*dt;
     state.sushi+=earned;
     state.allTime+=earned;
-    updateUI();
-    checkAchievements();
   }
-  state.totalTime+=dt;
+  state.totalTime+=Math.min(dt,2);
+  updateUI();
+  checkAchievements();
   requestAnimationFrame(gameTick);
 }
+
+/* ═══════════════════════════════════════════════
+   KEYBOARD SHORTCUT
+═══════════════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if((e.code==='Space'||e.code==='Enter')&&!document.getElementById('gameContainer').classList.contains('hidden')){
+    e.preventDefault();
+    const rect=sushiBtn.getBoundingClientRect();
+    handleClick(rect.left+rect.width/2,rect.top+rect.height/2);
+  }
+});
 
 /* ═══════════════════════════════════════════════
    INIT
@@ -1267,44 +1458,40 @@ requestAnimationFrame(gameTick);
 
 // Auto-save every 15s
 setInterval(saveGame,15000);
-// Also save on visibility change
-document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame();});
 
-// check milestones on load (for returning players)
-setTimeout(checkAchievements,500);
-
-// keyboard shortcut: space/enter to click
-document.addEventListener('keydown',e=>{
-  if(e.code==='Space'||e.code==='Enter'){
-    e.preventDefault();
-    const rect=sushiBtn.getBoundingClientRect();
-    handleClick(rect.left+rect.width/2,rect.top+rect.height/2);
+// Save on tab hide
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){
+    saveGame();
+    try{localStorage.setItem(SEEN_KEY,Date.now().toString());}catch(e){}
   }
 });
 
-// offline bonus on load
+// Check achievements on load (returning players)
+setTimeout(checkAchievements,500);
+
+// Offline bonus
 (function(){
   try{
-    const raw=localStorage.getItem(SAVE_KEY+'_lastSeen');
+    const raw=localStorage.getItem(SEEN_KEY);
     const last=raw?parseInt(raw):null;
     if(last){
       const seconds=Math.floor((Date.now()-last)/1000);
       const offlineCps=state.passive;
       if(seconds>30&&offlineCps>0){
-        const bonus=Math.floor(offlineCps*seconds*0.5); // 50% offline efficiency
-        state.sushi+=bonus;state.allTime+=bonus;
+        const bonus=Math.floor(offlineCps*seconds*0.5);
+        state.sushi+=bonus; state.allTime+=bonus;
         showToast('😴','OFFLINE BONUS','+'+fmt(bonus)+' sushi while away ('+Math.floor(seconds/60)+'m)','ach');
         updateUI();
       }
     }
-    localStorage.setItem(SAVE_KEY+'_lastSeen',Date.now().toString());
+    localStorage.setItem(SEEN_KEY,Date.now().toString());
   }catch(e){}
 })();
 
-// Update lastSeen on unload
 window.addEventListener('beforeunload',()=>{
   saveGame();
-  try{localStorage.setItem(SAVE_KEY+'_lastSeen',Date.now().toString());}catch(e){}
+  try{localStorage.setItem(SEEN_KEY,Date.now().toString());}catch(e){}
 });
 </script>
 </body>
