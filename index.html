@@ -877,6 +877,84 @@
     }
 
     /* =========================================
+       SNAKE BUTTON
+    ========================================= */
+
+    .snake-section {
+      text-align: center;
+      margin-top: 32px;
+      padding-bottom: 20px;
+    }
+
+    .snake-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      color: rgba(180,232,160,.35);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      display: block;
+      animation: softBlink 2.4s step-start infinite;
+    }
+
+    .snake-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      letter-spacing: 1px;
+      color: var(--soft);
+      background: rgba(19,45,25,.6);
+      border: 2px solid rgba(127,232,148,.4);
+      padding: 14px 24px;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      box-shadow: 4px 4px 0 rgba(127,232,148,.3), 0 0 20px rgba(127,232,148,.1);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      cursor: pointer !important;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .snake-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.05) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform .5s ease;
+    }
+
+    .snake-btn:hover::before { transform: translateX(150%); }
+
+    .snake-btn:hover {
+      transform: translate(-2px,-2px);
+      box-shadow: 6px 6px 0 rgba(127,232,148,.4), 0 0 30px rgba(127,232,148,.2);
+      border-color: rgba(180,232,160,.5);
+    }
+
+    .snake-btn:active {
+      transform: translate(2px,2px);
+      box-shadow: 1px 1px 0 rgba(127,232,148,.3);
+    }
+
+    .snake-emoji {
+      font-size: 16px;
+      display: inline-block;
+      animation: snakeWiggle 2s ease-in-out infinite;
+      font-style: normal;
+    }
+
+    @keyframes snakeWiggle {
+      0%,100% { transform: rotate(0deg) translateX(0); }
+      20%     { transform: rotate(-12deg) translateX(-2px); }
+      40%     { transform: rotate(12deg) translateX(2px); }
+      60%     { transform: rotate(-8deg) translateX(-1px); }
+      80%     { transform: rotate(8deg) translateX(1px); }
+    }
+
+    /* =========================================
        MUSIC BAR
     ========================================= */
 
@@ -1229,6 +1307,16 @@
         <span class="sushi-emoji">🍣</span>
         SUSHI CLICKER
         <span class="sushi-emoji">🍱</span>
+      </a>
+    </div>
+
+    <!-- SNAKE BUTTON -->
+    <div class="snake-section reveal">
+      <span class="snake-label">✦ secret stage ✦</span>
+      <a href="snake.html" class="snake-btn">
+        <span class="snake-emoji">🐍</span>
+        SNAKE GAME
+        <span class="snake-emoji">🍎</span>
       </a>
     </div>
 
