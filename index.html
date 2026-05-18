@@ -40,7 +40,7 @@
     }
 
     /* =========================================
-       SPLASH — completely redesigned
+       SPLASH
     ========================================= */
 
     #splash {
@@ -61,7 +61,6 @@
       pointer-events: none;
     }
 
-    /* Deep space background layers */
     .splash-bg {
       position: absolute;
       inset: 0;
@@ -73,7 +72,6 @@
       z-index: 0;
     }
 
-    /* Nebula blobs */
     .splash-nebula {
       position: absolute;
       inset: 0;
@@ -108,16 +106,14 @@
       50%      { transform: translate(-50%,-50%) scale(1.18); opacity:1; }
     }
 
-    /* Star field canvas */
     #splashCanvas {
       position: absolute;
       inset: 0;
       width: 100%; height: 100%;
       z-index: 2;
-      pointer-events: none; /* FIX: was blocking all clicks on button */
+      pointer-events: none;
     }
 
-    /* Floating orbiting hearts */
     .splash-orbit {
       position: absolute;
       inset: 0;
@@ -140,10 +136,9 @@
       100% { opacity:0; transform: translateY(-100vh) rotate(720deg) scale(1.3); }
     }
 
-    /* Content wrapper */
     .splash-content {
       position: relative;
-      z-index: 15; /* FIX: was 10, must be above splash-bottom-fade z:5 and scan z:4 */
+      z-index: 15;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -152,7 +147,6 @@
       padding: 30px 24px;
     }
 
-    /* Pixel decorative top bar */
     .splash-top-bar {
       display: flex;
       align-items: center;
@@ -180,7 +174,6 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
-    /* Big pixelated heart icon */
     .splash-icon-wrap {
       position: relative;
       margin-bottom: 28px;
@@ -206,7 +199,6 @@
       50%      { transform: scale(1.2); opacity:1; }
     }
 
-    /* Pixel heart rendered in canvas */
     #splashHeart {
       display: block;
       image-rendering: pixelated;
@@ -227,7 +219,6 @@
       56%     { transform: scale(1); }
     }
 
-    /* Main title */
     .splash-title {
       font-family: 'DM Serif Display', serif;
       font-style: italic;
@@ -257,7 +248,6 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
-    /* Subtitle row */
     .splash-subtitle {
       font-family: 'Press Start 2P', monospace;
       font-size: 7px;
@@ -273,13 +263,11 @@
       font-style: normal;
     }
 
-    /* THE BUTTON */
     .splash-btn-wrap {
       position: relative;
       animation: fadeSlideUp .8s ease .55s both;
     }
 
-    /* Ripple ring behind button */
     .splash-btn-wrap::before,
     .splash-btn-wrap::after {
       content: '';
@@ -321,7 +309,6 @@
       overflow: hidden;
     }
 
-    /* Shimmer sweep on button */
     #splashBtn::before {
       content: '';
       position: absolute;
@@ -347,7 +334,6 @@
       box-shadow: 2px 2px 0 var(--violet);
     }
 
-    /* Bottom note */
     .splash-note {
       font-family: 'Press Start 2P', monospace;
       font-size: 6px;
@@ -374,7 +360,6 @@
       50%      { opacity:.9; transform: scale(1.3); }
     }
 
-    /* Scanline overlay on splash */
     .splash-scan {
       position: absolute;
       inset: 0;
@@ -389,7 +374,6 @@
       );
     }
 
-    /* Bottom gradient fade */
     .splash-bottom-fade {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -801,7 +785,7 @@
     @keyframes softBlink{ 50%{opacity:.35;} }
 
     /* =========================================
-       SUSHI BUTTON — bottom of page
+       SUSHI BUTTON
     ========================================= */
 
     .sushi-section {
@@ -855,7 +839,7 @@
 
     .sushi-btn:hover {
       transform: translate(-2px,-2px);
-      box-shadow: 6px 6px 0 rgba(180,127,232,.4), 0 0 30px rgba(180,127,232,.2);
+      box-shadow: 6px 6px 0 rgba(180,127,232,.4), 0 0 30px rgba(180,127,200,.2);
       border-color: rgba(240,160,200,.5);
     }
 
@@ -884,7 +868,6 @@
     .snake-section {
       text-align: center;
       margin-top: 32px;
-      padding-bottom: 20px;
     }
 
     .snake-label {
@@ -953,6 +936,93 @@
       40%     { transform: rotate(12deg) translateX(2px); }
       60%     { transform: rotate(-8deg) translateX(-1px); }
       80%     { transform: rotate(8deg) translateX(1px); }
+    }
+
+    /* =========================================
+       MYSTERY BUTTON  ← nouveau bouton verrouillé
+       (voir le commentaire HTML plus bas pour le
+       tutoriel complet sur comment le configurer)
+    ========================================= */
+
+    .mystery-section {
+      text-align: center;
+      margin-top: 32px;
+      padding-bottom: 20px;
+    }
+
+    /* Label au-dessus du bouton — même style que les autres */
+    .mystery-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      /* Couleur grise/dorée pour donner un effet "mystère verrouillé" */
+      color: rgba(255,213,128,.25);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      display: block;
+      animation: softBlink 3s step-start infinite;
+    }
+
+    /* Bouton principal — état VERROUILLÉ */
+    .mystery-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      letter-spacing: 1px;
+      /* Texte grisé pour signifier "pas encore dispo" */
+      color: rgba(245,230,255,.35);
+      /* Fond très sombre, quasi transparent */
+      background: rgba(20,12,35,.7);
+      /* Bordure en pointillé doré très pâle = locked/mystérieux */
+      border: 2px dashed rgba(255,213,128,.2);
+      padding: 14px 24px;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      /* Ombre dorée très subtile */
+      box-shadow: 4px 4px 0 rgba(255,213,128,.1), 0 0 20px rgba(255,213,128,.04);
+      /* PAS de transition hover active : bouton mort */
+      position: relative;
+      overflow: hidden;
+      /* DÉSACTIVÉ : pas de curseur pointer, pas d'interactions */
+      cursor: not-allowed !important;
+      /* Opacité réduite pour renforcer l'effet "désactivé" */
+      opacity: 0.55;
+      /* pointer-events: none; ← optionnel, voir note dans le tuto HTML */
+    }
+
+    /* Petite animation de "scan" qui passe sur le bouton
+       pour montrer qu'il est là mais inaccessible */
+    .mystery-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255,213,128,.03) 3px,
+        rgba(255,213,128,.03) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Emoji qui "tremble" légèrement pour donner vie au mystère */
+    .mystery-emoji {
+      font-size: 16px;
+      display: inline-block;
+      font-style: normal;
+      animation: mysteryShake 4s ease-in-out infinite;
+      /* Semi-transparent pour renforcer l'effet locked */
+      opacity: 0.5;
+    }
+
+    @keyframes mysteryShake {
+      0%,100% { transform: rotate(0deg) scale(1); }
+      15%     { transform: rotate(-6deg) scale(1.05); }
+      30%     { transform: rotate(6deg) scale(1.05); }
+      45%     { transform: rotate(-3deg) scale(1); }
+      60%     { transform: rotate(3deg) scale(1); }
+      75%     { transform: rotate(0deg) scale(1); }
     }
 
     /* =========================================
@@ -1118,7 +1188,7 @@
 <body>
 
   <!-- =========================================
-       SPLASH — redesigned
+       SPLASH
   ========================================= -->
   <div id="splash">
     <div class="splash-bg"></div>
@@ -1320,6 +1390,128 @@
         SNAKE GAME
         <span class="snake-emoji">🍎</span>
       </a>
+    </div>
+
+
+    <!--
+    ╔══════════════════════════════════════════════════════════════════╗
+    ║           TUTORIEL — NOUVEAU BOUTON VERROUILLÉ                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║                                                                  ║
+    ║  CE BOUTON EST ACTUELLEMENT INACTIF (état "locked").             ║
+    ║  Voici tout ce qu'il faut changer quand ton jeu est prêt.        ║
+    ║                                                                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  ① CHANGER LE TEXTE DU LABEL (le petit truc au-dessus)          ║
+    ║                                                                  ║
+    ║  Actuellement :  "✦ Secret ??? ✦"                               ║
+    ║  Exemple final : "✦ ultra secret stage ✦"                       ║
+    ║                                                                  ║
+    ║  → Trouve la ligne :                                             ║
+    ║    <span class="mystery-label">✦ Secret ??? ✦</span>            ║
+    ║  → Remplace le texte entre les balises par ce que tu veux.      ║
+    ║                                                                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  ② CHANGER LE NOM DU JEU (texte sur le bouton)                  ║
+    ║                                                                  ║
+    ║  Actuellement : "??? GAME"                                       ║
+    ║  Exemple :      "COOKING GAME" ou "PUZZLE GAME" etc.            ║
+    ║                                                                  ║
+    ║  → Trouve la ligne avec "??? GAME" dans le HTML ci-dessous      ║
+    ║  → Remplace ce texte par le vrai nom de ton jeu.                ║
+    ║                                                                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  ③ CHANGER L'EMOJI (optionnel mais fun)                          ║
+    ║                                                                  ║
+    ║  Actuellement : 🔒 et ❓                                        ║
+    ║  → Remplace les deux emojis dans les balises                    ║
+    ║    <span class="mystery-emoji">🔒</span>                        ║
+    ║    par l'emoji qui correspond à ton jeu.                        ║
+    ║  Exemples : 🍳 pour cooking, 🎯 pour tir, 🧩 pour puzzle...    ║
+    ║                                                                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  ④ DÉBLOQUER LE BOUTON (le rendre cliquable)                     ║
+    ║                                                                  ║
+    ║  Il y a 3 choses à faire dans le CSS (cherche le bloc           ║
+    ║  "MYSTERY BUTTON" dans la balise <style>) :                     ║
+    ║                                                                  ║
+    ║  A) Retirer le cursor: not-allowed                               ║
+    ║     → Remplace par : cursor: pointer !important;                ║
+    ║                                                                  ║
+    ║  B) Retirer l'opacité réduite                                    ║
+    ║     → Supprime ou mets en commentaire la ligne : opacity: 0.55; ║
+    ║       (ou change-la en opacity: 1;)                             ║
+    ║                                                                  ║
+    ║  C) Changer la bordure en pointillé en bordure pleine           ║
+    ║     → Remplace :                                                 ║
+    ║       border: 2px dashed rgba(255,213,128,.2);                  ║
+    ║     → Par :                                                      ║
+    ║       border: 2px solid rgba(255,213,128,.5);                   ║
+    ║                                                                  ║
+    ║  D) Rajouter un effet hover dans le CSS (optionnel mais joli)   ║
+    ║     → Ajoute ce bloc APRÈS .mystery-btn { ... } :               ║
+    ║                                                                  ║
+    ║       .mystery-btn:hover {                                       ║
+    ║         transform: translate(-2px,-2px);                        ║
+    ║         box-shadow: 6px 6px 0 rgba(255,213,128,.5),             ║
+    ║                     0 0 30px rgba(255,213,128,.25);             ║
+    ║         border-color: rgba(255,213,128,.7);                     ║
+    ║         opacity: 1;                                              ║
+    ║       }                                                          ║
+    ║       .mystery-btn:active {                                      ║
+    ║         transform: translate(2px,2px);                          ║
+    ║         box-shadow: 1px 1px 0 rgba(255,213,128,.3);             ║
+    ║       }                                                          ║
+    ║                                                                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  ⑤ LIER LE BOUTON À TON JEU (le vrai déblocage)                 ║
+    ║                                                                  ║
+    ║  Actuellement la balise est un <div> → ça ne redirige           ║
+    ║  nulle part. Quand ta page est prête (ex: monkjeu.html) :       ║
+    ║                                                                  ║
+    ║  → Remplace :                                                    ║
+    ║    <div class="mystery-btn">                                     ║
+    ║  → Par :                                                         ║
+    ║    <a href="monjeudufeu.html" class="mystery-btn">              ║
+    ║                                                                  ║
+    ║  → Et remplace la balise fermante </div> par </a>               ║
+    ║                                                                  ║
+    ║  NOTE : Si tu veux que le lien s'ouvre dans un NOUVEL onglet,   ║
+    ║  ajoute target="_blank" dans la balise <a> :                    ║
+    ║    <a href="monjeudufeu.html" target="_blank" class="...">      ║
+    ║                                                                  ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  ⑥ RÉSUMÉ ULTRA RAPIDE — checklist finale                        ║
+    ║                                                                  ║
+    ║  [ ] Changer le texte du label (.mystery-label)                 ║
+    ║  [ ] Changer le nom du jeu (texte "??? GAME")                   ║
+    ║  [ ] Changer les emojis 🔒 ❓ par ceux de ton jeu              ║
+    ║  [ ] CSS : cursor → pointer                                      ║
+    ║  [ ] CSS : opacity → 1                                           ║
+    ║  [ ] CSS : border dashed → solid + plus opaque                  ║
+    ║  [ ] CSS : ajouter les effets :hover et :active                  ║
+    ║  [ ] HTML : remplacer <div> par <a href="TON_JEU.html">         ║
+    ║  [ ] HTML : remplacer </div> par </a>                           ║
+    ║                                                                  ║
+    ╚══════════════════════════════════════════════════════════════════╝
+    -->
+
+    <!-- MYSTERY BUTTON (verrouillé pour l'instant) -->
+    <div class="mystery-section reveal">
+      <span class="mystery-label">✦ Secret ??? ✦</span>
+      <!--
+        ATTENTION : c'est un <div> et non un <a href="..."> exprès !
+        Un <div> ne navigue nulle part → le bouton est visuellement
+        présent mais totalement inopérant, même si on clique dessus.
+        Quand tu es prêt(e), remplace ce <div> par :
+          <a href="TON_JEU.html" class="mystery-btn">
+        et supprime ce commentaire.
+      -->
+      <div class="mystery-btn">
+        <span class="mystery-emoji">🔒</span>
+        ??? GAME
+        <span class="mystery-emoji">❓</span>
+      </div>
     </div>
 
   </main>
