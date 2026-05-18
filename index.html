@@ -939,90 +939,178 @@
     }
 
     /* =========================================
-       MYSTERY BUTTON  ← nouveau bouton verrouillé
-       (voir le commentaire HTML plus bas pour le
-       tutoriel complet sur comment le configurer)
+       PACMAN BUTTON  ← LEGENDARY STAGE
     ========================================= */
 
-    .mystery-section {
+    .pacman-section {
       text-align: center;
       margin-top: 32px;
       padding-bottom: 20px;
     }
 
-    /* Label au-dessus du bouton — même style que les autres */
-    .mystery-label {
+    .pacman-label {
       font-family: 'Press Start 2P', monospace;
-      font-size: 6px;
-      /* Couleur grise/dorée pour donner un effet "mystère verrouillé" */
-      color: rgba(255,213,128,.25);
-      letter-spacing: 3px;
-      margin-bottom: 20px;
+      font-size: 7px;
+      color: rgba(255,213,128,.9);
+      letter-spacing: 4px;
+      margin-bottom: 22px;
       display: block;
-      animation: softBlink 3s step-start infinite;
+      text-shadow: 0 0 12px rgba(255,213,128,.6), 0 0 28px rgba(255,180,0,.3);
+      animation: pacLabelPulse 1.5s ease-in-out infinite;
     }
 
-    /* Bouton principal — état VERROUILLÉ */
-    .mystery-btn {
+    @keyframes pacLabelPulse {
+      0%,100% { opacity:.85; letter-spacing:4px; }
+      50%     { opacity:1;   letter-spacing:5px; text-shadow: 0 0 18px rgba(255,213,128,.9), 0 0 40px rgba(255,180,0,.5); }
+    }
+
+    .pacman-btn {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      letter-spacing: 1px;
-      /* Texte grisé pour signifier "pas encore dispo" */
-      color: rgba(245,230,255,.35);
-      /* Fond très sombre, quasi transparent */
-      background: rgba(20,12,35,.7);
-      /* Bordure en pointillé doré très pâle = locked/mystérieux */
-      border: 2px dashed rgba(255,213,128,.2);
-      padding: 14px 24px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #1a0a2e;
+      background: linear-gradient(135deg, #ffe566 0%, #ffd700 40%, #ffb700 70%, #ff9500 100%);
+      border: 3px solid #ffd700;
+      padding: 18px 32px;
       text-decoration: none;
-      backdrop-filter: blur(8px);
-      /* Ombre dorée très subtile */
-      box-shadow: 4px 4px 0 rgba(255,213,128,.1), 0 0 20px rgba(255,213,128,.04);
-      /* PAS de transition hover active : bouton mort */
+      cursor: pointer !important;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       position: relative;
       overflow: hidden;
-      /* DÉSACTIVÉ : pas de curseur pointer, pas d'interactions */
-      cursor: not-allowed !important;
-      /* Opacité réduite pour renforcer l'effet "désactivé" */
-      opacity: 0.55;
-      /* pointer-events: none; ← optionnel, voir note dans le tuto HTML */
+      box-shadow:
+        6px 6px 0 rgba(120,80,0,.7),
+        0 0 20px rgba(255,213,128,.5),
+        0 0 50px rgba(255,180,0,.25),
+        0 0 90px rgba(255,150,0,.1),
+        inset 0 1px 0 rgba(255,255,255,.4);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      animation: pacBtnIdle 3s ease-in-out infinite;
     }
 
-    /* Petite animation de "scan" qui passe sur le bouton
-       pour montrer qu'il est là mais inaccessible */
-    .mystery-btn::before {
+    @keyframes pacBtnIdle {
+      0%,100% { box-shadow: 6px 6px 0 rgba(120,80,0,.7), 0 0 20px rgba(255,213,128,.5), 0 0 50px rgba(255,180,0,.25), 0 0 90px rgba(255,150,0,.1), inset 0 1px 0 rgba(255,255,255,.4); }
+      50%     { box-shadow: 6px 6px 0 rgba(120,80,0,.7), 0 0 35px rgba(255,213,128,.8), 0 0 70px rgba(255,180,0,.45), 0 0 120px rgba(255,150,0,.2), inset 0 1px 0 rgba(255,255,255,.4); }
+    }
+
+    /* shimmer sweep */
+    .pacman-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.45) 50%, transparent 80%);
+      transform: translateX(-120%);
+      animation: pacShimmer 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pacShimmer {
+      0%,55%  { transform: translateX(-120%); }
+      100%    { transform: translateX(200%); }
+    }
+
+    /* scanline overlay */
+    .pacman-btn::after {
       content: '';
       position: absolute; inset: 0;
       background: repeating-linear-gradient(
         0deg,
         transparent,
         transparent 3px,
-        rgba(255,213,128,.03) 3px,
-        rgba(255,213,128,.03) 4px
+        rgba(0,0,0,.06) 3px,
+        rgba(0,0,0,.06) 4px
       );
       pointer-events: none;
     }
 
-    /* Emoji qui "tremble" légèrement pour donner vie au mystère */
-    .mystery-emoji {
-      font-size: 16px;
-      display: inline-block;
-      font-style: normal;
-      animation: mysteryShake 4s ease-in-out infinite;
-      /* Semi-transparent pour renforcer l'effet locked */
-      opacity: 0.5;
+    .pacman-btn:hover {
+      transform: translate(-4px,-4px);
+      filter: brightness(1.1) saturate(1.2);
+      box-shadow:
+        10px 10px 0 rgba(120,80,0,.7),
+        0 0 40px rgba(255,213,128,.9),
+        0 0 80px rgba(255,180,0,.6),
+        0 0 140px rgba(255,150,0,.3),
+        inset 0 1px 0 rgba(255,255,255,.4);
+      animation: none;
     }
 
-    @keyframes mysteryShake {
-      0%,100% { transform: rotate(0deg) scale(1); }
-      15%     { transform: rotate(-6deg) scale(1.05); }
-      30%     { transform: rotate(6deg) scale(1.05); }
-      45%     { transform: rotate(-3deg) scale(1); }
-      60%     { transform: rotate(3deg) scale(1); }
-      75%     { transform: rotate(0deg) scale(1); }
+    .pacman-btn:active {
+      transform: translate(3px,3px);
+      box-shadow: 2px 2px 0 rgba(120,80,0,.7), 0 0 10px rgba(255,213,128,.3);
+      filter: brightness(.95);
+      animation: none;
+    }
+
+    .pacman-btn-text {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(180deg, #3a1a00 0%, #1a0800 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 1px 0 rgba(255,255,255,.25));
+    }
+
+    /* pixel pac-man canvas */
+    #pacmanCanvas {
+      image-rendering: pixelated;
+      display: block;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 0 6px rgba(255,213,128,.8));
+      animation: pacChomp .35s steps(1) infinite;
+    }
+
+    @keyframes pacChomp {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.15); }
+    }
+
+    /* pixel ghost canvas */
+    #ghostCanvas {
+      image-rendering: pixelated;
+      display: block;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 0 6px rgba(255,100,100,.7));
+      animation: ghostBob 1.2s ease-in-out infinite;
+    }
+
+    @keyframes ghostBob {
+      0%,100% { transform: translateY(0) scaleX(1); }
+      50%     { transform: translateY(-3px) scaleX(-1); }
+    }
+
+    /* floating dots between pac-man and ghost */
+    .pac-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pac-dot {
+      width: 5px;
+      height: 5px;
+      background: #1a0a2e;
+      border-radius: 50%;
+      animation: dotEat .6s ease-in-out infinite;
+      box-shadow: 0 0 4px rgba(0,0,0,.3);
+    }
+
+    .pac-dot:nth-child(1) { animation-delay: 0s; }
+    .pac-dot:nth-child(2) { animation-delay: .15s; }
+    .pac-dot:nth-child(3) { animation-delay: .3s; }
+
+    @keyframes dotEat {
+      0%,100% { opacity:1; transform: scale(1); }
+      50%     { opacity:.2; transform: scale(.4); }
     }
 
     /* =========================================
@@ -1392,126 +1480,24 @@
       </a>
     </div>
 
-
-    <!--
-    ╔══════════════════════════════════════════════════════════════════╗
-    ║           TUTORIEL — NOUVEAU BOUTON VERROUILLÉ                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║                                                                  ║
-    ║  CE BOUTON EST ACTUELLEMENT INACTIF (état "locked").             ║
-    ║  Voici tout ce qu'il faut changer quand ton jeu est prêt.        ║
-    ║                                                                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║  ① CHANGER LE TEXTE DU LABEL (le petit truc au-dessus)          ║
-    ║                                                                  ║
-    ║  Actuellement :  "✦ Secret ??? ✦"                               ║
-    ║  Exemple final : "✦ ultra secret stage ✦"                       ║
-    ║                                                                  ║
-    ║  → Trouve la ligne :                                             ║
-    ║    <span class="mystery-label">✦ Secret ??? ✦</span>            ║
-    ║  → Remplace le texte entre les balises par ce que tu veux.      ║
-    ║                                                                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║  ② CHANGER LE NOM DU JEU (texte sur le bouton)                  ║
-    ║                                                                  ║
-    ║  Actuellement : "??? GAME"                                       ║
-    ║  Exemple :      "COOKING GAME" ou "PUZZLE GAME" etc.            ║
-    ║                                                                  ║
-    ║  → Trouve la ligne avec "??? GAME" dans le HTML ci-dessous      ║
-    ║  → Remplace ce texte par le vrai nom de ton jeu.                ║
-    ║                                                                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║  ③ CHANGER L'EMOJI (optionnel mais fun)                          ║
-    ║                                                                  ║
-    ║  Actuellement : 🔒 et ❓                                        ║
-    ║  → Remplace les deux emojis dans les balises                    ║
-    ║    <span class="mystery-emoji">🔒</span>                        ║
-    ║    par l'emoji qui correspond à ton jeu.                        ║
-    ║  Exemples : 🍳 pour cooking, 🎯 pour tir, 🧩 pour puzzle...    ║
-    ║                                                                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║  ④ DÉBLOQUER LE BOUTON (le rendre cliquable)                     ║
-    ║                                                                  ║
-    ║  Il y a 3 choses à faire dans le CSS (cherche le bloc           ║
-    ║  "MYSTERY BUTTON" dans la balise <style>) :                     ║
-    ║                                                                  ║
-    ║  A) Retirer le cursor: not-allowed                               ║
-    ║     → Remplace par : cursor: pointer !important;                ║
-    ║                                                                  ║
-    ║  B) Retirer l'opacité réduite                                    ║
-    ║     → Supprime ou mets en commentaire la ligne : opacity: 0.55; ║
-    ║       (ou change-la en opacity: 1;)                             ║
-    ║                                                                  ║
-    ║  C) Changer la bordure en pointillé en bordure pleine           ║
-    ║     → Remplace :                                                 ║
-    ║       border: 2px dashed rgba(255,213,128,.2);                  ║
-    ║     → Par :                                                      ║
-    ║       border: 2px solid rgba(255,213,128,.5);                   ║
-    ║                                                                  ║
-    ║  D) Rajouter un effet hover dans le CSS (optionnel mais joli)   ║
-    ║     → Ajoute ce bloc APRÈS .mystery-btn { ... } :               ║
-    ║                                                                  ║
-    ║       .mystery-btn:hover {                                       ║
-    ║         transform: translate(-2px,-2px);                        ║
-    ║         box-shadow: 6px 6px 0 rgba(255,213,128,.5),             ║
-    ║                     0 0 30px rgba(255,213,128,.25);             ║
-    ║         border-color: rgba(255,213,128,.7);                     ║
-    ║         opacity: 1;                                              ║
-    ║       }                                                          ║
-    ║       .mystery-btn:active {                                      ║
-    ║         transform: translate(2px,2px);                          ║
-    ║         box-shadow: 1px 1px 0 rgba(255,213,128,.3);             ║
-    ║       }                                                          ║
-    ║                                                                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║  ⑤ LIER LE BOUTON À TON JEU (le vrai déblocage)                 ║
-    ║                                                                  ║
-    ║  Actuellement la balise est un <div> → ça ne redirige           ║
-    ║  nulle part. Quand ta page est prête (ex: monkjeu.html) :       ║
-    ║                                                                  ║
-    ║  → Remplace :                                                    ║
-    ║    <div class="mystery-btn">                                     ║
-    ║  → Par :                                                         ║
-    ║    <a href="monjeudufeu.html" class="mystery-btn">              ║
-    ║                                                                  ║
-    ║  → Et remplace la balise fermante </div> par </a>               ║
-    ║                                                                  ║
-    ║  NOTE : Si tu veux que le lien s'ouvre dans un NOUVEL onglet,   ║
-    ║  ajoute target="_blank" dans la balise <a> :                    ║
-    ║    <a href="monjeudufeu.html" target="_blank" class="...">      ║
-    ║                                                                  ║
-    ╠══════════════════════════════════════════════════════════════════╣
-    ║  ⑥ RÉSUMÉ ULTRA RAPIDE — checklist finale                        ║
-    ║                                                                  ║
-    ║  [ ] Changer le texte du label (.mystery-label)                 ║
-    ║  [ ] Changer le nom du jeu (texte "??? GAME")                   ║
-    ║  [ ] Changer les emojis 🔒 ❓ par ceux de ton jeu              ║
-    ║  [ ] CSS : cursor → pointer                                      ║
-    ║  [ ] CSS : opacity → 1                                           ║
-    ║  [ ] CSS : border dashed → solid + plus opaque                  ║
-    ║  [ ] CSS : ajouter les effets :hover et :active                  ║
-    ║  [ ] HTML : remplacer <div> par <a href="TON_JEU.html">         ║
-    ║  [ ] HTML : remplacer </div> par </a>                           ║
-    ║                                                                  ║
-    ╚══════════════════════════════════════════════════════════════════╝
-    -->
-
-    <!-- MYSTERY BUTTON (verrouillé pour l'instant) -->
-    <div class="mystery-section reveal">
-      <span class="mystery-label">✦ Secret ??? ✦</span>
-      <!--
-        ATTENTION : c'est un <div> et non un <a href="..."> exprès !
-        Un <div> ne navigue nulle part → le bouton est visuellement
-        présent mais totalement inopérant, même si on clique dessus.
-        Quand tu es prêt(e), remplace ce <div> par :
-          <a href="TON_JEU.html" class="mystery-btn">
-        et supprime ce commentaire.
-      -->
-      <div class="mystery-btn">
-        <span class="mystery-emoji">🔒</span>
-        ??? GAME
-        <span class="mystery-emoji">❓</span>
-      </div>
+    <!-- PACMAN BUTTON — LEGENDARY STAGE -->
+    <div class="pacman-section reveal">
+      <span class="pacman-label">✦ legendary stage ✦</span>
+      <a href="pacman.html" class="pacman-btn">
+        <canvas id="pacmanCanvas" width="28" height="28"></canvas>
+        <div class="pac-dots">
+          <div class="pac-dot"></div>
+          <div class="pac-dot"></div>
+          <div class="pac-dot"></div>
+        </div>
+        <span class="pacman-btn-text">PAC-MAN</span>
+        <div class="pac-dots">
+          <div class="pac-dot"></div>
+          <div class="pac-dot"></div>
+          <div class="pac-dot"></div>
+        </div>
+        <canvas id="ghostCanvas" width="24" height="28"></canvas>
+      </a>
     </div>
 
   </main>
@@ -1743,6 +1729,88 @@
         }
       });
     });
+
+    /* =========================================
+       PACMAN PIXEL CANVAS
+    ========================================= */
+
+    (function(){
+      const pc  = document.getElementById('pacmanCanvas');
+      const pctx = pc.getContext('2d');
+      const SZ = 2;
+
+      // Pac-Man pixel map (14x14) — open mouth facing right
+      const pacOpen = [
+        [0,0,0,1,1,1,1,1,1,1,0,0,0,0],
+        [0,0,1,1,1,1,1,1,1,1,1,1,0,0],
+        [0,1,1,1,1,1,1,1,1,1,1,1,1,0],
+        [1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+        [1,1,1,1,1,1,1,1,1,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+        [1,1,1,1,1,1,1,0,0,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,1,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+        [0,1,1,1,1,1,1,1,1,1,1,1,1,0],
+        [0,0,1,1,1,1,1,1,1,1,1,1,0,0],
+        [0,0,0,1,1,1,1,1,1,1,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      ];
+
+      // Eye position
+      pacOpen.forEach((row, y) => {
+        row.forEach((cell, x) => {
+          if(cell){
+            pctx.fillStyle = '#ffd700';
+            pctx.fillRect(x*SZ, y*SZ, SZ, SZ);
+          }
+        });
+      });
+      // eye
+      pctx.fillStyle = '#1a0a2e';
+      pctx.fillRect(3*SZ, 2*SZ, SZ*2, SZ*2);
+    })();
+
+    (function(){
+      const gc  = document.getElementById('ghostCanvas');
+      const gctx = gc.getContext('2d');
+      const SZ = 2;
+
+      // Ghost pixel map (12x14) — red ghost (Blinky)
+      const ghostMap = [
+        [0,0,0,1,1,1,1,1,1,0,0,0],
+        [0,0,1,1,1,1,1,1,1,1,0,0],
+        [0,1,1,1,1,1,1,1,1,1,1,0],
+        [1,1,0,0,1,1,1,1,0,0,1,1],
+        [1,1,0,0,1,1,1,1,0,0,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,1,1,0,1,1,0,1,1,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0],
+      ];
+
+      ghostMap.forEach((row, y) => {
+        row.forEach((cell, x) => {
+          if(cell){
+            gctx.fillStyle = '#ff3333';
+            gctx.fillRect(x*SZ, y*SZ, SZ, SZ);
+          }
+        });
+      });
+      // white eyes
+      gctx.fillStyle = '#ffffff';
+      gctx.fillRect(2*SZ, 3*SZ, SZ*2, SZ*2);
+      gctx.fillRect(7*SZ, 3*SZ, SZ*2, SZ*2);
+      // blue pupils
+      gctx.fillStyle = '#4444ff';
+      gctx.fillRect(3*SZ, 3*SZ, SZ, SZ*2);
+      gctx.fillRect(8*SZ, 3*SZ, SZ, SZ*2);
+    })();
 
     /* =========================================
        MINI GAME
