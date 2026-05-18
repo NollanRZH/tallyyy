@@ -1028,6 +1028,8 @@ function tickGhost(g, dt){
         g.x = EXIT_COL;
         g.phase = PH_NORMAL;
         g.moveAccum = 0;
+        // Stay vulnerable if a power pill is still active
+        g.scared = powerModeActive;
         // Turn left out of the exit
         g.dir = {x:-1, y:0};
         g.eyeDir = {x:-1, y:0};
@@ -1098,7 +1100,8 @@ function tickGhost(g, dt){
 
   /* ─── NORMAL: chase/scatter/scared ─── */
   if(g.phase === PH_NORMAL){
-    const scaredMult = g.scared ? 1.6 : 1.0;
+    // Vulnerable ghosts move slower
+    const scaredMult = g.scared ? 0.65 : 1.0;
     const levelBonus = 1.0 + (level - 1) * 0.05; // 5% faster each level
     const interval = baseInterval / (scaredMult * levelBonus);
 
@@ -1329,8 +1332,10 @@ function eatCell(){
     powerTimer = POWER_DURATION * (longPower ? 2 : 1);
     ghostCombo = 1;
     ghosts.forEach(g => {
-      // Only scare ghosts in normal phase; don't affect returning/exiting/house
-      if(g.phase === PH_NORMAL) g.scared = true;
+      // Make every ghost vulnerable, even ones still inside the house
+      if(g.phase !== PH_RETURNING && g.phase !== PH_REVIVING){
+        g.scared = true;
+      }
     });
     updatePowerBadge();
     spawnFloatAtPac('⚡ POWER!', false);
