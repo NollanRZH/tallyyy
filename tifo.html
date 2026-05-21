@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pour Tally 💜</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Cinzel+Decorative:wght@700;900&family=Alex+Brush&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Cinzel+Decorative:wght@700;900&family=Alex+Brush&family=IM+Fell+English:ital@1&display=swap" rel="stylesheet">
 <style>
 :root {
   --deep: #04000e;
@@ -24,7 +24,6 @@ html, body {
   font-family: 'Cormorant Garamond', serif;
 }
 
-/* ─── LAYERED BACKGROUND ─── */
 #scene {
   width:100vw; height:100vh;
   position:relative;
@@ -68,10 +67,10 @@ html, body {
   100% { opacity:0.3; transform:translateX(8%) scaleY(1.2); }
 }
 
-/* ─── STARS ─── */
+/* STARS */
 #stars-layer { position:absolute; inset:0; pointer-events:none; }
 
-/* ─── FLOATING PETALS / SPARKLES ─── */
+/* SPARKLES */
 #sparkles-layer { position:absolute; inset:0; pointer-events:none; z-index:5; }
 
 .sparkle {
@@ -89,7 +88,7 @@ html, body {
   100% { opacity:0; transform:translateY(-120px) scale(0.3); }
 }
 
-/* ─── LANTERNS ─── */
+/* LANTERNS */
 .lantern {
   position:absolute;
   pointer-events:none;
@@ -118,13 +117,16 @@ html, body {
   100% { opacity:0; transform:translateY(-100vh) rotate(calc(var(--lr) + 15deg)); }
 }
 
-/* ─── TIFO ─── */
+/* TIFO */
 #tifo-wrap {
   position:absolute;
   inset: 0 0 120px 0;
   clip-path: inset(100% 0 0 0);
   transition: clip-path 2.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index:20;
+}
+@media(max-width:600px){
+  #tifo-wrap { bottom:90px; }
 }
 
 #tifo {
@@ -136,7 +138,6 @@ html, body {
   overflow:hidden;
 }
 
-/* Rich velvet background */
 #tifo::before {
   content:'';
   position:absolute; inset:0;
@@ -147,7 +148,6 @@ html, body {
     linear-gradient(170deg, #130030 0%, #0a001f 35%, #160035 65%, #080018 100%);
 }
 
-/* Subtle fabric weave texture */
 #tifo::after {
   content:'';
   position:absolute; inset:0;
@@ -157,7 +157,6 @@ html, body {
   pointer-events:none;
 }
 
-/* Ornate frame */
 .tifo-frame {
   position:absolute;
   inset:clamp(10px,2vw,28px);
@@ -175,7 +174,6 @@ html, body {
   border:1px solid rgba(200,80,255,0.08);
 }
 
-/* Corner ornaments */
 .corner-orn {
   position:absolute;
   width:clamp(40px,6vw,80px);
@@ -188,7 +186,6 @@ html, body {
 .co-bl { bottom:clamp(10px,2vw,28px); left:clamp(10px,2vw,28px); transform:scaleY(-1); }
 .co-br { bottom:clamp(10px,2vw,28px); right:clamp(10px,2vw,28px); transform:scale(-1); }
 
-/* Center side ornaments */
 .side-orn {
   position:absolute;
   top:50%; transform:translateY(-50%);
@@ -202,13 +199,12 @@ html, body {
 .side-orn-l { left:clamp(18px,3vw,40px); }
 .side-orn-r { right:clamp(18px,3vw,40px); transform:translateY(-50%) rotate(180deg); }
 
-/* Decorative dividers */
 .divider {
   display:flex;
   align-items:center;
   gap:12px;
   justify-content:center;
-  margin:clamp(8px,1.5vh,18px) 0;
+  margin:clamp(6px,1.2vh,14px) 0;
   opacity:0.7;
 }
 .div-line {
@@ -229,12 +225,12 @@ html, body {
   transform:rotate(45deg);
 }
 
-/* ─── TIFO CONTENT ─── */
+/* TIFO CONTENT */
 .tifo-content {
   position:relative; z-index:10;
   text-align:center;
   max-width:clamp(320px,85vw,1000px);
-  padding:clamp(20px,3vw,50px) clamp(30px,6vw,100px);
+  padding:clamp(16px,2.5vw,44px) clamp(28px,5vw,90px);
   animation: contentReveal 0.01s 4s both;
 }
 @keyframes contentReveal { from{opacity:0;} to{opacity:1;} }
@@ -244,14 +240,14 @@ html, body {
   font-size: clamp(14px,2.5vw,26px);
   color: #b080e8;
   letter-spacing: 4px;
-  margin-bottom: clamp(6px,1vh,14px);
+  margin-bottom: clamp(4px,.8vh,12px);
   opacity:0;
   animation: fadeUp 0.8s 3.4s forwards;
 }
 
 .tifo-crest {
-  font-size: clamp(28px,5vw,62px);
-  margin-bottom: clamp(6px,1.2vh,16px);
+  font-size: clamp(24px,4.5vw,56px);
+  margin-bottom: clamp(4px,1vh,14px);
   opacity:0;
   animation: fadeUp 0.8s 3.6s forwards;
   filter: drop-shadow(0 0 20px rgba(200,100,255,0.7));
@@ -260,7 +256,7 @@ html, body {
 .tifo-headline {
   font-family: 'Cinzel Decorative', serif;
   font-weight:700;
-  font-size: clamp(22px,4.5vw,64px);
+  font-size: clamp(20px,4vw,58px);
   color: #fff;
   line-height:1.2;
   letter-spacing: clamp(1px,0.2vw,3px);
@@ -268,7 +264,7 @@ html, body {
     0 0 30px rgba(220,130,255,0.7),
     0 0 80px rgba(200,100,255,0.35),
     0 3px 6px rgba(0,0,0,0.9);
-  margin-bottom:clamp(4px,0.8vh,10px);
+  margin-bottom:clamp(3px,.6vh,8px);
   opacity:0;
   animation: fadeUp 1s 3.8s forwards;
 }
@@ -277,7 +273,7 @@ html, body {
   font-family: 'Cormorant Garamond', serif;
   font-style:italic;
   font-weight:600;
-  font-size: clamp(36px,8vw,106px);
+  font-size: clamp(32px,7vw,96px);
   line-height:1;
   letter-spacing: clamp(2px,0.4vw,6px);
   background: linear-gradient(135deg, #f5d0fe 0%, #e879f9 35%, #f0abfc 60%, #fde8ff 100%);
@@ -286,7 +282,7 @@ html, body {
   filter: drop-shadow(0 0 30px rgba(240,171,252,0.5));
   opacity:0;
   animation: fadeUp 1s 4s forwards, nameGlow 3s 5s ease-in-out infinite alternate;
-  margin-bottom:clamp(4px,0.8vh,10px);
+  margin-bottom:clamp(3px,.6vh,8px);
 }
 @keyframes nameGlow {
   from { filter: drop-shadow(0 0 25px rgba(240,171,252,0.4)); }
@@ -294,7 +290,7 @@ html, body {
 }
 
 .tifo-stars {
-  font-size: clamp(14px,2.2vw,26px);
+  font-size: clamp(12px,2vw,24px);
   letter-spacing: clamp(6px,1.5vw,16px);
   color: #d4a0ff;
   opacity:0;
@@ -307,9 +303,9 @@ html, body {
 
 .tifo-message {
   font-family: 'Alex Brush', cursive;
-  font-size: clamp(16px,2.8vw,36px);
+  font-size: clamp(15px,2.6vw,34px);
   color: #e8c8ff;
-  line-height:1.7;
+  line-height:1.65;
   opacity:0;
   animation: fadeUp 0.9s 4.5s forwards;
 }
@@ -318,7 +314,7 @@ html, body {
   font-family: 'Cormorant Garamond', serif;
   font-style:italic;
   font-weight:300;
-  font-size: clamp(13px,1.8vw,22px);
+  font-size: clamp(12px,1.6vw,20px);
   color: rgba(220,180,255,0.75);
   opacity:0;
   animation: fadeUp 0.9s 4.7s forwards;
@@ -326,7 +322,7 @@ html, body {
 }
 
 .tifo-hearts {
-  font-size: clamp(22px,4vw,48px);
+  font-size: clamp(20px,3.5vw,44px);
   letter-spacing: clamp(8px,2vw,20px);
   opacity:0;
   animation: fadeUp 0.8s 4.9s forwards, heartbeat 1.5s 5.5s ease-in-out infinite;
@@ -342,7 +338,7 @@ html, body {
 .tifo-vow {
   font-family: 'Cinzel Decorative', serif;
   font-weight:700;
-  font-size: clamp(9px,1.4vw,16px);
+  font-size: clamp(8px,1.2vw,14px);
   letter-spacing: clamp(3px,0.8vw,10px);
   color: rgba(200,140,255,0.55);
   text-transform:uppercase;
@@ -356,7 +352,7 @@ html, body {
   to   { opacity:1; transform:translateY(0); }
 }
 
-/* ─── BANDEROLE ─── */
+/* BANDEROLE */
 #banderole-wrap {
   position:absolute;
   bottom:0; left:0; right:0;
@@ -365,7 +361,6 @@ html, body {
 }
 @media(max-width:600px){
   #banderole-wrap { height:90px; }
-  #tifo-wrap { bottom:90px; }
 }
 
 #banderole {
@@ -394,7 +389,6 @@ html, body {
     inset 0 -3px 0 rgba(0,0,0,0.35);
 }
 
-/* Vertical fold lines */
 #banderole::before {
   content:'';
   position:absolute; inset:0;
@@ -406,7 +400,6 @@ html, body {
   pointer-events:none;
 }
 
-/* Top highlight seam */
 #banderole::after {
   content:'';
   position:absolute;
@@ -422,7 +415,6 @@ html, body {
   );
 }
 
-/* Hanging fringe at bottom */
 .band-fringe {
   position:absolute;
   bottom:-1px; left:0; right:0;
@@ -443,20 +435,23 @@ html, body {
   position:relative; z-index:5;
   display:flex;
   align-items:center;
-  gap:clamp(12px,2vw,28px);
+  gap:clamp(10px,1.8vw,24px);
   padding:0 clamp(14px,3vw,40px);
 }
 .band-gem {
   font-size:clamp(14px,2.5vw,28px);
   filter:drop-shadow(0 0 8px rgba(255,200,255,0.8));
   flex-shrink:0;
+  font-family: serif;
 }
+
+/* IM Fell English italic for the band text — rich, warm, not "Cinzel-stiff" */
 .band-text {
-  font-family:'Cinzel Decorative', serif;
-  font-weight:700;
-  font-size:clamp(13px,2.4vw,30px);
+  font-family: 'IM Fell English', 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size:clamp(14px,2.6vw,32px);
   color:white;
-  letter-spacing:clamp(2px,0.5vw,5px);
+  letter-spacing:clamp(1px,0.3vw,3px);
   text-align:center;
   text-shadow:
     -1px -1px 0 #5b0088,
@@ -471,7 +466,7 @@ html, body {
   max-width:80vw;
 }
 @media(max-width:600px){
-  .band-text { font-size:clamp(10px,3.8vw,18px); white-space:normal; line-height:1.2; }
+  .band-text { font-size:clamp(11px,3.8vw,18px); white-space:normal; line-height:1.25; }
 }
 
 @keyframes bandShimmer {
@@ -479,26 +474,23 @@ html, body {
   100% { background-position: 300% 300%; }
 }
 
-/* ─── SMOKE / PARTICLES CANVAS ─── */
+/* TORCH / SMOKE CANVAS */
 #smoke-canvas {
   position:absolute; inset:0;
   pointer-events:none; z-index:15;
 }
 
-/* ─── CONFETTI CANVAS ─── */
+/* CONFETTI CANVAS */
 #confetti-canvas {
   position:absolute; inset:0;
   pointer-events:none; z-index:25;
 }
 
-/* ─── CROWN PULSE ON LOAD ─── */
+/* CROWN FLASH */
 #crown-flash {
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(200,100,255,0.12) 0%, transparent 70%);
-  pointer-events:none;
-  z-index:8;
-  opacity:0;
+  pointer-events:none; z-index:8; opacity:0;
   animation: crownFlash 1.5s 3.5s ease-out forwards;
 }
 @keyframes crownFlash {
@@ -506,7 +498,6 @@ html, body {
   40%  { opacity:1; }
   100% { opacity:0; transform:scale(2); }
 }
-
 </style>
 </head>
 <body>
@@ -528,8 +519,6 @@ html, body {
   <div id="tifo-wrap">
     <div id="tifo">
       <div class="tifo-frame"></div>
-
-      <!-- Corner SVG ornaments -->
       <div class="corner-orn co-tl">
         <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 76 L4 4 L76 4" stroke="rgba(200,100,255,0.4)" stroke-width="1.5"/>
@@ -538,7 +527,6 @@ html, body {
           <circle cx="4" cy="4" r="1.5" fill="#c090ff"/>
           <path d="M18 4 Q18 18 4 18" stroke="rgba(200,100,255,0.3)" stroke-width="1" fill="none"/>
           <path d="M32 4 Q32 32 4 32" stroke="rgba(200,100,255,0.15)" stroke-width="0.75" fill="none"/>
-          <line x1="4" y1="20" x2="20" y2="4" stroke="rgba(200,100,255,0.15)" stroke-width="0.5"/>
         </svg>
       </div>
       <div class="corner-orn co-tr">
@@ -571,15 +559,10 @@ html, body {
       <div class="side-orn side-orn-r">✦ ✦ ✦ ✦ ✦</div>
 
       <div class="tifo-content">
-
         <div class="tifo-eyebrow">— Dedicated with all my heart —</div>
-
         <div class="tifo-crest">👑</div>
-
         <div class="tifo-headline">Thank You</div>
-
         <div class="tifo-name">Princess Tallyyy</div>
-
         <div class="divider">
           <div class="div-line"></div>
           <div class="div-gem-sm"></div>
@@ -587,9 +570,7 @@ html, body {
           <div class="div-gem-sm"></div>
           <div class="div-line"></div>
         </div>
-
         <div class="tifo-stars">★ ★ ★ ★ ★</div>
-
         <div class="divider">
           <div class="div-line"></div>
           <div class="div-gem-sm"></div>
@@ -597,32 +578,25 @@ html, body {
           <div class="div-gem-sm"></div>
           <div class="div-line"></div>
         </div>
-
         <div class="tifo-message">
           For every attention, every compliment, every game played together<br>
           you make meee happpyyy when you text mee!
         </div>
-
         <div class="divider">
           <div class="div-line"></div>
           <div class="div-gem-sm"></div>
           <div class="div-line"></div>
         </div>
-
         <div class="tifo-message2">
           Every message from you lights up my whole world
         </div>
-
         <div class="divider" style="margin-bottom:0">
           <div class="div-line"></div>
           <div class="div-gem"></div>
           <div class="div-line"></div>
         </div>
-
         <div class="tifo-hearts">💜 🤍 💜</div>
-
         <div class="tifo-vow">Forever &amp; Always · I Am Yours · Trulyyy</div>
-
       </div>
     </div>
   </div>
@@ -638,9 +612,12 @@ html, body {
       </div>
     </div>
   </div>
-
 </div>
+
 <script>
+// ── MOBILE DETECTION ─────────────────────────────────────
+const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+
 // ── BUILD FRINGE ─────────────────────────────────────────
 (function(){
   const fc = document.getElementById('fringe-container');
@@ -656,9 +633,10 @@ html, body {
 // ── STARS ────────────────────────────────────────────────
 (function(){
   const layer = document.getElementById('stars-layer');
-  for(let i=0;i<160;i++){
+  const count = isMobile ? 70 : 140;
+  for(let i=0;i<count;i++){
     const s = document.createElement('div');
-    const size = Math.random()*2.8+0.4;
+    const size = Math.random()*2.5+0.4;
     const hue = Math.random() > 0.85 ? `hsl(${280+Math.random()*40},80%,80%)` : 'white';
     Object.assign(s.style, {
       position:'absolute',
@@ -671,27 +649,20 @@ html, body {
       opacity:0,
       animation:`twinkle ${(Math.random()*5+2).toFixed(1)}s ${(Math.random()*8).toFixed(1)}s ease-in-out infinite`,
     });
+    s.style.setProperty('--to', (Math.random()*0.6+0.2).toFixed(2));
     layer.appendChild(s);
   }
   const style = document.createElement('style');
-  style.textContent=`
-    @keyframes twinkle {
-      0%,100%{opacity:0;}
-      50%{opacity:var(--to,0.7);}
-    }
-  `;
-  // set individual opacities
-  layer.querySelectorAll('div').forEach(s=>{
-    s.style.setProperty('--to', (Math.random()*0.6+0.2).toFixed(2));
-  });
+  style.textContent=`@keyframes twinkle{0%,100%{opacity:0;}50%{opacity:var(--to,0.7);}}`;
   document.head.appendChild(style);
 })();
 
 // ── SPARKLES ─────────────────────────────────────────────
 (function(){
+  if(isMobile) return; // skip on mobile — expensive
   const layer = document.getElementById('sparkles-layer');
   const colors = ['#f0abfc','#d8b4fe','#e879f9','#fde8ff','#c4b5fd'];
-  for(let i=0;i<60;i++){
+  for(let i=0;i<40;i++){
     const s = document.createElement('div');
     s.className='sparkle';
     const c = colors[Math.floor(Math.random()*colors.length)];
@@ -712,6 +683,7 @@ html, body {
 
 // ── LANTERNS ─────────────────────────────────────────────
 (function(){
+  if(isMobile) return; // skip on mobile
   const scene = document.getElementById('scene');
   const configs = [
     { color:'rgba(220,80,255,0.6)', bg:'#8800cc', x:8 },
@@ -728,38 +700,17 @@ html, body {
     const dur = (18 + Math.random()*14).toFixed(1);
     const delay = (6 + i*2.8 + Math.random()*3).toFixed(1);
     const rot = ((Math.random()-0.5)*20).toFixed(1);
-    el.style.cssText=`
-      left:${cfg.x + (Math.random()-0.5)*4}%;
-      bottom:120px;
-      --ld:${dur}s;
-      --ls:${delay}s;
-      --lr:${rot}deg;
-    `;
-    el.innerHTML=`
-      <div class="lantern-body" style="background:${cfg.bg};--lc:${cfg.color}">
-        <div class="lantern-glow" style="background:radial-gradient(circle,${cfg.color} 0%,transparent 70%)"></div>
-      </div>
-    `;
+    el.style.cssText=`left:${cfg.x+(Math.random()-0.5)*4}%;bottom:120px;--ld:${dur}s;--ls:${delay}s;--lr:${rot}deg;`;
+    el.innerHTML=`<div class="lantern-body" style="background:${cfg.bg};--lc:${cfg.color}"><div class="lantern-glow" style="background:radial-gradient(circle,${cfg.color} 0%,transparent 70%)"></div></div>`;
     scene.appendChild(el);
   });
 })();
 
 // ── SEQUENCE ─────────────────────────────────────────────
 window.addEventListener('load', () => {
-  // 1. Banderole
-  setTimeout(() => {
-    document.getElementById('banderole').style.left = '0';
-  }, 600);
-
-  // 2. Tifo unfurl
-  setTimeout(() => {
-    document.getElementById('tifo-wrap').style.clipPath = 'inset(0% 0 0 0)';
-  }, 2200);
-
-  // 3. Smoke
-  setTimeout(startSmoke, 5000);
-
-  // 4. Confetti burst
+  setTimeout(() => { document.getElementById('banderole').style.left = '0'; }, 600);
+  setTimeout(() => { document.getElementById('tifo-wrap').style.clipPath = 'inset(0% 0 0 0)'; }, 2200);
+  setTimeout(startTorches, 3000);
   setTimeout(startConfetti, 3800);
 });
 
@@ -773,6 +724,8 @@ function startConfetti(){
 
   const COLORS = ['#f0abfc','#e879f9','#d8b4fe','#fde8ff','#c4b5fd','#f5d0fe','#ffffff'];
   const SHAPES = ['circle','rect','diamond','heart'];
+  const MAX_PIECES = isMobile ? 80 : 250;
+  const RAIN_INTERVAL = isMobile ? 20 : 8;
 
   class Piece {
     constructor(burst){
@@ -782,20 +735,20 @@ function startConfetti(){
       const cx = burst ? canvas.width/2 : Math.random()*canvas.width;
       const cy = burst ? canvas.height*0.45 : -20;
       const angle = burst ? (Math.random()*Math.PI*2) : Math.PI/2;
-      const speed = burst ? (Math.random()*12+4) : (Math.random()*3+1.5);
-      this.x = cx + (Math.random()-0.5)*50;
-      this.y = cy + (Math.random()-0.5)*50;
-      this.vx = Math.cos(angle)*speed + (Math.random()-0.5)*2;
-      this.vy = Math.sin(angle)*speed - (burst?6:0);
-      this.gravity = 0.12 + Math.random()*0.06;
-      this.size = Math.random()*7+3;
+      const speed = burst ? (Math.random()*10+3) : (Math.random()*2.5+1);
+      this.x = cx + (Math.random()-0.5)*40;
+      this.y = cy + (Math.random()-0.5)*40;
+      this.vx = Math.cos(angle)*speed + (Math.random()-0.5)*1.5;
+      this.vy = Math.sin(angle)*speed - (burst?5:0);
+      this.gravity = 0.11 + Math.random()*0.05;
+      this.size = Math.random()*6+2.5;
       this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
       this.shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
       this.rot = Math.random()*Math.PI*2;
-      this.rotSpeed = (Math.random()-0.5)*0.18;
+      this.rotSpeed = (Math.random()-0.5)*0.15;
       this.alpha = 1;
       this.life = 0;
-      this.maxLife = burst ? (Math.random()*180+120) : (Math.random()*300+200);
+      this.maxLife = burst ? (Math.random()*150+100) : (Math.random()*250+150);
       this.burst = !!burst;
     }
     update(){
@@ -823,11 +776,10 @@ function startConfetti(){
       } else if(this.shape==='diamond'){
         ctx.beginPath(); ctx.moveTo(0,-s/2); ctx.lineTo(s/2,0); ctx.lineTo(0,s/2); ctx.lineTo(-s/2,0); ctx.closePath(); ctx.fill();
       } else {
-        // heart
         ctx.beginPath();
         ctx.moveTo(0, s*0.35);
-        ctx.bezierCurveTo(-s*0.5, -s*0.1, -s*0.5, -s*0.5, 0, -s*0.2);
-        ctx.bezierCurveTo(s*0.5, -s*0.5, s*0.5, -s*0.1, 0, s*0.35);
+        ctx.bezierCurveTo(-s*0.5,-s*0.1,-s*0.5,-s*0.5,0,-s*0.2);
+        ctx.bezierCurveTo(s*0.5,-s*0.5,s*0.5,-s*0.1,0,s*0.35);
         ctx.fill();
       }
       ctx.restore();
@@ -836,22 +788,19 @@ function startConfetti(){
   }
 
   const pieces = [];
-  // Initial burst
-  for(let i=0;i<200;i++) pieces.push(new Piece(true));
+  const burstCount = isMobile ? 80 : 180;
+  for(let i=0;i<burstCount;i++) pieces.push(new Piece(true));
 
   let frame = 0;
   function loop(){
     frame++;
     ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // Occasional gentle rain
-    if(frame%8===0 && pieces.length<350) pieces.push(new Piece(false));
-
+    if(frame%RAIN_INTERVAL===0 && pieces.length<MAX_PIECES) pieces.push(new Piece(false));
     for(let i=pieces.length-1;i>=0;i--){
       pieces[i].update();
       pieces[i].draw(ctx);
       if(pieces[i].dead){
-        if(Math.random()<0.15) pieces[i].reset(false);
+        if(Math.random()<0.12) pieces[i].reset(false);
         else pieces.splice(i,1);
       }
     }
@@ -860,87 +809,118 @@ function startConfetti(){
   loop();
 }
 
-// ── SMOKE / FUMIGÈNES ────────────────────────────────────
-function startSmoke(){
+// ── TORCHES / FUMIGÈNES ──────────────────────────────────
+// Each torch sits at the bottom edge, emits coloured smoke upward
+function startTorches(){
   const canvas = document.getElementById('smoke-canvas');
   const ctx = canvas.getContext('2d');
-  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
   resize();
-  window.addEventListener('resize',resize);
+  window.addEventListener('resize', resize);
 
-  const BAND_H = window.innerWidth<=600?90:120;
-  const FLARES = [
-    { x:0.06, color:[230,50,180] },
-    { x:0.18, color:[130,60,250] },
-    { x:0.32, color:[210,40,210] },
-    { x:0.50, color:[160,50,255] },
-    { x:0.64, color:[220,60,170] },
-    { x:0.78, color:[100,70,255] },
-    { x:0.90, color:[240,50,200] },
+  const BAND_H = window.innerWidth <= 600 ? 90 : 120;
+
+  // Torch positions and colours — spread across width
+  const TORCHES = [
+    { x:0.04, r:[230,50,180] },
+    { x:0.14, r:[140,50,255] },
+    { x:0.26, r:[220,40,210] },
+    { x:0.38, r:[255,80,150] },
+    { x:0.50, r:[170,50,255] },
+    { x:0.62, r:[230,60,170] },
+    { x:0.74, r:[110,70,255] },
+    { x:0.86, r:[240,50,200] },
+    { x:0.96, r:[180,40,230] },
   ];
 
+  // Cap particle count for mobile
+  const MAX_PARTICLES = isMobile ? 180 : 480;
+  const SPAWN_PER_FRAME = isMobile ? 2 : 5;
+
   class Particle {
-    constructor(f){ this.reset(f); }
-    reset(f){
-      const W=canvas.width, H=canvas.height;
-      this.x = f.x*W + (Math.random()-0.5)*30;
-      this.y = H - BAND_H - Math.random()*20;
-      this.vx = (Math.random()-0.5)*1.1;
-      this.vy = -(Math.random()*2.2+0.6);
-      this.r  = Math.random()*50+18;
-      this.rTarget = Math.random()*100+55;
-      this.life=0;
-      this.maxLife=Math.random()*280+200;
-      this.wobble=Math.random()*Math.PI*2;
-      this.wobbleSpeed=(Math.random()-0.5)*0.035;
-      this.color=f.color.map(c=>Math.min(255,c+(Math.random()-0.5)*45));
+    constructor(torch){
+      this.init(torch);
+    }
+    init(torch){
+      const W = canvas.width, H = canvas.height;
+      // Start just above the banderole
+      this.x  = torch.x * W + (Math.random()-0.5)*18;
+      this.y  = H - BAND_H - 4 - Math.random()*12;
+      this.vx = (Math.random()-0.5)*0.9;
+      this.vy = -(Math.random()*2.0+0.5);
+      this.r  = Math.random()*28+12;
+      this.rTarget = Math.random()*80+50;
+      this.life = 0;
+      this.maxLife = isMobile
+        ? Math.random()*160+120
+        : Math.random()*260+180;
+      this.wobble = Math.random()*Math.PI*2;
+      this.wobbleSpeed = (Math.random()-0.5)*0.03;
+      // Slight colour variation per particle
+      this.color = torch.r.map(c => Math.min(255, c + Math.round((Math.random()-0.5)*40)));
     }
     update(){
       this.life++;
-      this.wobble+=this.wobbleSpeed;
-      this.x+=this.vx+Math.sin(this.wobble)*0.4;
-      this.y+=this.vy;
-      this.vy*=0.994;
-      this.vx*=0.994;
-      this.r+=(this.rTarget-this.r)*0.006;
+      this.wobble += this.wobbleSpeed;
+      this.x += this.vx + Math.sin(this.wobble)*0.35;
+      this.y += this.vy;
+      this.vy *= 0.995;
+      this.vx *= 0.993;
+      this.r  += (this.rTarget - this.r) * 0.007;
     }
     get alpha(){
-      const t=this.life/this.maxLife;
-      if(t<0.15) return (t/0.15)*0.3;
-      return (1-t)*0.3;
+      const t = this.life / this.maxLife;
+      if(t < 0.12) return (t/0.12)*0.28;
+      return (1-t)*0.28;
     }
-    get dead(){ return this.life>=this.maxLife; }
+    get dead(){ return this.life >= this.maxLife || this.y < -this.r; }
     draw(ctx){
-      const a=this.alpha; if(a<=0)return;
-      const [r,g,b]=this.color;
-      const gr=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
-      gr.addColorStop(0,`rgba(${r},${g},${b},${a})`);
-      gr.addColorStop(0.4,`rgba(${r},${g},${b},${a*0.45})`);
-      gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      const a = this.alpha;
+      if(a <= 0) return;
+      const [r,g,b] = this.color;
+      const gr = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+      gr.addColorStop(0, `rgba(${r},${g},${b},${a})`);
+      gr.addColorStop(0.4,`rgba(${r},${g},${b},${a*0.4})`);
+      gr.addColorStop(1, `rgba(${r},${g},${b},0)`);
       ctx.beginPath();
-      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-      ctx.fillStyle=gr;
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = gr;
       ctx.fill();
     }
   }
 
-  const particles=[];
-  const active=[];
-  FLARES.forEach((f,i)=>setTimeout(()=>active.push(f),i*280));
+  const particles = [];
+  // Stagger torch activation slightly for drama
+  const activeTorches = [];
+  TORCHES.forEach((t, i) => {
+    setTimeout(() => activeTorches.push(t), i * 220);
+  });
 
   function loop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(active.length && particles.length<700){
-      for(let i=0;i<6;i++){
-        particles.push(new Particle(active[Math.floor(Math.random()*active.length)]));
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Spawn new particles
+    if(activeTorches.length && particles.length < MAX_PARTICLES){
+      for(let i=0;i<SPAWN_PER_FRAME;i++){
+        const torch = activeTorches[Math.floor(Math.random()*activeTorches.length)];
+        particles.push(new Particle(torch));
       }
     }
+
     for(let i=particles.length-1;i>=0;i--){
-      const p=particles[i];
-      p.update(); p.draw(ctx);
+      const p = particles[i];
+      p.update();
+      p.draw(ctx);
       if(p.dead){
-        if(active.length) p.reset(active[Math.floor(Math.random()*active.length)]);
-        else particles.splice(i,1);
+        if(activeTorches.length){
+          // Recycle — re-init from a random active torch
+          p.init(activeTorches[Math.floor(Math.random()*activeTorches.length)]);
+        } else {
+          particles.splice(i,1);
+        }
       }
     }
     requestAnimationFrame(loop);
