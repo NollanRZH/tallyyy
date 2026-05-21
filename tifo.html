@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pour Tally 💜</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #0a0010;
+    font-family: 'Bebas Neue', sans-serif;
+  }
+
+  #scene {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  /* ── BACKGROUND ─────────────────────────────────────────── */
+  #bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, #1a0030 0%, #0a0010 70%);
+  }
+
+  /* Stars */
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d) infinite ease-in-out;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; }
+    50% { opacity: var(--o); }
+  }
+
+  /* ── TIFO PANEL ─────────────────────────────────────────── */
+  #tifo-wrap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 110px;
+    top: 0;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    clip-path: inset(100% 0 0 0);
+    transition: none;
+  }
+
+  #tifo {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 30% 50%, #2a004a 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 50%, #00143a 0%, transparent 60%),
+      linear-gradient(160deg, #12002a 0%, #0a001a 40%, #002040 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-bottom: 3px solid rgba(255,255,255,0.08);
+  }
+
+  /* Wavy fabric effect on tifo */
+  #tifo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 38px,
+      rgba(255,255,255,0.025) 38px,
+      rgba(255,255,255,0.025) 40px
+    );
+    pointer-events: none;
+  }
+
+  /* Glowing ornamental border on tifo */
+  #tifo::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(200,100,255,0.15);
+    border-radius: 2px;
+    pointer-events: none;
+    box-shadow:
+      inset 0 0 60px rgba(180,80,255,0.07),
+      0 0 40px rgba(180,80,255,0.05);
+  }
+
+  .tifo-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .tifo-top-label {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(16px, 3vw, 28px);
+    color: #c090ff;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    opacity: 0.85;
+    animation: fadeFlicker 3s ease-in-out infinite;
+  }
+
+  .tifo-main {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(30px, 6.5vw, 82px);
+    color: #fff;
+    line-height: 1.15;
+    text-shadow:
+      0 0 30px rgba(200,120,255,0.6),
+      0 0 80px rgba(200,120,255,0.3),
+      0 2px 0 rgba(0,0,0,0.8);
+    margin-bottom: 18px;
+  }
+
+  .tifo-main span.highlight {
+    color: #ffb3f0;
+    text-shadow:
+      0 0 20px rgba(255,150,230,0.8),
+      0 0 60px rgba(255,150,230,0.4);
+  }
+
+  .tifo-stars-row {
+    font-size: clamp(18px, 3vw, 32px);
+    letter-spacing: 8px;
+    color: #d4a0ff;
+    margin-bottom: 18px;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  .tifo-sub {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(14px, 2.5vw, 26px);
+    color: #e8c8ff;
+    letter-spacing: 2px;
+    opacity: 0.9;
+    margin-bottom: 14px;
+  }
+
+  .tifo-hearts {
+    font-size: clamp(20px, 3.5vw, 38px);
+    letter-spacing: 10px;
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+
+  .tifo-bottom-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(10px, 1.8vw, 18px);
+    letter-spacing: 10px;
+    color: rgba(200,160,255,0.5);
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+
+  /* Corner decorations */
+  .corner {
+    position: absolute;
+    width: clamp(30px, 6vw, 70px);
+    height: clamp(30px, 6vw, 70px);
+    opacity: 0.35;
+  }
+  .corner-tl { top: 16px; left: 16px; border-top: 2px solid #c090ff; border-left: 2px solid #c090ff; }
+  .corner-tr { top: 16px; right: 16px; border-top: 2px solid #c090ff; border-right: 2px solid #c090ff; }
+  .corner-bl { bottom: 24px; left: 16px; border-bottom: 2px solid #c090ff; border-left: 2px solid #c090ff; }
+  .corner-br { bottom: 24px; right: 16px; border-bottom: 2px solid #c090ff; border-right: 2px solid #c090ff; }
+
+  /* ── BANDEROLE ──────────────────────────────────────────── */
+  #banderole-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 110px;
+    overflow: hidden;
+  }
+
+  #banderole {
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      #c026a0 0%,
+      #8b2fc9 25%,
+      #c026a0 50%,
+      #8b2fc9 75%,
+      #c026a0 100%
+    );
+    background-size: 200% 200%;
+    animation: bandShimmer 4s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 -4px 30px rgba(180,0,150,0.5),
+      inset 0 2px 0 rgba(255,255,255,0.2),
+      inset 0 -2px 0 rgba(0,0,0,0.3);
+    transition: none;
+  }
+
+  /* Fabric fold lines */
+  #banderole::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 79px,
+      rgba(0,0,0,0.08) 79px,
+      rgba(0,0,0,0.08) 80px
+    );
+    pointer-events: none;
+  }
+
+  /* Top fringe */
+  #banderole::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0.4) 0%,
+      rgba(255,255,255,0.1) 30%,
+      rgba(255,255,255,0.5) 50%,
+      rgba(255,255,255,0.1) 70%,
+      rgba(255,255,255,0.4) 100%
+    );
+  }
+
+  .band-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 5vw, 58px);
+    color: white;
+    text-align: center;
+    letter-spacing: clamp(2px, 0.6vw, 6px);
+    position: relative;
+    z-index: 2;
+    padding: 0 20px;
+    text-shadow:
+      -2px -2px 0 #000,
+       2px -2px 0 #000,
+      -2px  2px 0 #000,
+       2px  2px 0 #000,
+      0 0 20px rgba(255,180,255,0.6),
+      0 0 40px rgba(255,180,255,0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    #banderole-wrap { height: 80px; }
+    #tifo-wrap { bottom: 80px; }
+    .band-text {
+      white-space: normal;
+      text-align: center;
+      line-height: 1.1;
+      font-size: clamp(16px, 5.5vw, 32px);
+    }
+  }
+
+  /* ── SMOKE / FUMIGÈNES ──────────────────────────────────── */
+  #smoke-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ── ANIMATIONS ─────────────────────────────────────────── */
+  @keyframes bandShimmer {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 200% 200%; }
+  }
+
+  @keyframes fadeFlicker {
+    0%,100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes pulseGlow {
+    0%,100% { text-shadow: 0 0 10px rgba(200,150,255,0.4); transform: scale(1); }
+    50% { text-shadow: 0 0 25px rgba(200,150,255,0.9); transform: scale(1.04); }
+  }
+
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14% { transform: scale(1.18); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.12); }
+    70% { transform: scale(1); }
+  }
+
+  /* Curtain unfurl helpers (JS-driven via style) */
+  #banderole { transition: left 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
+  #tifo-wrap { transition: clip-path 2.2s cubic-bezier(0.22, 1, 0.36, 1); }
+
+</style>
+</head>
+<body>
+<div id="scene">
+  <div id="bg"></div>
+  <canvas id="smoke-canvas"></canvas>
+
+  <!-- TIFO -->
+  <div id="tifo-wrap">
+    <div id="tifo">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+
+      <div class="tifo-content">
+        <div class="tifo-top-label">✦ Tifo Website ✦</div>
+        <div class="tifo-main">
+          Thank you,<br>
+          <span class="highlight">Princess Tallyyy</span>
+        </div>
+        <div class="tifo-stars-row">★ ★ ★ ★ ★</div>
+        <div class="tifo-sub">For every attention, every compliments, every games played together</div>
+        <div class="tifo-sub">you make meee happpyyy when you text mee!</div>
+        <div class="tifo-hearts">💜 🤍 💜</div>
+        <div class="tifo-bottom-label">Forever & always, I am YOURS, trulyyy!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANDEROLE -->
+  <div id="banderole-wrap">
+    <div id="banderole">
+      <div class="band-text">Princess Tally : Being your good boy is my greatest pride !</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STARS ────────────────────────────────────────────────────
+(function(){
+  const bg = document.getElementById('bg');
+  for(let i=0;i<120;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    const size = Math.random()*2.5+0.5;
+    s.style.cssText=`
+      width:${size}px;height:${size}px;
+      top:${Math.random()*100}%;left:${Math.random()*100}%;
+      --d:${(Math.random()*4+2).toFixed(1)}s;
+      --o:${(Math.random()*0.7+0.2).toFixed(2)};
+      animation-delay:${(Math.random()*6).toFixed(2)}s;
+    `;
+    bg.appendChild(s);
+  }
+})();
+
+// ── SEQUENCE ─────────────────────────────────────────────────
+window.addEventListener('load', () => {
+
+  // 1. Banderole slides in after 0.8s
+  setTimeout(() => {
+    document.getElementById('banderole').style.left = '0';
+  }, 800);
+
+  // 2. Tifo unfurls from bottom to top after 2.8s
+  setTimeout(() => {
+    document.getElementById('tifo-wrap').style.clipPath = 'inset(0% 0 0 0)';
+  }, 2800);
+
+  // 3. Smoke starts at 5.5s
+  setTimeout(startSmoke, 5500);
+});
+
+// ── SMOKE ENGINE ─────────────────────────────────────────────
+function startSmoke(){
+  const canvas = document.getElementById('smoke-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize(){
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const BAND_H = window.innerWidth <= 600 ? 80 : 110;
+  const FLARES = [
+    { x: 0.08, color: [220, 60, 180] },
+    { x: 0.25, color: [140, 80, 240] },
+    { x: 0.45, color: [200, 50, 200] },
+    { x: 0.60, color: [100, 60, 255] },
+    { x: 0.78, color: [230, 70, 160] },
+    { x: 0.92, color: [160, 40, 220] },
+  ];
+
+  // Particle pool
+  const particles = [];
+  const MAX = 600;
+
+  class Particle {
+    constructor(flare){
+      this.reset(flare);
+    }
+    reset(flare){
+      const W = canvas.width, H = canvas.height;
+      const bx = flare.x * W;
+      const by = H - BAND_H;
+
+      this.x  = bx + (Math.random()-0.5)*28;
+      this.y  = by - Math.random()*15;
+      this.vx = (Math.random()-0.5)*0.9;
+      this.vy = -(Math.random()*1.8+0.5);
+      this.r  = Math.random()*55+20;
+      this.life = 0;
+      this.maxLife = Math.random()*260+180;
+      this.wobble = Math.random()*Math.PI*2;
+      this.wobbleSpeed = (Math.random()-0.5)*0.03;
+      this.r_target = Math.random()*90+50;
+      this.color = flare.color.slice();
+      // random tint variation
+      this.color = this.color.map(c => Math.min(255, c + (Math.random()-0.5)*40));
+    }
+    update(){
+      this.life++;
+      this.wobble += this.wobbleSpeed;
+      this.x += this.vx + Math.sin(this.wobble)*0.3;
+      this.y += this.vy;
+      this.vy *= 0.993;
+      this.vx *= 0.993;
+      this.r  += (this.r_target - this.r)*0.005;
+    }
+    get alpha(){
+      const t = this.life / this.maxLife;
+      if(t < 0.15) return t/0.15 * 0.28;
+      return (1-t)*0.28;
+    }
+    get dead(){ return this.life >= this.maxLife; }
+    draw(ctx){
+      const a = this.alpha;
+      if(a<=0) return;
+      const [r,g,b] = this.color;
+      const grad = ctx.createRadialGradient(
+        this.x, this.y, 0,
+        this.x, this.y, this.r
+      );
+      grad.addColorStop(0,   `rgba(${r},${g},${b},${a})`);
+      grad.addColorStop(0.4, `rgba(${r},${g},${b},${a*0.5})`);
+      grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+  }
+
+  let tick = 0;
+  let activeFlares = [];
+  // Stagger flare activations
+  FLARES.forEach((f, i) => {
+    setTimeout(() => activeFlares.push(f), i * 320);
+  });
+
+  function spawnRate(){ return 5; }
+
+  function loop(){
+    tick++;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // Spawn
+    if(activeFlares.length > 0 && particles.length < MAX){
+      const count = spawnRate();
+      for(let i=0;i<count;i++){
+        const f = activeFlares[Math.floor(Math.random()*activeFlares.length)];
+        particles.push(new Particle(f));
+      }
+    }
+
+    // Update & draw
+    for(let i = particles.length-1; i>=0; i--){
+      const p = particles[i];
+      p.update();
+      p.draw(ctx);
+      if(p.dead){
+        if(activeFlares.length>0){
+          // recycle
+          p.reset(activeFlares[Math.floor(Math.random()*activeFlares.length)]);
+        } else {
+          particles.splice(i,1);
+        }
+      }
+    }
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+</script>
+</body>
+</html>
