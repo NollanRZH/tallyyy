@@ -4,346 +4,625 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pour Tally 💜</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Cinzel+Decorative:wght@700;900&family=Alex+Brush&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --deep: #04000e;
+  --mid: #10002a;
+  --purple1: #7b2fff;
+  --purple2: #c026d3;
+  --rose: #f0abfc;
+  --gold: #f5d0fe;
+  --white: #fdf4ff;
+}
 
-  body {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: #0a0010;
-    font-family: 'Bebas Neue', sans-serif;
-  }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-  #scene {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
+html, body {
+  width:100%; height:100%; overflow:hidden;
+  background: var(--deep);
+  font-family: 'Cormorant Garamond', serif;
+}
 
-  /* ── BACKGROUND ─────────────────────────────────────────── */
-  #bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 40%, #1a0030 0%, #0a0010 70%);
-  }
+/* ─── LAYERED BACKGROUND ─── */
+#scene {
+  width:100vw; height:100vh;
+  position:relative;
+  overflow:hidden;
+}
 
-  /* Stars */
-  .star {
-    position: absolute;
-    border-radius: 50%;
-    background: white;
-    animation: twinkle var(--d) infinite ease-in-out;
-    opacity: 0;
-  }
-  @keyframes twinkle {
-    0%,100% { opacity: 0; }
-    50% { opacity: var(--o); }
-  }
+#bg-base {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, #1a0040 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 70%, #0d0030 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, #110028 0%, transparent 60%),
+    linear-gradient(180deg, #030008 0%, #08001a 60%, #020008 100%);
+}
 
-  /* ── TIFO PANEL ─────────────────────────────────────────── */
-  #tifo-wrap {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 110px;
-    top: 0;
-    display: flex;
-    align-items: stretch;
-    overflow: hidden;
-    clip-path: inset(100% 0 0 0);
-    transition: none;
-  }
+/* Aurora ribbons */
+#aurora {
+  position:absolute; inset:0; pointer-events:none;
+  opacity:0;
+  animation: auroraFade 3s 1s forwards;
+}
+@keyframes auroraFade { to { opacity:1; } }
 
-  #tifo {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background:
-      radial-gradient(ellipse at 30% 50%, #2a004a 0%, transparent 60%),
-      radial-gradient(ellipse at 70% 50%, #00143a 0%, transparent 60%),
-      linear-gradient(160deg, #12002a 0%, #0a001a 40%, #002040 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-bottom: 3px solid rgba(255,255,255,0.08);
-  }
+.aurora-band {
+  position:absolute;
+  left:-20%; width:140%;
+  height:180px;
+  border-radius:50%;
+  filter:blur(70px);
+  opacity:0;
+  animation: auroraDrift var(--dur) var(--delay) ease-in-out infinite alternate;
+}
+.ab1 { top:8%; background: linear-gradient(90deg, transparent, #6600cc44, #cc00ff33, transparent); --dur:14s; --delay:0s; }
+.ab2 { top:18%; background: linear-gradient(90deg, transparent, #3300ff22, #9900dd44, transparent); --dur:17s; --delay:-5s; }
+.ab3 { top:28%; background: linear-gradient(90deg, transparent, #ff00aa22, #7700ee33, transparent); --dur:20s; --delay:-9s; }
 
-  /* Wavy fabric effect on tifo */
-  #tifo::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 38px,
-      rgba(255,255,255,0.025) 38px,
-      rgba(255,255,255,0.025) 40px
-    );
-    pointer-events: none;
-  }
+@keyframes auroraDrift {
+  0%   { opacity:0; transform:translateX(-8%) scaleY(0.7); }
+  30%  { opacity:1; }
+  70%  { opacity:0.7; }
+  100% { opacity:0.3; transform:translateX(8%) scaleY(1.2); }
+}
 
-  /* Glowing ornamental border on tifo */
-  #tifo::after {
-    content: '';
-    position: absolute;
-    inset: 6px;
-    border: 1px solid rgba(200,100,255,0.15);
-    border-radius: 2px;
-    pointer-events: none;
-    box-shadow:
-      inset 0 0 60px rgba(180,80,255,0.07),
-      0 0 40px rgba(180,80,255,0.05);
-  }
+/* ─── STARS ─── */
+#stars-layer { position:absolute; inset:0; pointer-events:none; }
 
-  .tifo-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    max-width: 900px;
-  }
+/* ─── FLOATING PETALS / SPARKLES ─── */
+#sparkles-layer { position:absolute; inset:0; pointer-events:none; z-index:5; }
 
-  .tifo-top-label {
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(16px, 3vw, 28px);
-    color: #c090ff;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-    opacity: 0.85;
-    animation: fadeFlicker 3s ease-in-out infinite;
-  }
+.sparkle {
+  position:absolute;
+  width:3px; height:3px;
+  background:#f0abfc;
+  border-radius:50%;
+  opacity:0;
+  animation: sparkleFall var(--sd) var(--ss) linear infinite;
+}
+@keyframes sparkleFall {
+  0%   { opacity:0; transform:translateY(0) scale(0); }
+  10%  { opacity:1; transform:translateY(-20px) scale(1); }
+  80%  { opacity:0.6; }
+  100% { opacity:0; transform:translateY(-120px) scale(0.3); }
+}
 
-  .tifo-main {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: clamp(30px, 6.5vw, 82px);
-    color: #fff;
-    line-height: 1.15;
-    text-shadow:
-      0 0 30px rgba(200,120,255,0.6),
-      0 0 80px rgba(200,120,255,0.3),
-      0 2px 0 rgba(0,0,0,0.8);
-    margin-bottom: 18px;
-  }
+/* ─── LANTERNS ─── */
+.lantern {
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+  animation: lanternRise var(--ld) var(--ls) ease-out infinite;
+}
+.lantern-body {
+  width:clamp(18px,2.5vw,32px);
+  aspect-ratio:0.65;
+  border-radius:45% 45% 55% 55%;
+  position:relative;
+  box-shadow: 0 0 20px var(--lc), 0 0 40px var(--lc), inset 0 0 10px rgba(255,255,255,0.2);
+}
+.lantern-glow {
+  position:absolute; inset:-30%;
+  border-radius:50%;
+  background: radial-gradient(circle, var(--lc) 0%, transparent 70%);
+  opacity:0.5;
+  animation: lanternPulse 2s ease-in-out infinite alternate;
+}
+@keyframes lanternPulse { to { opacity:1; transform:scale(1.15); } }
+@keyframes lanternRise {
+  0%   { opacity:0; transform:translateY(0) rotate(var(--lr)); }
+  5%   { opacity:0.9; }
+  95%  { opacity:0.7; }
+  100% { opacity:0; transform:translateY(-100vh) rotate(calc(var(--lr) + 15deg)); }
+}
 
-  .tifo-main span.highlight {
-    color: #ffb3f0;
-    text-shadow:
-      0 0 20px rgba(255,150,230,0.8),
-      0 0 60px rgba(255,150,230,0.4);
-  }
+/* ─── TIFO ─── */
+#tifo-wrap {
+  position:absolute;
+  inset: 0 0 120px 0;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 2.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index:20;
+}
 
-  .tifo-stars-row {
-    font-size: clamp(18px, 3vw, 32px);
-    letter-spacing: 8px;
-    color: #d4a0ff;
-    margin-bottom: 18px;
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
+#tifo {
+  width:100%; height:100%;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
 
-  .tifo-sub {
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(14px, 2.5vw, 26px);
-    color: #e8c8ff;
-    letter-spacing: 2px;
-    opacity: 0.9;
-    margin-bottom: 14px;
-  }
+/* Rich velvet background */
+#tifo::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%, #1e0045 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 15% 50%, #280040 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 85% 50%, #0a0035 0%, transparent 55%),
+    linear-gradient(170deg, #130030 0%, #0a001f 35%, #160035 65%, #080018 100%);
+}
 
-  .tifo-hearts {
-    font-size: clamp(20px, 3.5vw, 38px);
-    letter-spacing: 10px;
-    animation: heartbeat 1.4s ease-in-out infinite;
-  }
+/* Subtle fabric weave texture */
+#tifo::after {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px),
+    repeating-linear-gradient(90deg, transparent 0px, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px);
+  pointer-events:none;
+}
 
-  .tifo-bottom-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(10px, 1.8vw, 18px);
-    letter-spacing: 10px;
-    color: rgba(200,160,255,0.5);
-    margin-top: 16px;
-    text-transform: uppercase;
-  }
+/* Ornate frame */
+.tifo-frame {
+  position:absolute;
+  inset:clamp(10px,2vw,28px);
+  border:1px solid rgba(200,80,255,0.18);
+  border-radius:2px;
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 80px rgba(150,50,230,0.06),
+    0 0 60px rgba(150,50,230,0.08);
+}
+.tifo-frame::before {
+  content:'';
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(200,80,255,0.08);
+}
 
-  /* Corner decorations */
-  .corner {
-    position: absolute;
-    width: clamp(30px, 6vw, 70px);
-    height: clamp(30px, 6vw, 70px);
-    opacity: 0.35;
-  }
-  .corner-tl { top: 16px; left: 16px; border-top: 2px solid #c090ff; border-left: 2px solid #c090ff; }
-  .corner-tr { top: 16px; right: 16px; border-top: 2px solid #c090ff; border-right: 2px solid #c090ff; }
-  .corner-bl { bottom: 24px; left: 16px; border-bottom: 2px solid #c090ff; border-left: 2px solid #c090ff; }
-  .corner-br { bottom: 24px; right: 16px; border-bottom: 2px solid #c090ff; border-right: 2px solid #c090ff; }
+/* Corner ornaments */
+.corner-orn {
+  position:absolute;
+  width:clamp(40px,6vw,80px);
+  height:clamp(40px,6vw,80px);
+  pointer-events:none;
+}
+.corner-orn svg { width:100%; height:100%; }
+.co-tl { top:clamp(10px,2vw,28px); left:clamp(10px,2vw,28px); }
+.co-tr { top:clamp(10px,2vw,28px); right:clamp(10px,2vw,28px); transform:scaleX(-1); }
+.co-bl { bottom:clamp(10px,2vw,28px); left:clamp(10px,2vw,28px); transform:scaleY(-1); }
+.co-br { bottom:clamp(10px,2vw,28px); right:clamp(10px,2vw,28px); transform:scale(-1); }
 
-  /* ── BANDEROLE ──────────────────────────────────────────── */
-  #banderole-wrap {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 110px;
-    overflow: hidden;
-  }
+/* Center side ornaments */
+.side-orn {
+  position:absolute;
+  top:50%; transform:translateY(-50%);
+  pointer-events:none;
+  opacity:0.3;
+  font-size:clamp(12px,1.5vw,20px);
+  color:#c090ff;
+  letter-spacing:3px;
+  writing-mode:vertical-lr;
+}
+.side-orn-l { left:clamp(18px,3vw,40px); }
+.side-orn-r { right:clamp(18px,3vw,40px); transform:translateY(-50%) rotate(180deg); }
 
-  #banderole {
-    position: absolute;
-    bottom: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      135deg,
-      #c026a0 0%,
-      #8b2fc9 25%,
-      #c026a0 50%,
-      #8b2fc9 75%,
-      #c026a0 100%
-    );
-    background-size: 200% 200%;
-    animation: bandShimmer 4s linear infinite;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow:
-      0 -4px 30px rgba(180,0,150,0.5),
-      inset 0 2px 0 rgba(255,255,255,0.2),
-      inset 0 -2px 0 rgba(0,0,0,0.3);
-    transition: none;
-  }
+/* Decorative dividers */
+.divider {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  justify-content:center;
+  margin:clamp(8px,1.5vh,18px) 0;
+  opacity:0.7;
+}
+.div-line {
+  flex:1;
+  max-width:clamp(40px,8vw,120px);
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(200,120,255,0.6), transparent);
+}
+.div-gem {
+  width:6px; height:6px;
+  background:#c090ff;
+  transform:rotate(45deg);
+  box-shadow:0 0 8px #c090ff;
+}
+.div-gem-sm {
+  width:4px; height:4px;
+  background:#9060dd;
+  transform:rotate(45deg);
+}
 
-  /* Fabric fold lines */
-  #banderole::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 79px,
-      rgba(0,0,0,0.08) 79px,
-      rgba(0,0,0,0.08) 80px
-    );
-    pointer-events: none;
-  }
+/* ─── TIFO CONTENT ─── */
+.tifo-content {
+  position:relative; z-index:10;
+  text-align:center;
+  max-width:clamp(320px,85vw,1000px);
+  padding:clamp(20px,3vw,50px) clamp(30px,6vw,100px);
+  animation: contentReveal 0.01s 4s both;
+}
+@keyframes contentReveal { from{opacity:0;} to{opacity:1;} }
 
-  /* Top fringe */
-  #banderole::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: linear-gradient(
-      90deg,
-      rgba(255,255,255,0.4) 0%,
-      rgba(255,255,255,0.1) 30%,
-      rgba(255,255,255,0.5) 50%,
-      rgba(255,255,255,0.1) 70%,
-      rgba(255,255,255,0.4) 100%
-    );
-  }
+.tifo-eyebrow {
+  font-family: 'Alex Brush', cursive;
+  font-size: clamp(14px,2.5vw,26px);
+  color: #b080e8;
+  letter-spacing: 4px;
+  margin-bottom: clamp(6px,1vh,14px);
+  opacity:0;
+  animation: fadeUp 0.8s 3.4s forwards;
+}
 
-  .band-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(24px, 5vw, 58px);
-    color: white;
-    text-align: center;
-    letter-spacing: clamp(2px, 0.6vw, 6px);
-    position: relative;
-    z-index: 2;
-    padding: 0 20px;
-    text-shadow:
-      -2px -2px 0 #000,
-       2px -2px 0 #000,
-      -2px  2px 0 #000,
-       2px  2px 0 #000,
-      0 0 20px rgba(255,180,255,0.6),
-      0 0 40px rgba(255,180,255,0.3);
-    white-space: nowrap;
-    overflow: hidden;
-    max-width: 100%;
-  }
+.tifo-crest {
+  font-size: clamp(28px,5vw,62px);
+  margin-bottom: clamp(6px,1.2vh,16px);
+  opacity:0;
+  animation: fadeUp 0.8s 3.6s forwards;
+  filter: drop-shadow(0 0 20px rgba(200,100,255,0.7));
+}
 
-  @media (max-width: 600px) {
-    #banderole-wrap { height: 80px; }
-    #tifo-wrap { bottom: 80px; }
-    .band-text {
-      white-space: normal;
-      text-align: center;
-      line-height: 1.1;
-      font-size: clamp(16px, 5.5vw, 32px);
-    }
-  }
+.tifo-headline {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight:700;
+  font-size: clamp(22px,4.5vw,64px);
+  color: #fff;
+  line-height:1.2;
+  letter-spacing: clamp(1px,0.2vw,3px);
+  text-shadow:
+    0 0 30px rgba(220,130,255,0.7),
+    0 0 80px rgba(200,100,255,0.35),
+    0 3px 6px rgba(0,0,0,0.9);
+  margin-bottom:clamp(4px,0.8vh,10px);
+  opacity:0;
+  animation: fadeUp 1s 3.8s forwards;
+}
 
-  /* ── SMOKE / FUMIGÈNES ──────────────────────────────────── */
-  #smoke-canvas {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
-  }
+.tifo-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-style:italic;
+  font-weight:600;
+  font-size: clamp(36px,8vw,106px);
+  line-height:1;
+  letter-spacing: clamp(2px,0.4vw,6px);
+  background: linear-gradient(135deg, #f5d0fe 0%, #e879f9 35%, #f0abfc 60%, #fde8ff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(240,171,252,0.5));
+  opacity:0;
+  animation: fadeUp 1s 4s forwards, nameGlow 3s 5s ease-in-out infinite alternate;
+  margin-bottom:clamp(4px,0.8vh,10px);
+}
+@keyframes nameGlow {
+  from { filter: drop-shadow(0 0 25px rgba(240,171,252,0.4)); }
+  to   { filter: drop-shadow(0 0 50px rgba(240,171,252,0.8)); }
+}
 
-  /* ── ANIMATIONS ─────────────────────────────────────────── */
-  @keyframes bandShimmer {
-    0%   { background-position: 0% 0%; }
-    100% { background-position: 200% 200%; }
-  }
+.tifo-stars {
+  font-size: clamp(14px,2.2vw,26px);
+  letter-spacing: clamp(6px,1.5vw,16px);
+  color: #d4a0ff;
+  opacity:0;
+  animation: fadeUp 0.8s 4.2s forwards, starPulse 2s 5s ease-in-out infinite;
+}
+@keyframes starPulse {
+  0%,100% { letter-spacing: clamp(6px,1.5vw,16px); opacity:0.8; }
+  50% { letter-spacing: clamp(8px,2vw,20px); opacity:1; color:#f0c0ff; }
+}
 
-  @keyframes fadeFlicker {
-    0%,100% { opacity: 0.85; }
-    50% { opacity: 1; }
-  }
+.tifo-message {
+  font-family: 'Alex Brush', cursive;
+  font-size: clamp(16px,2.8vw,36px);
+  color: #e8c8ff;
+  line-height:1.7;
+  opacity:0;
+  animation: fadeUp 0.9s 4.5s forwards;
+}
 
-  @keyframes pulseGlow {
-    0%,100% { text-shadow: 0 0 10px rgba(200,150,255,0.4); transform: scale(1); }
-    50% { text-shadow: 0 0 25px rgba(200,150,255,0.9); transform: scale(1.04); }
-  }
+.tifo-message2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style:italic;
+  font-weight:300;
+  font-size: clamp(13px,1.8vw,22px);
+  color: rgba(220,180,255,0.75);
+  opacity:0;
+  animation: fadeUp 0.9s 4.7s forwards;
+  letter-spacing:1px;
+}
 
-  @keyframes heartbeat {
-    0%,100% { transform: scale(1); }
-    14% { transform: scale(1.18); }
-    28% { transform: scale(1); }
-    42% { transform: scale(1.12); }
-    70% { transform: scale(1); }
-  }
+.tifo-hearts {
+  font-size: clamp(22px,4vw,48px);
+  letter-spacing: clamp(8px,2vw,20px);
+  opacity:0;
+  animation: fadeUp 0.8s 4.9s forwards, heartbeat 1.5s 5.5s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%,100% { transform:scale(1); }
+  15% { transform:scale(1.22); }
+  30% { transform:scale(1); }
+  45% { transform:scale(1.14); }
+  60% { transform:scale(1); }
+}
 
-  /* Curtain unfurl helpers (JS-driven via style) */
-  #banderole { transition: left 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
-  #tifo-wrap { transition: clip-path 2.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.tifo-vow {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight:700;
+  font-size: clamp(9px,1.4vw,16px);
+  letter-spacing: clamp(3px,0.8vw,10px);
+  color: rgba(200,140,255,0.55);
+  text-transform:uppercase;
+  opacity:0;
+  animation: fadeUp 0.8s 5.1s forwards;
+  margin-top:clamp(4px,0.8vh,12px);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─── BANDEROLE ─── */
+#banderole-wrap {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:120px;
+  z-index:30;
+}
+@media(max-width:600px){
+  #banderole-wrap { height:90px; }
+  #tifo-wrap { bottom:90px; }
+}
+
+#banderole {
+  position:absolute;
+  bottom:0; left:-105%; right:0;
+  height:100%;
+  background: linear-gradient(135deg,
+    #7e22ce 0%,
+    #a21caf 20%,
+    #c026d3 35%,
+    #9333ea 50%,
+    #c026d3 65%,
+    #a21caf 80%,
+    #7e22ce 100%
+  );
+  background-size:300% 300%;
+  animation: bandShimmer 6s linear infinite;
+  transition: left 2s cubic-bezier(0.16, 1, 0.3, 1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:
+    0 -6px 40px rgba(160,0,200,0.6),
+    0 -1px 0 rgba(255,255,255,0.15),
+    inset 0 3px 0 rgba(255,255,255,0.25),
+    inset 0 -3px 0 rgba(0,0,0,0.35);
+}
+
+/* Vertical fold lines */
+#banderole::before {
+  content:'';
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(
+    90deg,
+    transparent 0, transparent 59px,
+    rgba(0,0,0,0.07) 59px, rgba(0,0,0,0.07) 60px
+  );
+  pointer-events:none;
+}
+
+/* Top highlight seam */
+#banderole::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:8px;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0.0) 0%,
+    rgba(255,255,255,0.5) 20%,
+    rgba(255,255,255,0.2) 40%,
+    rgba(255,255,255,0.6) 60%,
+    rgba(255,255,255,0.2) 80%,
+    rgba(255,255,255,0.0) 100%
+  );
+}
+
+/* Hanging fringe at bottom */
+.band-fringe {
+  position:absolute;
+  bottom:-1px; left:0; right:0;
+  height:16px;
+  display:flex;
+  pointer-events:none;
+  z-index:2;
+}
+.fringe-seg {
+  flex:1;
+  background:linear-gradient(180deg, #a21caf 0%, #6b21a8 100%);
+  border-radius:0 0 4px 4px;
+  margin:0 1px;
+  box-shadow:0 3px 6px rgba(0,0,0,0.3);
+}
+
+.band-text-wrap {
+  position:relative; z-index:5;
+  display:flex;
+  align-items:center;
+  gap:clamp(12px,2vw,28px);
+  padding:0 clamp(14px,3vw,40px);
+}
+.band-gem {
+  font-size:clamp(14px,2.5vw,28px);
+  filter:drop-shadow(0 0 8px rgba(255,200,255,0.8));
+  flex-shrink:0;
+}
+.band-text {
+  font-family:'Cinzel Decorative', serif;
+  font-weight:700;
+  font-size:clamp(13px,2.4vw,30px);
+  color:white;
+  letter-spacing:clamp(2px,0.5vw,5px);
+  text-align:center;
+  text-shadow:
+    -1px -1px 0 #5b0088,
+     1px -1px 0 #5b0088,
+    -1px  1px 0 #5b0088,
+     1px  1px 0 #5b0088,
+    0 0 20px rgba(255,200,255,0.7),
+    0 0 50px rgba(255,200,255,0.35);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:80vw;
+}
+@media(max-width:600px){
+  .band-text { font-size:clamp(10px,3.8vw,18px); white-space:normal; line-height:1.2; }
+}
+
+@keyframes bandShimmer {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 300% 300%; }
+}
+
+/* ─── SMOKE / PARTICLES CANVAS ─── */
+#smoke-canvas {
+  position:absolute; inset:0;
+  pointer-events:none; z-index:15;
+}
+
+/* ─── CONFETTI CANVAS ─── */
+#confetti-canvas {
+  position:absolute; inset:0;
+  pointer-events:none; z-index:25;
+}
+
+/* ─── CROWN PULSE ON LOAD ─── */
+#crown-flash {
+  position:absolute;
+  inset:0;
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(200,100,255,0.12) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:8;
+  opacity:0;
+  animation: crownFlash 1.5s 3.5s ease-out forwards;
+}
+@keyframes crownFlash {
+  0%   { opacity:0; transform:scale(0.5); }
+  40%  { opacity:1; }
+  100% { opacity:0; transform:scale(2); }
+}
 
 </style>
 </head>
 <body>
 <div id="scene">
-  <div id="bg"></div>
+  <div id="bg-base"></div>
+  <div id="aurora">
+    <div class="aurora-band ab1"></div>
+    <div class="aurora-band ab2"></div>
+    <div class="aurora-band ab3"></div>
+  </div>
+  <div id="stars-layer"></div>
+  <div id="sparkles-layer"></div>
+  <div id="crown-flash"></div>
+
   <canvas id="smoke-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
 
   <!-- TIFO -->
   <div id="tifo-wrap">
     <div id="tifo">
-      <div class="corner corner-tl"></div>
-      <div class="corner corner-tr"></div>
-      <div class="corner corner-bl"></div>
-      <div class="corner corner-br"></div>
+      <div class="tifo-frame"></div>
+
+      <!-- Corner SVG ornaments -->
+      <div class="corner-orn co-tl">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 76 L4 4 L76 4" stroke="rgba(200,100,255,0.4)" stroke-width="1.5"/>
+          <path d="M4 60 L4 4 L60 4" stroke="rgba(200,100,255,0.2)" stroke-width="0.75"/>
+          <circle cx="4" cy="4" r="3" fill="rgba(200,100,255,0.6)"/>
+          <circle cx="4" cy="4" r="1.5" fill="#c090ff"/>
+          <path d="M18 4 Q18 18 4 18" stroke="rgba(200,100,255,0.3)" stroke-width="1" fill="none"/>
+          <path d="M32 4 Q32 32 4 32" stroke="rgba(200,100,255,0.15)" stroke-width="0.75" fill="none"/>
+          <line x1="4" y1="20" x2="20" y2="4" stroke="rgba(200,100,255,0.15)" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="corner-orn co-tr">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 76 L4 4 L76 4" stroke="rgba(200,100,255,0.4)" stroke-width="1.5"/>
+          <path d="M4 60 L4 4 L60 4" stroke="rgba(200,100,255,0.2)" stroke-width="0.75"/>
+          <circle cx="4" cy="4" r="3" fill="rgba(200,100,255,0.6)"/>
+          <circle cx="4" cy="4" r="1.5" fill="#c090ff"/>
+          <path d="M18 4 Q18 18 4 18" stroke="rgba(200,100,255,0.3)" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+      <div class="corner-orn co-bl">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 76 L4 4 L76 4" stroke="rgba(200,100,255,0.4)" stroke-width="1.5"/>
+          <circle cx="4" cy="4" r="3" fill="rgba(200,100,255,0.6)"/>
+          <circle cx="4" cy="4" r="1.5" fill="#c090ff"/>
+          <path d="M18 4 Q18 18 4 18" stroke="rgba(200,100,255,0.3)" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+      <div class="corner-orn co-br">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 76 L4 4 L76 4" stroke="rgba(200,100,255,0.4)" stroke-width="1.5"/>
+          <circle cx="4" cy="4" r="3" fill="rgba(200,100,255,0.6)"/>
+          <circle cx="4" cy="4" r="1.5" fill="#c090ff"/>
+          <path d="M18 4 Q18 18 4 18" stroke="rgba(200,100,255,0.3)" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+
+      <div class="side-orn side-orn-l">✦ ✦ ✦ ✦ ✦</div>
+      <div class="side-orn side-orn-r">✦ ✦ ✦ ✦ ✦</div>
 
       <div class="tifo-content">
-        <div class="tifo-top-label">✦ Tifo ✦</div>
-        <div class="tifo-main">
-          Thank you,<br>
-          <span class="highlight">Princess Tallyyy</span>
+
+        <div class="tifo-eyebrow">— Dedicated with all my heart —</div>
+
+        <div class="tifo-crest">👑</div>
+
+        <div class="tifo-headline">Thank You</div>
+
+        <div class="tifo-name">Princess Tallyyy</div>
+
+        <div class="divider">
+          <div class="div-line"></div>
+          <div class="div-gem-sm"></div>
+          <div class="div-gem"></div>
+          <div class="div-gem-sm"></div>
+          <div class="div-line"></div>
         </div>
-        <div class="tifo-stars-row">★ ★ ★ ★ ★</div>
-        <div class="tifo-sub">For every attention, every compliments, every games played together</div>
-        <div class="tifo-sub">you make meee happpyyy when you text mee!</div>
+
+        <div class="tifo-stars">★ ★ ★ ★ ★</div>
+
+        <div class="divider">
+          <div class="div-line"></div>
+          <div class="div-gem-sm"></div>
+          <div class="div-gem"></div>
+          <div class="div-gem-sm"></div>
+          <div class="div-line"></div>
+        </div>
+
+        <div class="tifo-message">
+          For every attention, every compliment, every game played together<br>
+          you make meee happpyyy when you text mee!
+        </div>
+
+        <div class="divider">
+          <div class="div-line"></div>
+          <div class="div-gem-sm"></div>
+          <div class="div-line"></div>
+        </div>
+
+        <div class="tifo-message2">
+          Every message from you lights up my whole world
+        </div>
+
+        <div class="divider" style="margin-bottom:0">
+          <div class="div-line"></div>
+          <div class="div-gem"></div>
+          <div class="div-line"></div>
+        </div>
+
         <div class="tifo-hearts">💜 🤍 💜</div>
-        <div class="tifo-bottom-label">Forever & always, I am YOURS, trulyyy!</div>
+
+        <div class="tifo-vow">Forever &amp; Always · I Am Yours · Trulyyy</div>
+
       </div>
     </div>
   </div>
@@ -351,166 +630,319 @@
   <!-- BANDEROLE -->
   <div id="banderole-wrap">
     <div id="banderole">
-      <div class="band-text">Princess Tally : Being your good boy is my greatest pride !</div>
+      <div class="band-fringe" id="fringe-container"></div>
+      <div class="band-text-wrap">
+        <span class="band-gem">✦</span>
+        <div class="band-text">Princess Tally : Being your good boy is my greatest pride !</div>
+        <span class="band-gem">✦</span>
+      </div>
     </div>
   </div>
-</div>
 
+</div>
 <script>
-// ── STARS ────────────────────────────────────────────────────
+// ── BUILD FRINGE ─────────────────────────────────────────
 (function(){
-  const bg = document.getElementById('bg');
-  for(let i=0;i<120;i++){
+  const fc = document.getElementById('fringe-container');
+  const count = Math.ceil(window.innerWidth / 14);
+  for(let i=0;i<count;i++){
     const s = document.createElement('div');
-    s.className='star';
-    const size = Math.random()*2.5+0.5;
-    s.style.cssText=`
-      width:${size}px;height:${size}px;
-      top:${Math.random()*100}%;left:${Math.random()*100}%;
-      --d:${(Math.random()*4+2).toFixed(1)}s;
-      --o:${(Math.random()*0.7+0.2).toFixed(2)};
-      animation-delay:${(Math.random()*6).toFixed(2)}s;
-    `;
-    bg.appendChild(s);
+    s.className='fringe-seg';
+    s.style.height = (12 + Math.sin(i*0.6)*4) + 'px';
+    fc.appendChild(s);
   }
 })();
 
-// ── SEQUENCE ─────────────────────────────────────────────────
-window.addEventListener('load', () => {
+// ── STARS ────────────────────────────────────────────────
+(function(){
+  const layer = document.getElementById('stars-layer');
+  for(let i=0;i<160;i++){
+    const s = document.createElement('div');
+    const size = Math.random()*2.8+0.4;
+    const hue = Math.random() > 0.85 ? `hsl(${280+Math.random()*40},80%,80%)` : 'white';
+    Object.assign(s.style, {
+      position:'absolute',
+      borderRadius:'50%',
+      background: hue,
+      width:size+'px', height:size+'px',
+      top: Math.random()*85+'%',
+      left: Math.random()*100+'%',
+      boxShadow: size > 2 ? `0 0 ${size*3}px ${hue}` : 'none',
+      opacity:0,
+      animation:`twinkle ${(Math.random()*5+2).toFixed(1)}s ${(Math.random()*8).toFixed(1)}s ease-in-out infinite`,
+    });
+    layer.appendChild(s);
+  }
+  const style = document.createElement('style');
+  style.textContent=`
+    @keyframes twinkle {
+      0%,100%{opacity:0;}
+      50%{opacity:var(--to,0.7);}
+    }
+  `;
+  // set individual opacities
+  layer.querySelectorAll('div').forEach(s=>{
+    s.style.setProperty('--to', (Math.random()*0.6+0.2).toFixed(2));
+  });
+  document.head.appendChild(style);
+})();
 
-  // 1. Banderole slides in after 0.8s
+// ── SPARKLES ─────────────────────────────────────────────
+(function(){
+  const layer = document.getElementById('sparkles-layer');
+  const colors = ['#f0abfc','#d8b4fe','#e879f9','#fde8ff','#c4b5fd'];
+  for(let i=0;i<60;i++){
+    const s = document.createElement('div');
+    s.className='sparkle';
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    const sz = Math.random()*4+1.5;
+    Object.assign(s.style, {
+      background: c,
+      width:sz+'px', height:sz+'px',
+      borderRadius:'50%',
+      left: Math.random()*100+'%',
+      bottom: (120 + Math.random()*60)+'px',
+      boxShadow:`0 0 ${sz*3}px ${c}`,
+      '--sd': (Math.random()*4+3).toFixed(1)+'s',
+      '--ss': (Math.random()*8).toFixed(1)+'s',
+    });
+    layer.appendChild(s);
+  }
+})();
+
+// ── LANTERNS ─────────────────────────────────────────────
+(function(){
+  const scene = document.getElementById('scene');
+  const configs = [
+    { color:'rgba(220,80,255,0.6)', bg:'#8800cc', x:8 },
+    { color:'rgba(140,60,255,0.6)', bg:'#5500aa', x:18 },
+    { color:'rgba(255,100,200,0.6)', bg:'#aa0066', x:30 },
+    { color:'rgba(180,50,255,0.6)', bg:'#7700bb', x:50 },
+    { color:'rgba(255,80,180,0.6)', bg:'#cc0088', x:65 },
+    { color:'rgba(120,80,255,0.6)', bg:'#4400cc', x:75 },
+    { color:'rgba(240,100,220,0.6)', bg:'#990077', x:88 },
+  ];
+  configs.forEach((cfg, i) => {
+    const el = document.createElement('div');
+    el.className='lantern';
+    const dur = (18 + Math.random()*14).toFixed(1);
+    const delay = (6 + i*2.8 + Math.random()*3).toFixed(1);
+    const rot = ((Math.random()-0.5)*20).toFixed(1);
+    el.style.cssText=`
+      left:${cfg.x + (Math.random()-0.5)*4}%;
+      bottom:120px;
+      --ld:${dur}s;
+      --ls:${delay}s;
+      --lr:${rot}deg;
+    `;
+    el.innerHTML=`
+      <div class="lantern-body" style="background:${cfg.bg};--lc:${cfg.color}">
+        <div class="lantern-glow" style="background:radial-gradient(circle,${cfg.color} 0%,transparent 70%)"></div>
+      </div>
+    `;
+    scene.appendChild(el);
+  });
+})();
+
+// ── SEQUENCE ─────────────────────────────────────────────
+window.addEventListener('load', () => {
+  // 1. Banderole
   setTimeout(() => {
     document.getElementById('banderole').style.left = '0';
-  }, 800);
+  }, 600);
 
-  // 2. Tifo unfurls from bottom to top after 2.8s
+  // 2. Tifo unfurl
   setTimeout(() => {
     document.getElementById('tifo-wrap').style.clipPath = 'inset(0% 0 0 0)';
-  }, 2800);
+  }, 2200);
 
-  // 3. Smoke starts at 5.5s
-  setTimeout(startSmoke, 5500);
+  // 3. Smoke
+  setTimeout(startSmoke, 5000);
+
+  // 4. Confetti burst
+  setTimeout(startConfetti, 3800);
 });
 
-// ── SMOKE ENGINE ─────────────────────────────────────────────
-function startSmoke(){
-  const canvas = document.getElementById('smoke-canvas');
+// ── CONFETTI ─────────────────────────────────────────────
+function startConfetti(){
+  const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize',()=>{ canvas.width=window.innerWidth; canvas.height=window.innerHeight; });
 
-  function resize(){
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
+  const COLORS = ['#f0abfc','#e879f9','#d8b4fe','#fde8ff','#c4b5fd','#f5d0fe','#ffffff'];
+  const SHAPES = ['circle','rect','diamond','heart'];
 
-  const BAND_H = window.innerWidth <= 600 ? 80 : 110;
-  const FLARES = [
-    { x: 0.08, color: [220, 60, 180] },
-    { x: 0.25, color: [140, 80, 240] },
-    { x: 0.45, color: [200, 50, 200] },
-    { x: 0.60, color: [100, 60, 255] },
-    { x: 0.78, color: [230, 70, 160] },
-    { x: 0.92, color: [160, 40, 220] },
-  ];
-
-  // Particle pool
-  const particles = [];
-  const MAX = 600;
-
-  class Particle {
-    constructor(flare){
-      this.reset(flare);
+  class Piece {
+    constructor(burst){
+      this.reset(burst);
     }
-    reset(flare){
-      const W = canvas.width, H = canvas.height;
-      const bx = flare.x * W;
-      const by = H - BAND_H;
-
-      this.x  = bx + (Math.random()-0.5)*28;
-      this.y  = by - Math.random()*15;
-      this.vx = (Math.random()-0.5)*0.9;
-      this.vy = -(Math.random()*1.8+0.5);
-      this.r  = Math.random()*55+20;
+    reset(burst){
+      const cx = burst ? canvas.width/2 : Math.random()*canvas.width;
+      const cy = burst ? canvas.height*0.45 : -20;
+      const angle = burst ? (Math.random()*Math.PI*2) : Math.PI/2;
+      const speed = burst ? (Math.random()*12+4) : (Math.random()*3+1.5);
+      this.x = cx + (Math.random()-0.5)*50;
+      this.y = cy + (Math.random()-0.5)*50;
+      this.vx = Math.cos(angle)*speed + (Math.random()-0.5)*2;
+      this.vy = Math.sin(angle)*speed - (burst?6:0);
+      this.gravity = 0.12 + Math.random()*0.06;
+      this.size = Math.random()*7+3;
+      this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
+      this.shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+      this.rot = Math.random()*Math.PI*2;
+      this.rotSpeed = (Math.random()-0.5)*0.18;
+      this.alpha = 1;
       this.life = 0;
-      this.maxLife = Math.random()*260+180;
-      this.wobble = Math.random()*Math.PI*2;
-      this.wobbleSpeed = (Math.random()-0.5)*0.03;
-      this.r_target = Math.random()*90+50;
-      this.color = flare.color.slice();
-      // random tint variation
-      this.color = this.color.map(c => Math.min(255, c + (Math.random()-0.5)*40));
+      this.maxLife = burst ? (Math.random()*180+120) : (Math.random()*300+200);
+      this.burst = !!burst;
     }
     update(){
       this.life++;
-      this.wobble += this.wobbleSpeed;
-      this.x += this.vx + Math.sin(this.wobble)*0.3;
+      this.x += this.vx;
       this.y += this.vy;
-      this.vy *= 0.993;
-      this.vx *= 0.993;
-      this.r  += (this.r_target - this.r)*0.005;
+      this.vy += this.gravity;
+      this.vx *= 0.995;
+      this.rot += this.rotSpeed;
+      const t = this.life/this.maxLife;
+      this.alpha = t < 0.1 ? t/0.1 : (1-t)*1.1;
+    }
+    draw(ctx){
+      if(this.alpha<=0) return;
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, this.alpha);
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rot);
+      ctx.fillStyle = this.color;
+      const s = this.size;
+      if(this.shape==='circle'){
+        ctx.beginPath(); ctx.arc(0,0,s/2,0,Math.PI*2); ctx.fill();
+      } else if(this.shape==='rect'){
+        ctx.fillRect(-s/2,-s/4,s,s/2);
+      } else if(this.shape==='diamond'){
+        ctx.beginPath(); ctx.moveTo(0,-s/2); ctx.lineTo(s/2,0); ctx.lineTo(0,s/2); ctx.lineTo(-s/2,0); ctx.closePath(); ctx.fill();
+      } else {
+        // heart
+        ctx.beginPath();
+        ctx.moveTo(0, s*0.35);
+        ctx.bezierCurveTo(-s*0.5, -s*0.1, -s*0.5, -s*0.5, 0, -s*0.2);
+        ctx.bezierCurveTo(s*0.5, -s*0.5, s*0.5, -s*0.1, 0, s*0.35);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+    get dead(){ return this.life>=this.maxLife || this.y>canvas.height+40; }
+  }
+
+  const pieces = [];
+  // Initial burst
+  for(let i=0;i<200;i++) pieces.push(new Piece(true));
+
+  let frame = 0;
+  function loop(){
+    frame++;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // Occasional gentle rain
+    if(frame%8===0 && pieces.length<350) pieces.push(new Piece(false));
+
+    for(let i=pieces.length-1;i>=0;i--){
+      pieces[i].update();
+      pieces[i].draw(ctx);
+      if(pieces[i].dead){
+        if(Math.random()<0.15) pieces[i].reset(false);
+        else pieces.splice(i,1);
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// ── SMOKE / FUMIGÈNES ────────────────────────────────────
+function startSmoke(){
+  const canvas = document.getElementById('smoke-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+  resize();
+  window.addEventListener('resize',resize);
+
+  const BAND_H = window.innerWidth<=600?90:120;
+  const FLARES = [
+    { x:0.06, color:[230,50,180] },
+    { x:0.18, color:[130,60,250] },
+    { x:0.32, color:[210,40,210] },
+    { x:0.50, color:[160,50,255] },
+    { x:0.64, color:[220,60,170] },
+    { x:0.78, color:[100,70,255] },
+    { x:0.90, color:[240,50,200] },
+  ];
+
+  class Particle {
+    constructor(f){ this.reset(f); }
+    reset(f){
+      const W=canvas.width, H=canvas.height;
+      this.x = f.x*W + (Math.random()-0.5)*30;
+      this.y = H - BAND_H - Math.random()*20;
+      this.vx = (Math.random()-0.5)*1.1;
+      this.vy = -(Math.random()*2.2+0.6);
+      this.r  = Math.random()*50+18;
+      this.rTarget = Math.random()*100+55;
+      this.life=0;
+      this.maxLife=Math.random()*280+200;
+      this.wobble=Math.random()*Math.PI*2;
+      this.wobbleSpeed=(Math.random()-0.5)*0.035;
+      this.color=f.color.map(c=>Math.min(255,c+(Math.random()-0.5)*45));
+    }
+    update(){
+      this.life++;
+      this.wobble+=this.wobbleSpeed;
+      this.x+=this.vx+Math.sin(this.wobble)*0.4;
+      this.y+=this.vy;
+      this.vy*=0.994;
+      this.vx*=0.994;
+      this.r+=(this.rTarget-this.r)*0.006;
     }
     get alpha(){
-      const t = this.life / this.maxLife;
-      if(t < 0.15) return t/0.15 * 0.28;
-      return (1-t)*0.28;
+      const t=this.life/this.maxLife;
+      if(t<0.15) return (t/0.15)*0.3;
+      return (1-t)*0.3;
     }
-    get dead(){ return this.life >= this.maxLife; }
+    get dead(){ return this.life>=this.maxLife; }
     draw(ctx){
-      const a = this.alpha;
-      if(a<=0) return;
-      const [r,g,b] = this.color;
-      const grad = ctx.createRadialGradient(
-        this.x, this.y, 0,
-        this.x, this.y, this.r
-      );
-      grad.addColorStop(0,   `rgba(${r},${g},${b},${a})`);
-      grad.addColorStop(0.4, `rgba(${r},${g},${b},${a*0.5})`);
-      grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+      const a=this.alpha; if(a<=0)return;
+      const [r,g,b]=this.color;
+      const gr=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+      gr.addColorStop(0,`rgba(${r},${g},${b},${a})`);
+      gr.addColorStop(0.4,`rgba(${r},${g},${b},${a*0.45})`);
+      gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-      ctx.fillStyle = grad;
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=gr;
       ctx.fill();
     }
   }
 
-  let tick = 0;
-  let activeFlares = [];
-  // Stagger flare activations
-  FLARES.forEach((f, i) => {
-    setTimeout(() => activeFlares.push(f), i * 320);
-  });
-
-  function spawnRate(){ return 5; }
+  const particles=[];
+  const active=[];
+  FLARES.forEach((f,i)=>setTimeout(()=>active.push(f),i*280));
 
   function loop(){
-    tick++;
     ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // Spawn
-    if(activeFlares.length > 0 && particles.length < MAX){
-      const count = spawnRate();
-      for(let i=0;i<count;i++){
-        const f = activeFlares[Math.floor(Math.random()*activeFlares.length)];
-        particles.push(new Particle(f));
+    if(active.length && particles.length<700){
+      for(let i=0;i<6;i++){
+        particles.push(new Particle(active[Math.floor(Math.random()*active.length)]));
       }
     }
-
-    // Update & draw
-    for(let i = particles.length-1; i>=0; i--){
-      const p = particles[i];
-      p.update();
-      p.draw(ctx);
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i];
+      p.update(); p.draw(ctx);
       if(p.dead){
-        if(activeFlares.length>0){
-          // recycle
-          p.reset(activeFlares[Math.floor(Math.random()*activeFlares.length)]);
-        } else {
-          particles.splice(i,1);
-        }
+        if(active.length) p.reset(active[Math.floor(Math.random()*active.length)]);
+        else particles.splice(i,1);
       }
     }
-
     requestAnimationFrame(loop);
   }
   loop();
