@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Months With You</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+
+background:
+radial-gradient(circle at top,#7d2ae8,#371154,#16051f,#09030d);
+
+font-family:Georgia,serif;
+overflow-x:hidden;
+color:white;
+
+}
+
+body::before{
+
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+left:0;
+top:0;
+
+background-image:
+
+radial-gradient(white 1px,transparent 1px),
+radial-gradient(#ffd3ff 1px,transparent 1px),
+radial-gradient(#ffb8ff 1px,transparent 1px);
+
+background-size:
+130px 130px,
+180px 180px,
+250px 250px;
+
+opacity:.4;
+
+animation:
+stars 80s linear infinite;
+
+pointer-events:none;
+
+}
+
+@keyframes stars{
+
+from{
+
+transform:translateY(0px);
+
+}
+
+to{
+
+transform:translateY(800px);
+
+}
+
+}
+
+.overlay{
+
+position:fixed;
+
+width:100%;
+height:100%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+background:
+
+linear-gradient(
+135deg,
+rgba(25,8,40,.95),
+rgba(95,25,130,.92),
+rgba(20,5,35,.95)
+);
+
+z-index:999;
+
+transition:1.5s;
+
+}
+
+.overlay.hide{
+
+opacity:0;
+visibility:hidden;
+
+}
+
+.menu{
+
+width:min(900px,90%);
+
+padding:60px;
+
+border-radius:40px;
+
+background:
+
+rgba(255,255,255,.08);
+
+backdrop-filter:blur(18px);
+
+box-shadow:
+
+0 0 80px rgba(255,100,255,.4);
+
+text-align:center;
+
+}
+
+.menu h1{
+
+font-size:68px;
+
+letter-spacing:5px;
+
+margin-bottom:20px;
+
+background:
+
+linear-gradient(
+90deg,
+white,
+#ffd0ff,
+#ffc0ff
+);
+
+-webkit-background-clip:text;
+
+color:transparent;
+
+}
+
+.menu h2{
+
+font-weight:normal;
+
+opacity:.85;
+
+line-height:1.7;
+
+margin-bottom:45px;
+
+}
+
+button{
+
+padding:20px 55px;
+
+font-size:18px;
+
+cursor:pointer;
+
+border:none;
+
+border-radius:50px;
+
+background:
+
+linear-gradient(
+90deg,
+#ff89ff,
+#d46bff
+);
+
+color:white;
+
+transition:.4s;
+
+}
+
+button:hover{
+
+transform:scale(1.08);
+
+box-shadow:
+
+0 0 40px #ffb7ff;
+
+}
+
+header{
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+padding:50px;
+
+}
+
+.hero{
+
+max-width:900px;
+
+animation:fade 2s;
+
+}
+
+.hero h1{
+
+font-size:90px;
+
+margin-bottom:30px;
+
+text-shadow:
+
+0 0 40px #ffb3ff;
+
+}
+
+.hero p{
+
+font-size:26px;
+
+line-height:2;
+
+opacity:.95;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(40px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+section{
+
+padding:120px 12%;
+
+}
+
+.card{
+
+background:
+
+rgba(255,255,255,.06);
+
+padding:60px;
+
+border-radius:30px;
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+
+0 0 60px rgba(255,170,255,.15);
+
+line-height:2.1;
+
+font-size:22px;
+
+}
+
+.title{
+
+font-size:55px;
+
+margin-bottom:40px;
+
+text-align:center;
+
+color:#ffd7ff;
+
+}
+
+.poem{
+
+white-space:pre-line;
+
+}
+
+footer{
+
+padding:120px;
+
+text-align:center;
+
+opacity:.8;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay" id="overlay">
+
+<div class="menu">
+
+<h1>Our Two Months</h1>
+
+<h2>
+
+21 July 2026
+
+<br><br>
+
+22:26
+
+<br><br>
+
+A small website made from my heart (sorry for the bad decoration wanted to make it fast).
+
+A place where every word will belongs to you.
+
+A place where every thought begins with you.
+
+</h2>
+
+<button onclick="startLetter()">
+
+Dear Princess, Please I beg, Open My Heart!
+
+</button>
+
+</div>
+
+</div>
+
+<header>
+
+<div class="hero">
+
+<h1>For The Princess I Think About Every Day...</h1>
+
+<p>
+
+Some stories begin with a look.
+
+Some begin with a smile.
+
+Ours began with words.
+
+Yet somehow, those words became my safest place ever!
+
+</p>
+
+</div>
+
+</header>
+
+<section>
+
+<div class="card">
+
+<div class="title">
+
+To My Dearest Love, Princess Tally, Your Majesty.
+
+</div>
+
+<div class="poem">
+
+My Tally, My Highnesss, My Mommyyyyyyyyyy (ahemmm), My Princessssss, My.... Juliettee!!!
+
+If someone had ever told me that one day another soul living hundreds and hundreds of kilometers away would become one of the most precious people in my entire life, I would haveee probablyyyyyy have smiled with disbelief....
+
+Yet here we are.
+
+Two months, (I'm surprised because of our misunderstoods ahahahah anywayysss).
+
+Only two months according to the calendar.
+
+And somehow it feels as if my heart has already known yours for much longer.
+
+Distance is supposed to separate people (evil distance, please mommy protect me, protect your goodest boyy, your Aaroonn).
+
+Instead it introduced me to someone I never want to lose, and it's you.
+
+Thank you.
+
+Thank you for every single conversation.
+
+Thank you for every minute you spent listening and talking to me.
+
+Thank you for every moment during which you chose to stay.
+
+There is one memory I know I will never forget, really, never.
+
+The evening after I went out drinking.
+
+I was not feeling well.
+
+I was very sick.
+
+And despite everything...
+
+You stayed.
+
+You remained there.
+
+Talking to me.
+
+Trying to make me feel better, yet, you did made me feel better, you actually... made me feel less sick!
+
+You probably, and surely, have no idea how much that meant to me.
+
+You probably thought you were simply talking to someone.
+
+But for me...
+
+You became my comfort.
+
+You became my peace.
+
+You became the person I wanted to hear when everything inside my head felt loud.
+
+And then came another difficult moment.
+
+The day I did not get my diploma.
+
+I was disappointed.
+
+I was ashamed.
+
+I felt like I had failed.
+
+Yet once again...
+
+You never judged me.
+
+You stayed beside me.
+
+That kind of kindness cannot be measured.
+
+It stays forever inside someone heart, my heart.
+I will remember it forever.
+
+You gave me hope without even realizing it.
+
+Thank you for believing in me during moments when I struggle to believe in myself.
+
+Thank you for reminding me that even after difficult days, tomorrow still exists.
+
+Sometimes I wonder if you truly understand how much you have changed my life.
+You may think you only send messages.
+You may think we simply spend time talking.
+But for me, every conversation with you becomes a memory I treasure.
+
+Every notification from you makes an ordinary day feel extraordinary, and you make me jump on your notifications.
+Every little story you tell becomes something I remember, because who am I? Who am I if I don't notice things about you? If I don't remember things about you?
+And I wish you would tell me even more! Talk more about youuu!
+
+Please never hesitate to tell me about your day.
+Tell me about the books you love.
+Tell me about the stories that make you smile so I can try using some references and make you blush a little ahahah!
+Tell me about the characters that stay in your mind long after you close the last page (don't make me jealouss ofccc)!
+
+Tell me about your dreams.
+Tell me about your childhood memories.
+Tell me about the songs you cannot stop listening to even if I know you listen a lot to Oliviaaa.
+
+Tell me about the little things that most people would call insignificant.
+Because to meeee...
+Nothing about you could ever be insignificant.
+
+I want to know everything that makes you who you are, I globally, save all the reels you liked that give me some things about youuu!
+I want to learn every piece of your heart!
+I want to remember your favorite colors, and I actually think you'll love the colors I choosed for this website!
+
+I want to remember your favorite meals.
+The places you dream about visiting.
+The things that make you laugh until you cannot breathe.
+
+The things that secretly worry you.
+I want to know all of it, yes, all!
+Why? Because every single part of you matters to me.
+Like I keep saying, you're a part of my family, Tally.
+
+Sometimes I close my eyes and imagine a future that feels so real.
+I imagine walking beside you.
+No screen.
+No distance.
+No waiting.
+Only us.
+
+I imagine opening the door for you.
+Holding your hand.
+Looking into your eyes instead of imagining them.
+Listening to your divine voice without headphones.
+Hearing your laughter echo beside me instead of through my phone.
+
+One of the first things I dream about is taking you to a sushi restaurant.
+It sounds so simple.
+
+Yet to me it would mean everything.
+Watching you smile while choosing what you want.
+Laughing together over something completely silly (for examplee ourr typooss lolll tgeee, youyyyy, maybereeee)
+
+Talking for hours until the restaurant quietly closes around us.
+Those ordinary moments would become extraordinary simply because they would be shared with youuu!!!
+
+I often imagine what our life together could become.
+I do not dream about luxury.
+
+I dream about peace.
+I dream about making your mornings easier.
+I dream about preparing breakfast before you wake up.
+I dream about cleaning the house before you even think about doing it.
+I dream about washing the dishes.
+Doing the laundry.
+Cooking dinner.
+Taking care of every little responsibility that I possibly can.
+Not because I have to.
+Because I want to, I don't care if it seems I would look like to be your servant.
+
+Because seeing you relaxed would make me happier than any gift I could ever receive.
+If I could take away even a little of your stress every single day, then I would do it without hesitation.
+
+I want your life to feel lighter because I am part of it, and I blame myself for my reactions.
+I want to become someone who gives you peace instead of problems (actually sorry for all recent misunderstoods).
+
+Someone who makes your home feel warm.
+Someone who makes you feel safe.
+Someone who reminds you every single day that you are deeply loved.
+
+The distance between France and Israel is... woah! 
+Maps make it look simple.
+Reality is much harder.
+There are borders.
+
+Flights.
+Time.
+Money.
+Waiting.
+
+Missing each other, because textss...
+
+Wondering when we will finally meet.
+Some people would look at that distance and decide it is impossible.
+
+I look at that same distance and think something completely different.
+
+If we succeed...
+
+If one day we finally stand in front of each other after everything we have overcome...!! 
+
+Then our story will become one of the most beautiful love stories I could ever imagine.
+Because it will have been built with patience.
+
+With trust.
+With hope.
+With loyalty!
+
+With thousands of conversations.
+With thousands of good mornings.
+Thousands of good nights.
+
+Thousands of moments where we chose each other even while being so far apart.
+
+Distance can test love.
+But it can also prove how strong it truly is!
+
+Every day I find myself thinking about you, you never left my mind Tally.
+
+Sometimes while working.
+Sometimes before sleeping.
+Sometimes while listening to music.
+Sometimes while doing absolutely nothing.
+
+Your name quietly appears in my thoughts without asking for permission.
+
+And somehow...
+It always makes me smile and blushhhh (and melttttt...)!!
+
+There is something comforting about knowing that somewhere, hundreds of kilometers away, you exist.
+
+That alone makes this world feel a little brighter.
+Sometimes I catch myself smiling for no obvious reason.
+
+Then I realize I was thinking about you again!
+I think about the future far more often than I used to.
+Not because I suddenly became someone who enjoys making plans, trust me I struggle taking decisions lollll!
+
+But yeah, because now, every future I imagine somehow it includes you.
+I imagine walking beside you on quiet eveningsss.
+Watching the sunset without saying a single word.
+
+Sitting together in comfortable silence while knowing that silence itself can be another way of saying... Je t'aime !
+
+I imagine rainy afternoons spent reading in the same room.
+You with one of your favorite books, playing with my haiiiirrrrrr (headpattss yayayayayaaa)
+
+I imagine winter mornings.
+Warm drinks.
+Soft blankets.
+Music quietly filling the room.
+
+A peaceful home built not with maybe with expensive things (we can still hopee thiis ofccc), but with kindness, patience, trust, and love!
+
+I do not need a perfect life.
+I only dream of a life where you are there!
+
+A place where coming home means coming back to you.
+A place where your smile, your eyes, your hairstyyleee (hehehe thanks mommy for educatingg mee) becomes the first thing I see after a long dayyyy!
+
+A place where we celebrate every small victory together!
+
+A place where difficult days become easier simply because we face them side by side.
+I know I cannot promise a life without problems, I'll surely have baddd reactionns sadlyyy...
+Nobody can...
+
+But I can promise that I never want you to face those problems alone.
+If life becomes difficult, I want to stand beside you, and it's us, against the problems.
+
+If you feel tired, I want to help you rest!
+If you cry, I want to be there until your tears become a memory.
+
+If you laugh, I want to laugh with you.
+If you dream, I want to encourage those dreams with everything I have!!!
+
+Please never think that your feelings are too small.
+Never think your worries are a burden!
+Never think your excitement is unimportant.
+Tell me everything, just as I keep asking you, tell. me. everything!
+
+Tell me about the little victories that nobody else notices.
+Tell me about the pages of a book that made you cry or watheverrr!
+
+Tell me about the stories that stayed in your heart.
+Tell me about the songs you replay over and over, I knoww I repeat myself surelyy hereee but igoejriojgriogefihreoi...
+
+Tell me about the random thoughts that appear at three in the morning.
+Tell me about your happiest memories.
+
+Tell me about the moments that still hurt.
+Tell me everything you want.
+
+Because I genuinely want to know.
+Because knowing you is one of the greatest privileges life has ever given me.
+
+Sometimes I wonder if you realize how beautiful your heart truly is!
+
+Kindness has a quiet way of changing lives.
+You changed mine.
+
+Not through grand gestures.
+Not through dramatic speeches.
+Simply by being yourself!!
+
+By listening.
+By caring.
+By staying.
+
+Those things may seem ordinary.
+To me, they are extraordinary.
+
+You became a light during moments when everything else seemed dark, cause hell yeah, you're the light in my shadow!
+
+You reminded me that even after disappointment, someone could still choose to stay.
+That lesson will remain with me forever.
+
+There is another little confession I want to make.... (hahaahah ahemmmmmmmmmmmmmmm)
+I absolutely love being your little good boy.
+
+Those words always make me smile.
+Not because they are playful.
+But because they remind me that I belong somewhere.
+
+That I matter to someone whose opinion means the world to me.
+Every time you make me smile without even trying, I realize once again how deeply my heart has fallen for you, and it keeps falling!
+
+Love is often described as something loud.
+Something dramatic.
+Something impossible to ignore.
+But with you, love also feels peaceful.
+
+Gentle.
+Comforting.
+
+Like finally finding a place where my heart can quietly rest!
+
+You never asked me to become someone else.
+You never expected perfection.
+You accepted me with my flaws, my fears, my doubts, and my... mistakes.
+
+That kind of acceptance is incredibly rare.
+I hope that one day I can make you feel just as accepted.
+
+Just as understood.
+Just as safe.
+
+I want you to know that you never have to hide who you are around me.
+Your dreams deserve to be heard.
+Your passions deserve to be celebrated.
+Your fears deserve compassion.
+Your happiness deserves to be protected.
+And your heart deserves to be loved with patience every single day.
+
+One day, when the distance is finally behind us, I hope we look back at these conversations with grateful smiles.
+
+I hope we remember every late night!
+
+Every message.
+Every call.
+Every moment spent waiting.
+Not with sadness.
+But with pride.
+
+Because every kilometer we endured will have led us to the same destination.
+Each other.
+
+If there is one thing I hope you never question, it is how grateful I am that you came into my life.
+Out of all the people I could have met, all the conversations I could have had, all the paths my life could have taken, somehow they led me to you.
+
+And I will always be thankful for that.
+There are days when life feels confusing.
+
+Days when nothing seems certain.
+Days when the future looks blurry.
+
+Yet whenever I think about you, one thing suddenly becomes clear.
+You are someone I genuinely want in my future.
+
+Not only tomorrow.
+Not only next month.
+Not only next year.
+I hope for every year after that.
+I want to celebrate birthdays together.
+I want to celebrate tiny victories that nobody else would notice!!!!! I knoowww I repeat myselfff but words aren't... enough...
+
+I want to laugh over terrible jokes that only we understand.
+I want to build traditions that belong only to us.
+I want our ordinary days to become our favorite memories.
+Because I have learned something beautiful.
+The greatest moments in life are not always extraordinary.
+Sometimes they are simply quiet mornings.
+
+Shared dinners.
+Late night conversations.
+Reading and playing in the same room.
+Watching the rain through the same window.
+Holding the same hand.
+Living under the same roof.
+
+Growing older together without ever losing the habit of looking at each other with admiration.
+That is the kind of happiness I dream about.
+
+I know the road ahead will not always be easy.
+France and Israel are separated by more than distance.
+
+There will be challenges.
+There will be waiting.
+There will be moments when we miss each other more than words can describe.
+
+But I truly believe that love is measured not by how easy the journey is, but by how willing two hearts are to keep walking toward one another.
+Every day we continue choosing each other is another step closer!
+
+Closer to our first real hug.
+Closer to my first headpatt and boopie (eheheh ahemmmm)!!!
+Closer to our first walk together!
+Closer to our first sushi dinner!!!
+
+Closer to every dream that today still exists only in our imagination.
+And when that day finally arrives, I know I will remember all the waiting!!
+
+Not because it was painful.
+But because it made finally reaching you even more meaningful.
+
+I often wonder what our first meeting will feel like.
+Will I be able to find the right words?
+Will I simply smile?
+Will my heart beat so fast that I forget everything I wanted to say?
+
+Maybe none of those things will matter.
+Maybe all that will matter is finally seeing you standing there.
+Real.
+
+Not through a screen.
+Not through pictures.
+Not through imagination.
+
+Just you.
+
+The person who unknowingly became one of the safest places my heart has ever known!
+
+If I could make one promise today, it would be this.
+I will never stop appreciating you.
+I will never take your kindness for granted.
+I will never forget the nights you stayed with me.
+
+The moments you encouraged me.
+The comfort you gave me when I felt disappointed.
+Those memories are part of who I am now.
+
+They are written into my heart.
+
+Thank you for every conversation that lasted longer than expected because neither of us wanted it to end!
+
+Thank you for every moment in which you simply existed beside me.
+Sometimes love is not about grand declarations!
+
+Sometimes it is about choosing someone again and again.
+
+Choosing to listen.
+Choosing to care.
+Choosing to stay.
+
+If love is a choice, then I choose you.
+
+Today.
+Tomorrow.
+And every day that follows.
+
+No matter how many kilometers separate us.
+No matter how many airports stand between us.
+
+No matter how many nights we still have to spend saying goodnight through a screen.
+I will continue believing in the day we finally close that distance!
+
+Because you are worth every second of waiting.
+
+Every hour.
+Every kilometer.
+Every effort.
+Every hope.
+
+If one day we finally build a home together, I hope it becomes the kind of place where laughter is louder than arguments.
+Where kindness is more common than silence!
+
+Where we never stop thanking each other for the smallest things.
+Where your favorite books always have a place on the shelves.
+
+Where our kitchen smells like dinner we cooked together.
+Where rainy evenings become excuses to stay close.
+Where every room quietly reminds us that love truly survived the distance.
+
+And if life ever becomes difficult again, I hope you remember something.
+
+You will never have to face it alone.
+As long as my heart keeps beating, it will always make room for you.
+
+Because loving you has never felt like an obligation.
+It has always felt like the most natural thing in the world.
+
+Happy two months, my love, my princess, my highness, your majesty, my owner, my sweetheart, my angel, (my masterrrrr ehehe), my Juliette!!
+
+Thank you for changing my life in ways you may never fully realize.
+Thank you for your patience!! 
+
+Your kindness.
+Your warmth.
+Your heart.
+
+No matter where life takes us next...
+No matter how long the road still is...
+No matter how many borders remain between France and Israel...
+
+I will keep walking toward you!
+
+Again.
+And again.
+And again.
+And again.
+And again.
+And again. (Okey I stopp lololol!)
+
+Until one day, the distance becomes nothing more than a story we tell with smiles.
+
+Forever yours,
+
+Your goodest boy. (I hope hmm? eheheheh ihihihih mwahhhh je t'aimeeee)
+
+                21 July 2026
+                     22:26
+</div>
+</div>
+</section>
+
+
+<section id="promises">
+
+<h2 class="title">Promises Written By My Heart</h2>
+
+<div class="card">
+
+<div class="poem">
+
+I promise that I will never stop listening to you.
+
+I promise that your voice will always matter to me.
+
+I promise that your dreams will never be too small.
+
+I promise to celebrate your victories, even the ones the world does not notice.
+
+I promise to stay during difficult days.
+
+I promise to laugh with you during beautiful ones.
+
+I promise to keep learning about you every single day.
+
+I promise to never stop asking how you are.
+
+I promise to never stop telling you how proud I am of you.
+
+I promise to remind you how loved you are whenever you forget it.
+
+I promise that one day, when the distance finally disappears, I will look at you with exactly the same admiration that I have today.
+
+And even more.
+
+</div>
+
+</div>
+
+</section>
+
+<section id="dreams">
+
+<h2 class="title">Little Dreams That Mean Everything</h2>
+
+<div class="card">
+
+<div class="poem">
+
+I dream about buying sushi together.
+
+I dream about walking through quiet streets without caring where we are going.
+
+I dream about bookstores where we lose track of time.
+
+I dream about watching you choose another novel while I secretly smile because I love seeing you happy.
+
+I dream about making breakfast while you are still sleeping.
+
+I dream about bringing you tea when you are reading.
+
+I dream about taking care of the little things so that your shoulders feel lighter.
+
+I dream about hearing you laugh from another room.
+
+I dream about movie nights.
+
+Rain outside.
+
+Warm blankets.
+
+Soft music.
+
+Simple happiness.
+
+I dream about waking up and realizing that I no longer have to miss you because you are finally there.
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">One Last Thing</h2>
+
+<div class="card">
+
+<div class="poem">
+
+People often say that love is measured by time.
+
+I disagree.
+
+Love is measured by sincerity.
+
+By patience.
+
+By effort.
+
+By loyalty.
+
+By choosing someone even when they are far away.
+
+By finding comfort in messages instead of embraces.
+
+By believing in tomorrow even when today feels impossible.
+
+If someone asked me what my greatest wish is...
+
+I would not ask for riches.
+
+I would not ask for fame.
+
+I would simply ask for enough time.
+
+Enough time to laugh with you.
+
+Enough time to discover the world beside you.
+
+Enough time to build a home with you.
+
+Enough time to make you feel as loved as you have made me feel.
+
+That would already be everything.
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<h2
+style="
+font-size:48px;
+margin-bottom:25px;
+color:#ffd8ff;
+">
+
+Forever Starts With Hope
+
+</h2>
+
+<p
+style="
+font-size:22px;
+line-height:2;
+max-width:900px;
+margin:auto;
+opacity:.9;
+">
+
+No matter how many kilometers separate France and Israel today,
+my heart already knows where home is.
+
+Home is wherever you are.
+
+Happy Two Months.
+
+I love you more than words will ever be able to describe.
+
+</p>
+
+<br><br>
+
+<p
+style="
+font-size:18px;
+opacity:.65;
+letter-spacing:4px;
+">
+
+21 July 2026
+
+22:26
+
+</p>
+
+</footer>
+
+<script>
+
+/*
+Commentaires en français
+
+Gestion du menu d'ouverture.
+*/
+
+function startLetter(){
+
+document
+.getElementById("overlay")
+.classList
+.add("hide");
+
+}
+
+
+
+const cards=document.querySelectorAll(".card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.animate(
+
+[
+{
+opacity:0,
+transform:"translateY(70px)"
+},
+{
+opacity:1,
+transform:"translateY(0px)"
+}
+],
+
+{
+duration:1400,
+fill:"forwards",
+easing:"ease"
+}
+
+);
+
+}
+
+});
+
+},{
+threshold:.15
+});
+
+cards.forEach(card=>observer.observe(card));
+
+/*
+Commentaires en français
+
+Création de particules lumineuses roses.
+*/
+
+for(let i=0;i<60;i++){
+
+const star=document.createElement("div");
+
+star.style.position="fixed";
+
+star.style.width=Math.random()*5+2+"px";
+
+star.style.height=star.style.width;
+
+star.style.borderRadius="50%";
+
+star.style.left=Math.random()*100+"vw";
+
+star.style.top=Math.random()*100+"vh";
+
+star.style.background="rgba(255,220,255,.9)";
+
+star.style.boxShadow="0 0 15px #ffb7ff";
+
+star.style.pointerEvents="none";
+
+star.style.opacity=Math.random();
+
+star.style.animation=
+
+`float ${6+Math.random()*8}s ease-in-out infinite`;
+
+document.body.appendChild(star);
+
+}
+
+const style=document.createElement("style");
+
+style.innerHTML=`
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0px);
+
+opacity:.2;
+
+}
+
+50%{
+
+transform:translateY(-30px);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(0px);
+
+opacity:.2;
+
+}
+
+}
+
+`;
+
+document.head.appendChild(style);
+
+</script>
+
+</body>
+
+</html>
