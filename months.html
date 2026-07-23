@@ -73,6 +73,38 @@ transform:translateY(800px);
 
 }
 
+.progress-bar-container{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:6px;
+
+background:rgba(255,255,255,.08);
+
+z-index:1001;
+
+}
+
+.progress-bar{
+
+height:100%;
+width:0%;
+
+background:
+linear-gradient(
+90deg,
+#ff89ff,
+#d46bff
+);
+
+box-shadow:0 0 12px #ffb7ff;
+
+transition:width .12s ease;
+
+}
+
 .overlay{
 
 position:fixed;
@@ -322,7 +354,9 @@ opacity:.8;
 
 }
 
-
+/* ===================================== */
+/* Responsive - tablettes */
+/* ===================================== */
 @media (max-width:900px){
 
 .menu{
@@ -386,7 +420,9 @@ font-size:18px !important;
 
 }
 
-
+/* ===================================== */
+/* Responsive - mobiles */
+/* ===================================== */
 @media (max-width:520px){
 
 .menu{
@@ -463,6 +499,12 @@ line-height:1.8 !important;
 </head>
 
 <body>
+
+<div class="progress-bar-container">
+
+<div class="progress-bar" id="progressBar"></div>
+
+</div>
 
 <div class="overlay" id="overlay">
 
@@ -1231,7 +1273,11 @@ letter-spacing:4px;
 
 <script>
 
+/*
+Commentaires en français
 
+Gestion du menu d'ouverture.
+*/
 
 function startLetter(){
 
@@ -1241,6 +1287,89 @@ document
 .add("hide");
 
 }
+
+const progressBar=document.getElementById("progressBar");
+
+const STORAGE_KEY="tallyAndAaronReadingProgress";
+
+function getScrollPercent(){
+
+const scrollTop=window.scrollY;
+
+const docHeight=
+document.documentElement.scrollHeight-window.innerHeight;
+
+return docHeight>0?(scrollTop/docHeight)*100:0;
+
+}
+
+function updateProgressBar(percent){
+
+progressBar.style.width=percent+"%";
+
+}
+
+function saveProgress(){
+
+const percent=getScrollPercent();
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify({
+scrollTop:window.scrollY,
+percent:percent
+})
+);
+
+updateProgressBar(percent);
+
+}
+
+function restoreProgress(){
+
+const saved=localStorage.getItem(STORAGE_KEY);
+
+if(!saved){
+
+return;
+
+}
+
+try{
+
+const data=JSON.parse(saved);
+
+window.scrollTo(0,data.scrollTop);
+
+updateProgressBar(data.percent);
+
+}catch(e){}
+
+}
+
+let ticking=false;
+
+window.addEventListener("scroll",()=>{
+
+if(!ticking){
+
+requestAnimationFrame(()=>{
+
+saveProgress();
+
+ticking=false;
+
+});
+
+ticking=true;
+
+}
+
+});
+
+window.addEventListener("load",restoreProgress);
+
+window.addEventListener("beforeunload",saveProgress);
 
 
 
@@ -1283,6 +1412,11 @@ threshold:.15
 
 cards.forEach(card=>observer.observe(card));
 
+/*
+Commentaires en français
+
+Création de particules lumineuses roses.
+*/
 
 for(let i=0;i<60;i++){
 
